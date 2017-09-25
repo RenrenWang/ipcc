@@ -2,15 +2,16 @@
   <div class="release-recruitment">
          <VHeader  :isSubPage="false" title="我的发布" :isFixed="true"/>
          <ul class="recruit-list">
-              <RecruitItem v-for="v in 20"/>
+              <RecruitItem v-for="v in 2"/>
          </ul>
-         <div class="post">发布</div>
+         <FooterButton btnName="发布"/>
   </div>
 </template>
 
 <script>
 import  VHeader   from '../components/Header.vue'
 import  RecruitItem   from '../components/RecruitItem.vue'
+import  FooterButton   from '../components/FooterButton.vue'
 export default {
   name: 'releaseRecruitment',
   data () {
@@ -20,7 +21,8 @@ export default {
   },
   components:{
      VHeader,
-     RecruitItem
+     RecruitItem,
+     FooterButton
   }
 }
 </script>
@@ -38,17 +40,6 @@ export default {
        padding:rem(100px) 6px;
       
     }
-    .post{
-
-        position:fixed;
-        bottom:0px;
-        font-weight:bold;
-        font-size:18px;
-        height:rem(100px);
-        width:100%;
-        background:#ffc800;
-        text-align:center;
-        line-height:rem(100px);
-    }
+    
 }
 </style>

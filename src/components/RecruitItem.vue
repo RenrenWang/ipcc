@@ -1,5 +1,5 @@
-<template>
-  <li class="recruit-item">
+<template> 
+  <router-link class="recruit-item" :to="{name:'RecruitD'}" tag="li">
        <div class="recruit-item-t">
            <h3 class="recruit-item-title">招聘店长</h3>
            <span class="timing">倒计时29天</span>
@@ -20,7 +20,7 @@
              </div>
              <span class="iconfont icon-shanchu"></span>
        </div>
-  </li>
+  </router-link >
 </template>
 
 <script>
@@ -40,7 +40,7 @@ export default {
 .recruit-item{
     margin:10px 0;
     border-radius:6px;
-    padding:10px;
+    padding:8px 10px 5px 10px;
     font-size:14px;
     background:#fff;
 
@@ -60,7 +60,7 @@ export default {
     }
    
     .recruit-item-text{
-       margin:10px  0;
+       margin:5px  0;
        color:#050501;
     }
     .demand-keyword{
@@ -98,7 +98,7 @@ export default {
         }
     }
     .recruit-item-b{
-        padding:10px 0;
+        padding:5px 0;
        display:flex;
         flex-direction:row;
         justify-content:space-between;
