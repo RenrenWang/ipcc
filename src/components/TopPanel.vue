@@ -62,7 +62,7 @@ export default {
              font-size:22px;
              left:rem(15px);  
              bottom:0;
-           
+             
           }
       }
       .top-panel-item-txt{

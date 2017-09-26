@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-button">
+  <div class="footer-button" @click="btnAction()">
     {{btnName}}
   </div>
 </template>
@@ -9,12 +9,22 @@ export default {
   name: 'footerBsutton',
   props: {
     "btnName": {
+      type: String,
       required: true
+       
+    },
+    "fBtnAction":{
+       type: Object
     }
   },
   data() {
     return {
 
+    }
+  },
+  methods:{
+    btnAction(){
+       this.$emit('fBtnAction');
     }
   }
 }
