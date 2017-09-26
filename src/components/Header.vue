@@ -56,6 +56,7 @@ export default {
        top:0;
      }
      .header-buttons{
+       padding: 0 10px;
          a{
            margin:0 5px;  
             .iconfont{
