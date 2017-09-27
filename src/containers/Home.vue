@@ -18,7 +18,7 @@ export default {
     return {
       links:[
           {name:"发布招聘",toUrl:"ReleaseRecruitment"},
-           {name:"简历大全",toUrl:"/"},
+           {name:"简历大全",toUrl:"Resume"},
             {name:"IPCC专属教师服务",toUrl:"/"}
       ]
     }

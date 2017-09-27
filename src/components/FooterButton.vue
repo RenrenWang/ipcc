@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-button" @click="btnAction()">
+  <div class="footer-button" @click="btnAction()" :style="{background:bgFooterButton}">
     {{btnName}}
   </div>
 </template>
@@ -15,6 +15,9 @@ export default {
     },
     "fBtnAction":{
        type: Object
+    },
+    "bgFooterButton":{
+        type: String
     }
   },
   data() {

@@ -1,0 +1,188 @@
+<template>
+    <div class="recruit-d">
+        <VHeader :isSubPage="false" title="详细" :isFixed="true" />
+        <div class="recruit-d-content">
+            <div class="recruit-d-t">
+                <div class="recruit-d-item">
+                    <p><span class="iconfont  icon-dizhi"></span><span>杭州市</span></p>
+                </div>
+                <div class="recruit-d-item">
+                    <img src="/static/images/avater.jpeg" class="avater-img">
+                    <p class="top-panel-item-txt">
+                        <span>神仙姐姐有点黑</span>
+                    </p>
+                </div>
+                <div class="recruit-d-item">
+                    <p>全职</p>
+                </div>
+            </div>
+            <div class="recruit-d-c">
+                 <h2 class="recruit-title">简历</h2>
+                 <div class="r-section">
+                     <span>教学经验：</span>
+                     <div class="r-section-item">
+                         <span>5年</span>
+                     </div>
+                 </div>
+                 <div class="r-section">
+                     <span>毕业于：</span>
+                     <div class="r-section-item">
+                         <span>浙江艺术职业学院</span>
+                     </div>
+                 </div>
+                  <div class="r-section">
+                     <span>擅长：</span>
+                     <div class="r-section-item">
+                         <span>民族舞</span>
+                         <span>芭蕾舞</span>
+                         <span>拉丁舞</span>
+                         <span>古典舞</span> 
+                     </div>
+                 </div>
+                 <div class="nl-box">
+                     <h3 style="border:none;margin-bottom:15px;">个人简历</h3>
+                     <p>需要什么事没什么没事没事没事慢慢。必须怎么么么哒就开始加快大数据库的奥斯卡的鸡啊实践活动考级坑我呢农村教师肯定会就开始的那四大美女啊四大皆空技能</p>
+                </div>
+                <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
+                <div style="height:300px;"></div>
+            </div>
+        </div>
+         <FooterButton  btnName="与他联系" bgFooterButton="#ff6b00"/>
+    </div>
+</template>
+
+<script>
+import VHeader from '../components/Header.vue'
+import FooterButton from '../components/FooterButton.vue'
+
+export default {
+    name: 'recruitD',
+    data() {
+        return {
+
+        }
+    },
+    components: {
+        VHeader,
+        FooterButton
+    }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+@import "../assets/style/base.scss";
+
+.recruit-d {
+    height: 100%;
+    font-size: 14px;
+    
+     background: #edebe8;
+    .recruit-d-content {
+         background:#ffc800;
+      
+        padding: rem(100px) 0px;
+    }
+    .recruit-d-t {
+
+        padding: 15px 0;
+        display: flex;
+
+        justify-content: center;
+        flex-direction: row;
+      
+
+        .recruit-d-item {
+
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            &:nth-of-type(1) {
+                width: 100%;
+                height: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                p {
+                    font-size:18px;
+                    color:#808080;
+                    text-align: center;
+                 }
+            }
+            &:nth-of-type(2) {
+                p {
+                    margin-top: 10px;
+                }
+            }
+            &:nth-of-type(3) {
+               font-size:18px;
+               font-weight:bold;
+               
+            }
+        }
+        .avater-img {
+            height: rem(120px);
+            width: rem(120px);
+            border-radius: 50%;
+        }
+    }
+    .recruit-d-c {
+          background: #edebe8;
+        text-align:center;
+        border-radius: 25px 25px 0 0;
+        border-top: 1px solid #bbb;
+       
+        >h2{
+          
+            width:60%;
+            height:rem(90px);
+            text-alig:center;
+            line-height:rem(100px);
+            background:#727272;
+            font-size:25px;
+            font-weight:bold;
+            color:#fff;
+            margin:15px auto;
+            border-radius:rem(90px)/2;
+        }
+        .r-section{
+            width:90%;
+            padding:15px 0;
+            margin:0 auto;
+            display: flex; 
+           
+            flex-direction: row;
+            align-items: center;
+            border-bottom:1px dotted #bbbbbb;
+            text-align:center;
+             >span{
+                 
+               width:80px;   
+            }
+          .r-section-item{
+            display: flex; 
+            flex-direction: row;
+          
+             flex-wrap:wrap;
+             
+               span{
+                   padding:6px rem(35px);
+                   border-radius:5px; 
+                   background:#ffc800;
+                    margin:5px;
+                }
+          }
+        }
+         .nl-box{
+         margin:15px 25px;
+         p{
+             line-height: 20px;
+         padding: 20px 10px;     
+        border:1px solid #bbbbbb;
+           background: #FFC800;
+           border-radius: 5px;} 
+        }
+    }
+}
+</style>

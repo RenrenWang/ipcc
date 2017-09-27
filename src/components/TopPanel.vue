@@ -9,7 +9,7 @@
           <p class="top-panel-item-txt"><span class="iconfont icon-nv"></span><span>神仙姐姐有点黑</span></p>
        </div>
        <div class="top-panel-item">
-           <span class="iconfont icon-shezhi"></span>
+           <router-link :to="{ name: 'MyInfo'}" class="iconfont icon-shezhi1" tag="span"></router-link>
        </div>
   </div>
 </template>
@@ -45,11 +45,11 @@ export default {
          width:100%;
          height:100%;
          flex-direction:row;
-        .icon-shezhi{
-            margin-top:15px;
-                font-size:28px;
-                color:#fdbe19;
-                align-self:flex-start;
+        .icon-shezhi1{
+             margin-top:15px;
+             font-size:22px;
+             color:#fdbe19;
+             align-self:flex-start;
             }
        }
       

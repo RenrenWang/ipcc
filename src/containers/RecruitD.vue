@@ -120,14 +120,11 @@ export default {
         }
     }
     .recruit-d-c {
-         display: flex;
-           
-            flex-direction: column;
-            align-items: center;
+       text-align:center;
         border-radius: 25px 25px 0 0;
         border-top: 1px solid #bbb;
         background: #edebe8;
-       
+    
         width:100%;
         h3 {
             padding: 10px 5px 15px 5px;
@@ -142,6 +139,7 @@ export default {
             justify-content: center;
             flex-direction: row;
             align-items: center;
+            
             li{
               background: #FFC800;
               padding: 3px 20px;
@@ -151,12 +149,14 @@ export default {
             }
         }
         .dy-box{
-            text-align: center;
+              text-align: center;
+             
             p{
-                margin:15px 0;
+                margin:15px auto;
                 &:nth-of-type(2){
                     font-size: 14px;
-                    padding: 8px 30px;
+                    padding: 8px 0px;
+                    width:rem(300px);
                     border:1px solid #bbbbbb;
                      background: #FFC800;
                       border-radius: 5px;
@@ -172,7 +172,8 @@ export default {
            background: #FFC800;
            border-radius: 5px;} 
         }.map-box{
-            margin:20px 0;
+          
+            margin:20px rem(100px);
             border-top:1px solid #bbb;
             border-bottom:1px solid #bbb;
         }
