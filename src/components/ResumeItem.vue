@@ -79,12 +79,23 @@ export default {
           display:flex;
           align-items:center;  
           justify-content:space-between;
+
+
           span{
+
+           
+            
               padding:5px 5px;
               background:#ffc800;
             
               border-radius:5px;
           }
+
+             @media screen and (max-width:320px) {
+                    span {
+                        font-size:.85em;
+                    }
+            }
         }
     }
   }

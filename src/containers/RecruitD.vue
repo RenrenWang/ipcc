@@ -70,6 +70,7 @@ export default {
 .recruit-d {
     height: 100%;
     font-size: 14px;
+     background:#fff;
     .recruit-d-content {
         
         padding: rem(100px) 0px;

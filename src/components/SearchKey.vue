@@ -1,17 +1,18 @@
 <template>
   <div class="search-key">
        <div class="search-key-item" v-for="(v,index) in searchKeys" :key="index">
-            <div class="search-key-item-s">
+            <div class="search-key-item-s" @click="ishowKindPanel()">
                   <span>{{v.name}}</span>
                   <span class="iconfont  icon-xiangxia"></span>
             </div>
            
        </div>
-       
+       <KindPanel v-show="isShowPanel"/>
   </div>
 </template>
 
 <script>
+import  KindPanel   from './KindPanel.vue'
 export default {
   name: 'SearchKey',
   props:{
@@ -22,8 +23,16 @@ export default {
   },
   data () {
     return {
-      
+      isShowPanel:false
     }
+  },
+  methods:{
+    ishowKindPanel(){
+      this.isShowPanel=!this.isShowPanel;
+    }
+  },
+  components:{
+    KindPanel
   }
 }
 </script>
@@ -52,10 +61,10 @@ export default {
        
     }
    .search-key-item-s{
-      padding:0 rem(50px);
+      padding:0 rem(30px);
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      justify-content:center;
       position:relative;
       &:after{
         position:absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="my-info">
+  <div class="my-info" >
        <VHeader title="IPCC机构"/>   
        <div class="my-info-content">
             <div class="input-group">

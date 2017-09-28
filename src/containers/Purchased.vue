@@ -3,7 +3,7 @@
        <VHeader  :isSubPage="false" title="已购买" :isFixed="true"/>
       <SearchKey :searchKeys="keyList"/> 
        <ul class="resume-list">
-            <ResumeItem v-for="v in 10"/>
+           <ResumeItem v-for="(v,index) in 10" :key="index"/>
        </ul> 
   </div>
 </template>

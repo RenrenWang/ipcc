@@ -49,6 +49,7 @@ body {
 
 	line-height: 1;
 	 color: #141514;
+  background:#edebe8;
 }
 ol, ul {
 	list-style: none;

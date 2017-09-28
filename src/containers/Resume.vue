@@ -4,7 +4,7 @@
        <SearchNavbar/>
        <SearchKey :searchKeys="keyList"/> 
        <ul class="resume-list">
-            <ResumeItem v-for="v in 10"/>
+            <ResumeItem v-for="(v,index) in 10" :key="index"/>
        </ul> 
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
 <style scoped lang="scss">
 @import "../assets/style/base.scss";
 .resume{
-    min-height:100%;
+   
      background:#edebe8;
     .resume-list{
   

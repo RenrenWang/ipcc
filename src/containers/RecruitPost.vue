@@ -77,7 +77,10 @@ export default {
   name: 'recruitPost',
   data () {
     return {
-      
+      rName:'',
+      rmb:'',
+      rClass:'',
+      workDemand:''
     }
   },
   methods:{
@@ -97,6 +100,7 @@ export default {
 @import "../assets/style/base.scss";
 .recruit-post{
      height:100%;
+  
     .post-content{
       
       width:100%;
