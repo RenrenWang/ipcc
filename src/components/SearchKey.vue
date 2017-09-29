@@ -1,13 +1,13 @@
 <template>
   <div class="search-key">
        <div class="search-key-item" v-for="(v,index) in searchKeys" :key="index">
-            <div class="search-key-item-s" @click="ishowKindPanel()">
+            <div :class="['search-key-item-s',{noLine:searchKeys.length-1==index}]" @click="ishowKindPanel(index)">
                   <span>{{v.name}}</span>
                   <span class="iconfont  icon-xiangxia"></span>
             </div>
            
        </div>
-       <KindPanel v-show="isShowPanel"/>
+       <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel()" :sKindList="kindList"/>
   </div>
 </template>
 
@@ -17,18 +17,21 @@ export default {
   name: 'SearchKey',
   props:{
    searchKeys:{
-     type: Object,
+     type: Array,
      required: true
    }
+  
   },
   data () {
     return {
-      isShowPanel:false
+      isShowPanel:false,
+      kindList:[]
     }
   },
   methods:{
-    ishowKindPanel(){
+    ishowKindPanel(index){
       this.isShowPanel=!this.isShowPanel;
+      this.kindList=this.searchKeys[index]['kindList'];
     }
   },
   components:{
@@ -54,12 +57,7 @@ export default {
   
    
     flex:1;
-    &:nth-last-of-type(1){
-         .search-key-item-s:after{
-             width:0;
-          }
-       
-    }
+  
    .search-key-item-s{
       padding:0 rem(30px);
       display:flex;
@@ -77,6 +75,13 @@ export default {
       }
     
     }
+
+     .noLine:after{
+             width:0;
+     }
   }
+
+  
+    
 }
 </style>

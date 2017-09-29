@@ -2,7 +2,7 @@
   <div class="resume">
        <VHeader  :isSubPage="false" title="简历大全" :isFixed="true"/>
        <SearchNavbar/>
-       <SearchKey :searchKeys="keyList"/> 
+       <SearchKey :searchKeys="keyList" /> 
        <ul class="resume-list">
             <ResumeItem v-for="(v,index) in 10" :key="index"/>
        </ul> 
@@ -19,9 +19,9 @@ export default {
   data () {
     return {
       keyList:[
-        {name:"兼全职"},
-        {name:"艺术种类"},
-        {name:"性别"}  
+        {name:"兼全职",kindList:[{name:'兼职',isSelect:true},{name:'全职',isSelect:false}]},
+        {name:"艺术种类",kindList:[{name:'舞蹈',isSelect:false},{name:'芭蕾',isSelect:false}]},
+        {name:"性别",kindList:[{name:'男',isSelect:false},{name:'女',isSelect:false}]}  
       ]
     }
   },
