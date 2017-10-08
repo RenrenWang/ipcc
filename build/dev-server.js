@@ -48,7 +48,8 @@ Object.keys(proxyTable).forEach(function (context) {
   if (typeof options === 'string') {
     options = { target: options }
   }
-  app.use(proxyMiddleware(options.filter || context, options))
+  //app.use(proxyMiddleware(options.filter || context, options))
+  app.use('/appsrv',proxyMiddleware(options.filter || context, options))
 })
 
 // handle fallback for HTML5 history API
@@ -65,7 +66,7 @@ app.use(hotMiddleware)
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://192.168.2.114:' + port
+var uri = 'http://192.168.0.3:' + port
 
 var _resolve
 var readyPromise = new Promise(resolve => {

@@ -9,11 +9,14 @@
                 <div class="recruit-d-item">
                     <img src="/static/images/avater.jpeg" class="avater-img">
                     <p class="top-panel-item-txt">
-                        <span>神仙姐姐有点黑</span>
+                        <span>{{data.pinfoPname}}</span>
+                        <span class="iconfont icon-nan" style="color:#1e9ee6"></span>
+                        <span>{{data.pinfoAge}}岁</span>
                     </p>
                 </div>
                 <div class="recruit-d-item">
-                    <p>全职</p>
+                    <p>{{data.titleClassname}} </p>
+                  
                 </div>
             </div>
             <div class="recruit-d-c">
@@ -21,13 +24,14 @@
                  <div class="r-section">
                      <span>教学经验：</span>
                      <div class="r-section-item">
-                         <span>5年</span>
+                         <span>{{data.teacherYear}}</span>
+                       
                      </div>
                  </div>
                  <div class="r-section">
                      <span>毕业于：</span>
                      <div class="r-section-item">
-                         <span>浙江艺术职业学院</span>
+                         <span>{{data.collName}}</span>
                      </div>
                  </div>
                   <div class="r-section">
@@ -41,7 +45,7 @@
                  </div>
                  <div class="nl-box">
                      <h3 style="border:none;margin-bottom:15px;">个人简历</h3>
-                     <p>需要什么事没什么没事没事没事慢慢。必须怎么么么哒就开始加快大数据库的奥斯卡的鸡啊实践活动考级坑我呢农村教师肯定会就开始的那四大美女啊四大皆空技能</p>
+                     <p>{{data.pinfoNote}}</p>
                 </div>
                 <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
                 <div style="height:300px;"></div>
@@ -59,8 +63,21 @@ export default {
     name: 'recruitD',
     data() {
         return {
-
+           data:{},
+           imgList:[],
+           isError:false
         }
+    },
+    mounted(){
+       this.$http.get(api.resumeD+this.$route.params.id)
+       .then(response=>{
+         let data=response.data;
+          this.data=data.data[0];
+          this.imgList=data.imgData;
+          this.isError=false;
+       }).catch(error=>{
+          this.isError=true;
+       })
     },
     components: {
         VHeader,

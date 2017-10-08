@@ -7,7 +7,7 @@
             </div>
            
        </div>
-       <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel()" :sKindList="kindList"/>
+       <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel()" :sKinds="kinds" :selectIndex='index' :sName="searchKeys[index]['name']"/>
   </div>
 </template>
 
@@ -25,13 +25,19 @@ export default {
   data () {
     return {
       isShowPanel:false,
-      kindList:[]
+      kinds:[],
+      index:0
     }
   },
   methods:{
     ishowKindPanel(index){
+     if(index||index==0){
+        this.index=index;
+        this.kinds=this.searchKeys[index]['kinds'];
+     }
       this.isShowPanel=!this.isShowPanel;
-      this.kindList=this.searchKeys[index]['kindList'];
+     
+     
     }
   },
   components:{
@@ -52,6 +58,7 @@ export default {
  border-bottom:1px solid #bbbbbb;
  display:flex;
  align-items:center;
+ z-index: 9999999;
  .search-key-item{
    font-size:14px;
   

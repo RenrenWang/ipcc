@@ -1,12 +1,16 @@
 <template>
   <div class="kind-panel">
-       <div class="kind-panel-nav-bar" >
+        <div class="kind-panel-nav-bar" >
            <span class="iconfont icon-fanhui" @click="closeKp()"></span>
-          <!-- <h2>艺术种类</h2>--> 
+          <h2>{{sName}}</h2>
         </div>
-      <ul class="kind-panel-list">
-           <li v-for="(v,index) in  sKindList"  :class="{activeLi:v.isSelect}" :key="index"  @click="selectKind(index)">{{v.name}}</li>
-      </ul>
+      <div class="kinds"  v-for="(v,index) in sKinds">
+         <h2>{{v.title}}</h2>
+         <ul class="kind-panel-list">
+           <li v-for="(sv,sindex) in  v.classData"  :class="{activeLi:sv.isSelect}" :key="sindex"  @click="selectKind(index,sindex)">{{sv.codeValue}}</li>
+          </ul>
+      </div>
+     
   </div>
 </template>
  
@@ -15,24 +19,60 @@ import  VHeader   from './Header.vue'
 export default {
   name: 'KindPanel',
   props:{
-    sKindList:{
+    sKinds:{
        type:Array,
        required:true
+    },
+    sName:{
+      type:String,
+      required:true
+    },
+    selectIndex:{
+      type:Number,
+      required:true
     }
    
   },
   data () {
     return {
-      
+     selectArray:[]
     }
   },
   methods:{
   closeKp(){
     this.$emit('closePanel');
   },
-  selectKind(index){
-      this.sKindList[index]['isSelect']=!this.sKindList[index]['isSelect'];
-  }
+  selectKind(index,sindex){
+    let array=[];
+    if(this.selectArray.length>=5){
+      if(!this.sKinds[index]['classData'][sindex]['isSelect']){alert('最多选择5个选项');}
+      this.sKinds[index]['classData'][sindex]['isSelect']=false;
+    
+    }else{
+    
+      if(this.selectIndex!=1){
+        this.sKinds[index]['classData'].map((item,index)=>{
+          item.isSelect=false;
+        });
+      }
+          this.sKinds[index]['classData'][sindex]['isSelect']=!this.sKinds[index]['classData'][sindex]['isSelect'];
+      
+     
+         // this.selectArray.push(this.sKinds[index]['classData'][sindex]['ids']); 
+       
+    }
+    
+    this.sKinds.map((item1,index1)=>{
+             item1.classData.map((item2,idnex2)=>{
+                if(item2.isSelect){
+                  array.push(item2.ids); 
+                }
+             })
+       });
+     this.selectArray=array;
+    
+     console.log( this.selectArray);
+    }
   },
   components:{
       VHeader
@@ -45,11 +85,25 @@ export default {
 @import "../assets/style/base.scss";
 .kind-panel{
     position:fixed;
-    top:0;//rem(100px)*2;
+     top:0;//rem(100px)*2+rem(80px);
     width:100%;
     height:100%;
     background:#fff;
-   
+    border-top:1px solid  #bbb;
+    z-index: 999999;
+    overflow: hidden;
+    overflow-y: scroll;
+
+    .kinds{
+       
+        padding:10px 8px;
+      h2{
+        padding:5px 0;
+        font-size:16px;
+        font-weight: bold;
+        padding: 0 5px;
+      }
+    }
     .kind-panel-nav-bar{
       height:rem(90px);
       line-height:rem(90px);
@@ -72,7 +126,7 @@ export default {
       display:flex;
     
       flex-wrap:wrap;
-        padding:0 10px;
+     
      >li{
         
         border:1px solid  #bbb;

@@ -1,25 +1,26 @@
 <template>
- <router-link class="resume-item" :to="{name:'ResumeD'}" tag="li">
+ <router-link class="resume-item" :to="{name:'ResumeD', params: { id: resume.rsmIds}}" tag="li">
   
     <div class="resume-item-top">
-         <img src="/static/images/tx.jpeg" class="resume-item-top-img"/> 
+         <img :src="imgUrl+resume.pinfoUri" class="resume-item-top-img" alt="头像"/> 
          <div class="resume-item-top-text">
               <div class="resume-item-top-text-t">
                    <p class="name-info">
-                       <span style="font-size:16px;font-weight:bold;">陈浩凯</span>
-                       <span class="iconfont  icon-nan"></span>
-                       <span>99岁</span>
+                       <span style="font-size:16px;font-weight:bold;">{{resume.pinfoPname}}</span>
+                       <span  v-if="resume.pinfoSex=='男'" class="iconfont  icon-nan"  style="color:rgb(30, 158, 230)"></span>
+                       <span  v-if="resume.pinfoSex=='女'" class="iconfont  icon-nv"  style="color:rgb(30, 158, 230)"></span>
+                       <span>{{resume.pinfoAge}}岁</span>
                    </p>
-                   <span style="font-size:16px;font-weight:bold;">全职</span>
+                   <span style="font-size:16px;font-weight:bold;">{{resume.titleClassname}}</span>
               </div>
               <div class="resume-item-top-text-b">
-                    <span>教学经验：5年</span>
-                    <span>浙江艺术职业学校</span>
+                    <span>教学经验：{{resume.teacherYear}}</span>
+                    <span>{{resume.collName}}</span>
               </div>
          </div> 
     </div>
     <p class="resume-item-bottom">
-        擅长：古典舞、芭蕾舞、民族舞、钢管舞、脱衣舞
+        擅长：{{resume.titleExt1name?resume.titleExt1name+'、':''}}{{resume.titleExt2name?resume.titleExt2name+'、':''}}{{resume.titleExt3name?resume.titleExt3name+'、':''}}{{resume.titleExt4name?resume.titleExt4name+'、':''}}{{resume.titleExt5name?resume.titleExt5name+'、':''}}
     </p>
  </router-link>
 </template>
@@ -27,11 +28,17 @@
 <script>
 export default {
   name: 'ResumeItem',
+  props:{
+    resume:{
+         required: true
+    }
+  },
   data () {
     return {
-      
+      imgUrl:api.imgUrl
     }
   }
+
 }
 </script>
 
