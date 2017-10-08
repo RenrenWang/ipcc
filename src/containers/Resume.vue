@@ -99,7 +99,7 @@ export default {
 					page: {
 						num: 0,
 						size: 10,
-						time: 5000
+						time: 5
 					},
 					empty: { //配置列表无任何数据的提示
 						warpId: "dataList",
@@ -138,6 +138,8 @@ export default {
 				//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 				//传参:数据的总数; mescroll会自动判断列表是否有无下一页数据,如果数据不满一页则提示无更多数据;
 				this.mescroll.endSuccess(data.length);
+			}).catch(error=>{
+					this.mescroll.endSuccess(0);
 			})
 
 		},

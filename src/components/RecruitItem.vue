@@ -1,22 +1,22 @@
 <template> 
   <router-link class="recruit-item" :to="{name:'RecruitD'}" tag="li">
        <div class="recruit-item-t">
-           <h3 class="recruit-item-title">招聘店长</h3>
-           <span class="timing">倒计时29天</span>
+           <h3 class="recruit-item-title">{{rData.infoTitle}}</h3>
+           <span class="timing">倒计时{{rData.timeDays}}天</span>
        </div>
-       <p class="recruit-item-text">要求：因店里要扩张，需要一个很好的人才来帮助我们一起</p>
+       <p class="recruit-item-text">要求：{{rData.titleDesc}}</p>
        <div class="demand-keyword">
           <div class="demand-keyword-l">
-            <span>兼职：</span>
+            <span>{{rData.titleClassname}}</span>
             <p class="sex"><span class="iconfont  icon-nan"></span></p>
             <span class="need-item">古典舞</span>
           </div>
-          <p class="rmb">薪资：100/小时</p>
+          <p class="rmb">薪资：{{rData.salaryClassname}}</p>
        </div>
        <div class="recruit-item-b">
              <div class="recruit-item-b-l">
                 <img src="/static/images/avater.jpeg" class="recruit-item-avater"/>
-                <span>神仙姐姐有点黑</span>
+                <span>{{rData.pinfoPname}}</span>
              </div>
              <span class="iconfont icon-shanchu"></span>
        </div>
@@ -26,6 +26,11 @@
 <script>
 export default {
   name: 'recruitItem',
+  props:{
+      rData:{
+       type:Object
+      }
+  },
   data () {
     return {
       

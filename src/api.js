@@ -6,5 +6,6 @@ const Api={
   kindList:BaseUrl+'/ippcInfoAction.action?classInfo=',
   resumeList:BaseUrl+'/ippcInfoAction.action?newsType=RM&',
   resumeD:BaseUrl+'/ippcInfoAction.action?newsType=RMD&rsmIds=',
+  recruitList:BaseUrl+'/ippcInfoAction.action?newsType=PR&'
 };
 export{BaseUrl,Api}
