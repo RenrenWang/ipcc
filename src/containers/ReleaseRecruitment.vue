@@ -3,7 +3,7 @@
          <VHeader  :isSubPage="false" title="我的发布" :isFixed="true"/>
          <div class="recruit-list mescroll" id="mescroll">
             <ul id="dataList" class="data-list">
-                  <RecruitItem v-for="(v,index) in pdlist"  :key="index" :rData="v"  @deleteItem="showAlertConfirm(v.infoIds)"/>
+                  <RecruitItem v-for="(v,index) in pdlist"  :key="index" :rData="v" :selectIndex='index' @deleteItem="showAlertConfirm"/>
             </ul>
          </div>
      <FooterButton  btnName="发布" @fBtnAction="btnAction()"/>
@@ -24,6 +24,8 @@ export default {
       pdlist:[],
 	  isShowAlertConfirm:false,
 	  deleteId:-1,
+	  deleteIndex:-1,
+	  mescroll:Object
     }
   },
   mounted(){
@@ -38,15 +40,24 @@ export default {
           console.log(api.recruitDelete+this.deleteId);
           this.$http.get(api.recruitDelete+this.deleteId)
           .then((response)=>{
-              console.log(JSON.stringify(response.data));
+			  console.log(JSON.stringify(response.data));
+			  if(response.data.result=='success'){
                this.isShowAlertConfirm=false;
+			
+			 
+			   console.log(this.pdlist.splice(this.deleteIndex,1));
+			  }else{
+				   alert('删除失败！'+this.deleteIndex);
+			  }
+			  
           });
         
       },
-      showAlertConfirm(id){
-		 
+      showAlertConfirm(array){
+	
        this.isShowAlertConfirm=true;
-	   this.deleteId=id;
+	   this.deleteId=array[0];
+	   this.deleteIndex=array[1];
       },
    btnAction(){
       this.$router.push({name:'RecruitPost'});
@@ -55,7 +66,7 @@ export default {
 		initMescroll() {
 			//创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
 			//解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
-
+              let self=this;
 			this.mescroll = new MeScroll("mescroll", {
 				down: {
 					use: false,
@@ -75,10 +86,10 @@ export default {
 					},
 					htmlNodata: '<p class="upwarp-nodata">-- 没有更多数据 --</p>',
 					page: {
-						num: 0,
-						size: 10,
-						time: 5
+						
+						size: 10
 					},
+					
 					empty: { //配置列表无任何数据的提示
 						warpId: "dataList",
 						icon: "/static/images/mescroll-empty.png",
@@ -98,7 +109,7 @@ export default {
 		upCallback(page) {
 			console.log("page.num==" + page.num + ", page.size==" + page.size);
 			//联网加载数据
-
+                console.log("------->"+page.num);
 			this.$http.get(api.recruitList + 'pinfoId=32&pageno=' + page.num).then((response) => {
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				let data = response.data.data;
@@ -107,17 +118,19 @@ export default {
 
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				//如果是第一页需手动制空列表
-				if (page == 1) this.pdlist = [];
+			   if (page.num == 1) this.pdlist = [];
 
-				//更新列表数据
-				this.pdlist = this.pdlist.concat(data);
-				console.log("this.pdlist.length==" + this.pdlist.length);
-
+			
 				//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 				//传参:数据的总数; mescroll会自动判断列表是否有无下一页数据,如果数据不满一页则提示无更多数据;
 				this.mescroll.endSuccess(data.length);
+				console.log(	this.mescroll);
+					//更新列表数据
+				this.pdlist = this.pdlist.concat(data);
+				console.log("this.pdlist.length==" + this.pdlist.length);
+
 			}).catch(error=>{
-					this.mescroll.endSuccess(0);
+				 this.mescroll.endErr();
 			})
 
 		}
@@ -136,13 +149,16 @@ export default {
 <style scoped lang="scss">
 @import "../assets/style/base.scss";
 .release-recruitment{
-    min-height:100%;
+   
     
   
     background:#bbbbbb;
     .recruit-list{
+     position: fixed;
+    top: rem(100px);
+    bottom:  rem(100px);
+    height: auto;
       
-       padding:rem(100px) 0;
       >ul{
         	padding: 0 10px;
       }

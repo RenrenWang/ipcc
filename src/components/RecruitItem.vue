@@ -8,14 +8,17 @@
        <p class="recruit-item-text">要求：{{rData.titleDesc}}</p>
        <div class="demand-keyword">
           <div class="demand-keyword-l">
-            <span>{{rData.titleClassname}}</span>
-            <p class="sex" v-if="rData.pinfoSex=='男'"><span class="iconfont  icon-nan"></span></p>
+            <span class="jqz">{{rData.titleClassname}}</span>
+             <p class="sex" v-if="rData.pinfoSex=='男'"><span class="iconfont  icon-nan"></span></p>
              <p class="sex" v-if="rData.pinfoSex=='女'"><span class="iconfont  icon-nv"></span></p>
-            <span class="need-item" v-if="rData.titleExt1name&&rData.titleExt1name!=''">{{rData.titleExt1name}}</span>
+           
+          </div>
+          <div class="needs">
+             <span class="need-item" v-if="rData.titleExt1name&&rData.titleExt1name!=''">{{rData.titleExt1name}}</span>
              <span class="need-item" v-if="rData.titleExt2name&&rData.titleExt2name!=''">{{rData.titleExt2name}}</span>
-                <span class="need-item" v-if="rData.titleExt3name&&rData.titleExt3name!=''">{{rData.titleExt3name}}</span>
-                   <span class="need-item" v-if="rData.titleExt4name&&rData.titleExt4name!=''">{{rData.titleExt4name}}</span>
-                      <span class="need-item" v-if="rData.titleExt5name&&rData.titleExt5name!=''">{{rData.titleExt5name}}</span>
+             <span class="need-item" v-if="rData.titleExt3name&&rData.titleExt3name!=''">{{rData.titleExt3name}}</span>
+             <span class="need-item" v-if="rData.titleExt4name&&rData.titleExt4name!=''">{{rData.titleExt4name}}</span>
+             <span class="need-item" v-if="rData.titleExt5name&&rData.titleExt5name!=''">{{rData.titleExt5name}}</span>
           </div>
           <p class="rmb">薪资：{{rData.salaryClassname}}</p>
         </div>
@@ -37,6 +40,9 @@ export default {
   props:{
       rData:{
        type:Object
+      },
+      selectIndex:{
+       type:Number
       }
   },
   data () {
@@ -46,7 +52,7 @@ export default {
   },
   methods:{
     deleteItem(){
-       this.$emit('deleteItem');  
+       this.$emit('deleteItem',[this.rData.infoIds,this.selectIndex]);  
     }
   }
 }
@@ -82,11 +88,37 @@ export default {
        color:#050501;
     }
     .demand-keyword{
-      
+        padding: 5px 0;
         display:flex;
         flex-direction:row;
         justify-content:space-between;
+        align-items:center;
         border-bottom:1px solid #bbbbbb;
+        .jqz{
+            width:35px;
+            text-align: center;
+        }
+        .needs{
+             display:flex;
+        flex-direction:row;
+       
+        flex-wrap:wrap;
+        
+            .need-item{
+                font-size:12px;
+                        display:inline-block;
+                        width:75px;
+                        border:1px  solid  #bbbbbb;
+                        border-radius:5px; 
+                        text-align:center;
+                        padding:3px 0;
+                        margin-left:5px;
+                        white-space:nowrap;
+                        text-overflow:ellipsis;
+                        overflow:hidden;
+            }
+        }
+            
        .demand-keyword-l{
          display:flex;
          flex-direction:row;
@@ -99,18 +131,7 @@ export default {
              
              text-align:center;
            }
-           .need-item{
-               display:inline-block;
-               width:75px;
-               border:1px  solid  #bbbbbb;
-               border-radius:5px; 
-               text-align:center;
-               padding:3px 0;
-               margin-left:5px;
-               white-space:nowrap;
-               text-overflow:ellipsis;
-               overflow:hidden;
-           }
+       
          }
         .rmb{
             flex:1;

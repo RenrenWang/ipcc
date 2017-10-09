@@ -27,7 +27,7 @@ export default {
 					name: "兼全职", kinds: [
 						{
 							title: "",
-							classData: [{ids:-1, codeValue: '兼职', isSelect: true }, {ids:-2, codeValue: '全职', isSelect: false }]
+							classData: [{codeName:'C', codeValue: '兼职', isSelect: true }, {codeName:'J', codeValue: '全职', isSelect: false }]
 						}
 					]
 				},
@@ -35,7 +35,7 @@ export default {
 					name: "艺术种类", kinds: [
 						{
 							title: "",
-							classData: [{ codeValue: '兼职', isSelect: true }, { codeValue: '全职', isSelect: false }]
+							classData: []
 						}
 					]
 				},
@@ -43,7 +43,7 @@ export default {
 					name: "性别", kinds: [
 						{
 							title: "",
-							classData: [{ids:-3, codeValue: '男', isSelect: true }, {ids:-4, codeValue: '女', isSelect: false }]
+							classData: [{codeName:"男", codeValue: '男', isSelect: true }, {codeName:'女', codeValue: '女', isSelect: false }]
 						}
 					]
 				},
@@ -129,15 +129,15 @@ export default {
 
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				//如果是第一页需手动制空列表
-				if (page == 1) this.pdlist = [];
-
+			if (page.num == 1) this.pdlist = [];
+	           this.mescroll.endSuccess(data.length);
 				//更新列表数据
 				this.pdlist = this.pdlist.concat(data);
 				console.log("this.pdlist.length==" + this.pdlist.length);
 
 				//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 				//传参:数据的总数; mescroll会自动判断列表是否有无下一页数据,如果数据不满一页则提示无更多数据;
-				this.mescroll.endSuccess(data.length);
+			
 			}).catch(error=>{
 					this.mescroll.endSuccess(0);
 			})
@@ -162,8 +162,8 @@ export default {
 	background: #edebe8;
 	.resume-list {
 
-
-		padding: rem(100px) * 2 + rem(80px) 0 0 0;
+    position: fixed;
+	top: rem(100px) * 2 + rem(80px);
 		ul {
 			padding: 0 10px;
 		}

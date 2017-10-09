@@ -40,7 +40,7 @@ export default {
   },
   methods:{
   closeKp(){
-    this.$emit('closePanel');
+    this.$emit('closePanel',this.selectArray);
   },
   selectKind(index,sindex){
     let array=[];
@@ -65,7 +65,7 @@ export default {
     this.sKinds.map((item1,index1)=>{
              item1.classData.map((item2,idnex2)=>{
                 if(item2.isSelect){
-                  array.push(item2.ids); 
+                  array.push({codeName:item2.codeName,codeValue:item2.codeValue}); 
                 }
              })
        });
