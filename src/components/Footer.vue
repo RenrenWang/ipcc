@@ -1,5 +1,5 @@
 <template>
-  <p class="footer">
+  <p class="footer" @click="btnAction">
       本服务由IPCC提供，最终解释权由IPCC所有
  
   </p>
@@ -11,6 +11,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  methods:{
+    btnAction(){
+      this.$emit('footerBtnAction');
     }
   }
 }

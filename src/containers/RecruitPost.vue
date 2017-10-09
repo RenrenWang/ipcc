@@ -4,7 +4,7 @@
       <div class="post-content">
            <div class="input-group">
                <div class="input-box">
-                 <span style="font-weight:bold;"> 机构名称或标题：</span> <input type="text"  v-model="rName" placeholder="不超过十个字"/>
+                 <span style="font-weight:bold;"> 机构名称或标题：</span> <input type="text"  v-model="rTitle" placeholder="不超过十个字"/>
               </div>
              <div class="input-box">
                  <span style="font-weight:bold;">艺术种类：</span> 
@@ -30,15 +30,15 @@
            <div class="selection">
                  <p>性别</p>
                  <div class="select-group">
-                      <span class="select-box">男</span>
-                      <span class="select-box">女</span>
+                      <span :class="['select-box',{'selectBtnbox':this.rSex=='男'}]" @click="selectSex('男')" >男</span>
+                      <span  :class="['select-box',{'selectBtnbox':this.rSex=='女'}]" @click="selectSex('女')">女</span>
                  </div>
            </div>
             <div class="selection">
                  <p>兼全职</p>
                  <div class="select-group">
-                      <span class="select-box">全职</span>
-                      <span class="select-box">兼职</span>
+                      <span :class="['select-box',{'selectBtnbox':this.rZKind=='全职'}]" @click="selectJqz('全职')" >全职</span>
+                      <span :class="['select-box',{'selectBtnbox':this.rZKind=='兼职'}]" @click="selectJqz('兼职')" >兼职</span>
                  </div>
            </div>
            <div class="selection">
@@ -46,7 +46,8 @@
                  <div class="select-group">
                      <div class="rmb-box">
                           <input type="text"  v-model="rmb" />
-                          <span>/月</span>
+                          <span  v-show="this.rZKind=='全职'">/月</span>
+                          <span  v-show="this.rZKind=='兼职'">/小时</span>
                      </div>
                  </div>
            </div>
@@ -77,15 +78,30 @@ export default {
   name: 'recruitPost',
   data () {
     return {
-      rName:'',
+      rTitle:'',
       rmb:'',
       rClass:'',
-      workDemand:''
+      rSex:'',
+      rZKind:'',
+      workDemand:'',
+      postString:''
     }
   },
   methods:{
+    selectSex(sex){
+       this.rSex=sex;
+    },
+    selectJqz(str){
+     this.rZKind=str;
+    },
+    postRecruit(){
+       this.$http.get(api.recruitAddAOrRevise+this.postString)
+       .then(response=>{
+          console.log(JOSN.Stringify(response.data));
+       })
+    },
     btnAction(){
-      
+      this.postString='infoTitle='+this.rTitle+'&titleClass=C&salaryClass=A&titleDesc=内容&titleAddr=地址&pinfoSex=男&titleExt1=WT01&titleExt2=WT02&&titleExt3=WT03&titleExt4=WT04&&titleExt5=WT05&pinfoId=32';
     }
   },
   components:{
@@ -193,6 +209,7 @@ export default {
        border: 1px solid #bbbbbb;
        background: #fff;
        border-radius: 5px;
+      
      }
      .rmb-box,.work-demand{
        margin: 0 auto;
@@ -248,6 +265,9 @@ export default {
             }
         }
     }
+    .selectBtnbox{
+      background:#ffc800 !important;
+   }
 }
 
 </style>

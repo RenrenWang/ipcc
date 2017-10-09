@@ -60,7 +60,7 @@ import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 
 export default {
-    name: 'recruitD',
+    name: 'redumeD',
     data() {
         return {
            data:{},

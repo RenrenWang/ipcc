@@ -3,10 +3,12 @@
          <VHeader  :isSubPage="false" title="我的发布" :isFixed="true"/>
          <div class="recruit-list mescroll" id="mescroll">
             <ul id="dataList" class="data-list">
-                  <RecruitItem v-for="(v,index) in pdlist"  :key="index" :rData="v"/>
+                  <RecruitItem v-for="(v,index) in pdlist"  :key="index" :rData="v"  @deleteItem="showAlertConfirm(v.infoIds)"/>
             </ul>
          </div>
-          <FooterButton  btnName="发布" @fBtnAction="btnAction()"/>
+     <FooterButton  btnName="发布" @fBtnAction="btnAction()"/>
+     <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="删除后，该信息将无法被老师所看到。" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
+
   </div>
 </template>
 
@@ -14,17 +16,38 @@
 import  VHeader   from '../components/Header.vue'
 import  RecruitItem   from '../components/RecruitItem.vue'
 import FooterButton from '../components/FooterButton.vue'
+import AlertConfirm from '../components/AlertConfirm.vue'
 export default {
   name: 'releaseRecruitment',
   data () {
     return {
-      pdlist:[]
+      pdlist:[],
+	  isShowAlertConfirm:false,
+	  deleteId:-1,
     }
   },
   mounted(){
      this.initMescroll();
   },
   methods:{
+
+	AlertCancelActive(){
+         this.isShowAlertConfirm=false;
+      },
+      AlertConfirmActive(){
+          console.log(api.recruitDelete+this.deleteId);
+          this.$http.get(api.recruitDelete+this.deleteId)
+          .then((response)=>{
+              console.log(JSON.stringify(response.data));
+               this.isShowAlertConfirm=false;
+          });
+        
+      },
+      showAlertConfirm(id){
+		 
+       this.isShowAlertConfirm=true;
+	   this.deleteId=id;
+      },
    btnAction(){
       this.$router.push({name:'RecruitPost'});
    },
@@ -103,7 +126,8 @@ export default {
   components:{
      VHeader,
      RecruitItem,
-     FooterButton
+     FooterButton,
+	 AlertConfirm
   }
 }
 </script>

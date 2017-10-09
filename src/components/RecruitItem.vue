@@ -1,6 +1,7 @@
 <template> 
-  <router-link class="recruit-item" :to="{name:'RecruitD'}" tag="li">
-       <div class="recruit-item-t">
+  <li class="recruit-item" >
+       <router-link  class="recruit-item-t" :to="{name:'RecruitD',params: { id:rData.infoIds}}"  tag="div">
+           <div class="recruit-item-tt">
            <h3 class="recruit-item-title">{{rData.infoTitle}}</h3>
            <span class="timing">倒计时{{rData.timeDays}}天</span>
        </div>
@@ -8,19 +9,26 @@
        <div class="demand-keyword">
           <div class="demand-keyword-l">
             <span>{{rData.titleClassname}}</span>
-            <p class="sex"><span class="iconfont  icon-nan"></span></p>
-            <span class="need-item">古典舞</span>
+            <p class="sex" v-if="rData.pinfoSex=='男'"><span class="iconfont  icon-nan"></span></p>
+             <p class="sex" v-if="rData.pinfoSex=='女'"><span class="iconfont  icon-nv"></span></p>
+            <span class="need-item" v-if="rData.titleExt1name&&rData.titleExt1name!=''">{{rData.titleExt1name}}</span>
+             <span class="need-item" v-if="rData.titleExt2name&&rData.titleExt2name!=''">{{rData.titleExt2name}}</span>
+                <span class="need-item" v-if="rData.titleExt3name&&rData.titleExt3name!=''">{{rData.titleExt3name}}</span>
+                   <span class="need-item" v-if="rData.titleExt4name&&rData.titleExt4name!=''">{{rData.titleExt4name}}</span>
+                      <span class="need-item" v-if="rData.titleExt5name&&rData.titleExt5name!=''">{{rData.titleExt5name}}</span>
           </div>
           <p class="rmb">薪资：{{rData.salaryClassname}}</p>
-       </div>
+        </div>
+          
+       </router-link>
        <div class="recruit-item-b">
              <div class="recruit-item-b-l">
-                <img src="/static/images/avater.jpeg" class="recruit-item-avater"/>
+                <img :src="imgUrl+rData.pinfoUri" class="recruit-item-avater"/>
                 <span>{{rData.pinfoPname}}</span>
              </div>
-             <span class="iconfont icon-shanchu"></span>
+             <span class="iconfont icon-shanchu" @click="deleteItem"></span>
        </div>
-  </router-link >
+  </li >
 </template>
 
 <script>
@@ -33,7 +41,12 @@ export default {
   },
   data () {
     return {
-      
+       imgUrl:api.imgUrl
+    }
+  },
+  methods:{
+    deleteItem(){
+       this.$emit('deleteItem');  
     }
   }
 }
@@ -49,7 +62,7 @@ export default {
     font-size:14px;
     background:#fff;
 
-    .recruit-item-t{
+    .recruit-item-tt{
         display:flex;
         flex-direction:row;
         justify-content:space-between;
@@ -65,11 +78,11 @@ export default {
     }
    
     .recruit-item-text{
-       margin:5px  0;
+       margin:10px  0;
        color:#050501;
     }
     .demand-keyword{
-        padding:8px 0;
+      
         display:flex;
         flex-direction:row;
         justify-content:space-between;
@@ -94,12 +107,17 @@ export default {
                text-align:center;
                padding:3px 0;
                margin-left:5px;
+               white-space:nowrap;
+               text-overflow:ellipsis;
+               overflow:hidden;
            }
          }
         .rmb{
+            flex:1;
             font-weight:bold;
-            font-size:18px;
+            font-size:16px;
             color:#FFAF45;
+            text-align: right;
         }
     }
     .recruit-item-b{

@@ -9,56 +9,96 @@
                 <div class="recruit-d-item">
                     <img src="/static/images/avater.jpeg" class="avater-img">
                     <p class="top-panel-item-txt">
-                        <span>神仙姐姐有点黑</span>
+                        <span>{{data.pinfoPname}}</span>
                     </p>
                 </div>
                 <div class="recruit-d-item">
-                    <p>倒计时29天</p>
+                    <p>倒计时30天</p>
                 </div>
             </div>
             <div class="recruit-d-c">
                 <h3>IPCC舞蹈工作室</h3>
                 <ul class="demand-keyword">
-                    <li v-for="v in 3">兼职</li>
+                    <li>{{data.titleClassname}}</li>
+                    <li>{{data.pinfoSex}}</li>
+                    <li>{{data.titleExt1name}}</li>
                 </ul>
                 <div class="dy-box">
                     <p>薪资待遇：</p>
-                    <p>500/小时</p>
+                    <p>{{data.salaryClassname}}</p>
                 </div>
                 <div class="nl-box">
                      <h3 style="border:none">工作内容与要求</h3>
-                     <p>需要什么事没什么没事没事没事慢慢。必须怎么么么哒就开始加快大数据库的奥斯卡的鸡啊实践活动考级坑我呢农村教师肯定会就开始的那四大美女啊四大皆空技能</p>
+                     <p>{{data.titleSimdesc}}</p>
                 </div>
                 <div class="map-box">
                     <p>工作地点</p>
-                    <p>详细地址：5号楼308室</p>
+                    <p>详细地址：{{data.infoAddr}}</p>
                 </div>
                 <div class="imgs-box">
                     <p>机构图片</p>
                     <ul class="imgs-list">
-                      <li v-for="v in 3"><img  src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1506357907929&di=17891aed4bd8314ffb10436f97b8bc79&imgtype=jpg&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffcfaaf51f3deb48f856b141ef91f3a292cf578eb.jpg"/></li>
+                      <li v-for="(v,idnex) in imgList"><img  :src="imgUrl+v.lidFileuri"/></li>
                    </ul>
                 </div>
             </div>
         </div>
-         <FooterButton  btnName="删除"/>
+         <FooterButton  btnName="删除" @fBtnAction="showAlertConfirm()"/>
+         <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="删除后，该信息将无法被老师所看到。" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
     </div>
+   
 </template>
 
 <script>
 import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
-
+import AlertConfirm from '../components/AlertConfirm.vue'
 export default {
     name: 'recruitD',
     data() {
         return {
-
+           data:{},
+           imgList:[],
+           isError:false,
+           imgUrl:api.imgUrl,
+           isShowAlertConfirm:false
         }
+    },
+    mounted(){
+      console.log(api.recruitD+this.$route.params.id);
+       this.$http.get(api.recruitD+1)//this.$route.params.id
+       .then(response=>{
+         let data=response.data;
+          this.data=data.data[0];
+          this.imgList=data.imgData;
+          this.isError=false;
+          console.log(JSON.stringify(data));
+       }).catch(error=>{
+           console.log(error);
+          this.isError=true;
+       })
+    },
+    methods:{
+      AlertCancelActive(){
+         this.isShowAlertConfirm=false;
+      },
+      AlertConfirmActive(){
+          console.log(api.recruitDelete+this.$route.params.id);
+          this.$http.get(api.recruitDelete+this.$route.params.id)
+          .then((response)=>{
+              console.log(JSON.stringify(response.data));
+               this.isShowAlertConfirm=false;
+          });
+        
+      },
+      showAlertConfirm(){
+       this.isShowAlertConfirm=true;
+      }
     },
     components: {
         VHeader,
-        FooterButton
+        FooterButton,
+        AlertConfirm
     }
 }
 </script>
