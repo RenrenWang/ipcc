@@ -33,6 +33,19 @@ export default {
     }
    
   },
+
+
+  updated(){
+ let array=[];
+     this.sKinds.map((item1,index1)=>{
+             item1.classData.map((item2,idnex2)=>{
+                if(item2.isSelect){
+                  array.push({codeName:item2.codeName,codeValue:item2.codeValue}); 
+                }
+             })
+       });
+     this.selectArray=array;
+  },
   data () {
     return {
      selectArray:[]
@@ -44,10 +57,11 @@ export default {
   },
   selectKind(index,sindex){
     let array=[];
-    if(this.selectArray.length>=5){
+    console.log("size--->"+this.selectArray.length);
+    if(this.selectArray.length>=5&&this.selectIndex==1){
       if(!this.sKinds[index]['classData'][sindex]['isSelect']){alert('最多选择5个选项');}
       this.sKinds[index]['classData'][sindex]['isSelect']=false;
-    
+       return;
     }else{
     
       if(this.selectIndex!=1){
@@ -55,13 +69,13 @@ export default {
           item.isSelect=false;
         });
       }
-          this.sKinds[index]['classData'][sindex]['isSelect']=!this.sKinds[index]['classData'][sindex]['isSelect'];
+          
       
-     
+      this.sKinds[index]['classData'][sindex]['isSelect']=!this.sKinds[index]['classData'][sindex]['isSelect'];
          // this.selectArray.push(this.sKinds[index]['classData'][sindex]['ids']); 
        
     }
-    
+   
     this.sKinds.map((item1,index1)=>{
              item1.classData.map((item2,idnex2)=>{
                 if(item2.isSelect){
