@@ -1,8 +1,8 @@
 <template>
   <div class="search-navbar">
-       <div class="address-box">
+       <div class="address-box" @click="active()">
            <span class="iconfont  icon-dizhi"></span>
-           <span>杭州市</span>
+           <span>{{sCity}}</span>
        </div>
        <div class="search-box">
            <span class="iconfont  icon-sousuo1"></span>
@@ -17,9 +17,16 @@
 <script>
 export default {
   name: 'SearchNavbar',
+  props:['sCity'],
   data () {
     return {
        searchKey:""
+    }
+  },
+  methods:{
+    active(){
+    
+      this.$emit('searchNavLeftBtn');
     }
   }
 }

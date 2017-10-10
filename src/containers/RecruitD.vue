@@ -33,6 +33,7 @@
                 </div>
                 <div class="map-box">
                     <p>工作地点</p>
+                    <iframe  style="width:100%;height:100%" :src="address+'&dest=116.470098,39.992838&destName=阜通西'"></iframe>
                     <p>详细地址：{{data.infoAddr}}</p>
                 </div>
                 <div class="imgs-box">
@@ -61,7 +62,8 @@ export default {
            imgList:[],
            isError:false,
            imgUrl:api.imgUrl,
-           isShowAlertConfirm:false
+           isShowAlertConfirm:false,
+           address:api.address
         }
     },
     mounted(){

@@ -16,9 +16,10 @@
         <p>工作地点：</p>
         <div class="input-box">
           <span style="font-weight:bold;"> 请选择定位：</span>
-          <div class="addressBtn">
-            <span class="iconfont icon-dizhi" style="font-size:20px;"></span>
-            <span style="font-size:16px;font-weight:bold;">点击选择地址</span>
+          <div class="addressBtn"  @click="isShowMap">
+            <span class="iconfont icon-dizhi" style="font-size:20px;"  v-show="rMapAddress==''"></span>
+            <span style="font-size:16px;font-weight:bold;" v-show="rMapAddress==''">点击选择地址</span>
+            <span style="font-size:16px;font-weight:bold;" v-show="rMapAddress!=''">{{rMapAddress}}</span>
           </div>
           <span class="iconfont icon-xiangyou"></span>
         </div>
@@ -45,7 +46,7 @@
         <p>薪资待遇</p>
         <div class="select-group">
           <div class="rmb-box">
-            <input type="text" v-model="rmb" />
+            <input type="text" v-model="rmb" />元
             <span v-show="this.rZKind=='C'">/月</span>
             <span v-show="this.rZKind=='J'">/小时</span>
           </div>
@@ -67,7 +68,7 @@
         </ul>
       </div>
     </div>
-   <div style="background:#fff;position:fixed;width:100%;height:100%;z-index:999999999"> <iframe  id="test" style="width:100%;height:100%" src='https://m.amap.com/picker/?center=116.40,39.97&key=1683a75e3995650aafd98176386ccb9a'></iframe></div>
+    <selectMapAddress v-show="isShowSelectMap" @closeSelectMap="showMap"/>
     <FooterButton btnName="确认发布" @fBtnAction="btnAction()" />
     <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
   </div>
@@ -77,6 +78,7 @@
 import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 import KindPanel from '../components/KindPanel.vue'
+import selectMapAddress from '../components/selectMapAddress.vue'
 export default {
   name: 'recruitPost',
   data() {
@@ -89,24 +91,29 @@ export default {
       workDemand: '',
       postString: '',
       rAddress: '',
+      rMapAddress:'',
+      rMapX:"",
+      rMapY:"",
       isShowPanel: false,
       kinds: [],
       selectKinds:[],
-      selectKindsStr:'点击选择'
+      selectKindsStr:'点击选择',
+      isShowSelectMap:false,
     }
   },
-mounted(){
-   var iframe = document.getElementById('test').contentWindow;
-    document.getElementById('test').onload = function(){
-      iframe.postMessage('hello','https://m.amap.com/picker/');
-    };
-    window.addEventListener("message", function(e){
-      alert('您选择了:' + e.data.name + ',' + e.data.location)
-    }, false);
 
-},
   
   methods: {
+    isShowMap(){
+        this.isShowSelectMap=!this.isShowSelectMap;
+    },
+    showMap(arr){
+       this.isShowSelectMap=false;
+       this.rMapAddress=arr[0];
+       let xy=arr[1].split(',');
+       this.rMapX=xy[0];
+       this.rMapY=xy[1];
+    },
   selectKindsAction() {
        
       let kindStr = '';
@@ -203,11 +210,20 @@ mounted(){
           alert('艺术种类不能为空');
           return;
       }
-      if (kindStr == '')
-        if (this.rAddress == '' || !tthis.rAddress) {
-          alert('地址不能为空');
+
+   
+        if (this.rAddress == '' || !this.rAddress||this.rMapAddress == '') {
+          alert('请选择地址');
           return;
         }
+       if(this.rmb== '' || !this.rmb){
+          alert('薪资待遇不能为空');
+          return;
+       }
+       if(isNaN(this.rmb)){
+          alert('薪资待遇格式有误');
+          return;
+       }
 
       if (this.workDemand == '' || !this.workDemand) {
         alert('内容不能为空');
@@ -217,10 +233,16 @@ mounted(){
         alert('内容不能超过100个字');
         return;
       }
+        let xzdy='';
+        if(this.rZKind=="C"){
+           xzdy=this.rmb+'元/月';
 
+        }else if(this.rZKind=="J"){
+           xzdy=this.rmb+'元/小时';
+        }
+    
 
-
-      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass=A&titleDesc=' + this.workDemand + '&titleAddr=' + this.rAddress + '&pinfoSex=' + this.rSex + kindStr + '&pinfoId=32';
+      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&pinfoSex=' + this.rSex + kindStr + '&pinfoId=32';
       console.log(this.postString);
       this.postRecruit(this.postString);
     }
@@ -228,7 +250,9 @@ mounted(){
   components: {
     VHeader,
     FooterButton,
-    KindPanel
+    KindPanel,
+    selectMapAddress
+    
   }
 }
 </script>
@@ -342,6 +366,7 @@ mounted(){
       flex-direction: row;
       align-items: center;
       justify-content: center;
+      font-size:14px;
       input {
         text-align: center;
         width: rem(150px);

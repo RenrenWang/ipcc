@@ -12,14 +12,15 @@ import  VHeader   from '../components/Header.vue'
 import  TopPanel   from '../components/TopPanel.vue'
 import  BottomPanel   from '../components/BottomPanel.vue'
 
+
 export default {
   name: 'home',
   data () {
     return {
       links:[
           {name:"发布招聘",toUrl:"ReleaseRecruitment"},
-           {name:"简历大全",toUrl:"Resume"},
-            {name:"IPCC专属教师服务",toUrl:"/"}
+          {name:"简历大全",toUrl:"Resume"},
+          {name:"IPCC专属教师服务",toUrl:"/"}
       ]
     }
   },

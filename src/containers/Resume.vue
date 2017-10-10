@@ -1,14 +1,14 @@
 <template>
 	<div class="resume">
 		<VHeader :isSubPage="false" title="简历大全" :isFixed="true" />
-		<SearchNavbar/>
+		<SearchNavbar @searchNavLeftBtn="selectAddressCity" :sCity="city"/>
 		<SearchKey :searchKeys="keyList" />
 		<div class="resume-list mescroll" id="mescroll">
 			<ul id="dataList" class="data-list">
 				<ResumeItem v-for="(v,index) in pdlist" :key="index" :resume="v" />
 			</ul>
 		</div>
-
+      
 	</div>
 </template>
 
@@ -17,11 +17,13 @@ import VHeader from '../components/Header.vue'
 import SearchNavbar from '../components/SearchNavbar.vue'
 import SearchKey from '../components/SearchKey.vue'
 import ResumeItem from '../components/ResumeItem.vue'
-
+import  SelectMapCity   from '../components/SelectMapCity.vue'
 export default {
 	name: 'Resume',
 	data() {
 		return {
+			isSelectAddressCity:false,
+			city:'杭州市',
 			keyList: [
 				{
 					name: "兼全职", kinds: [
@@ -61,6 +63,28 @@ export default {
 		this.initMescroll();
 	},
 	methods: {
+		selectAddressCity(){
+		
+		  AMapUI.loadUI(['misc/MobiCityPicker'],(MobiCityPicker)=> {
+
+          var cityPicker = new MobiCityPicker();
+         
+            cityPicker.show();
+             
+            // AMap.event.addDomListener(document.getElementById('openBtn'), 'click', function(e) {
+
+            //     cityPicker.show();
+            // });
+            cityPicker.on('citySelected', (cityInfo)=> {
+                //隐藏城市列表
+                cityPicker.hide();
+                this.city=cityInfo.name;
+                //选中的城市信息
+                console.log(JSON.stringify(cityInfo));
+               });
+            });
+            this.isSelectAddressCity=!this.isSelectAddressCity;  
+		},
     getKindsData(){
 		 this.$http.get(api.kindList)
 		 .then(response=>{
@@ -150,6 +174,7 @@ export default {
 		SearchNavbar,
 		SearchKey,
 		ResumeItem
+	
 	}
 }
 </script>
