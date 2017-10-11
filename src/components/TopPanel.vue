@@ -2,11 +2,11 @@
   <div class="top-panel">
        <div class="top-panel-item">
            <img src="../assets/images/topIco.png">
-           <p class="top-panel-item-txt"><span>机构端</span></p>
+           <p class="top-panel-item-txt"><span>{{setData.name}}</span></p>
         </div>
        <div class="top-panel-item">
           <img src="/static/images/avater.jpeg" class="avater-img">
-          <p class="top-panel-item-txt"><span class="iconfont icon-nv"></span><span>神仙姐姐有点黑</span></p>
+          <p class="top-panel-item-txt"><span class="iconfont icon-nv"></span><span>{{setData.firstName}}</span></p>
        </div>
        <div class="top-panel-item">
            <router-link :to="{ name: 'MyInfo'}" class="iconfont icon-shezhi1" tag="span"></router-link>
@@ -17,6 +17,11 @@
 <script>
 export default {
   name: 'TopPanel',
+  props:{
+      setData:{
+          type:Object
+      }
+  },
   data () {
     return {
       

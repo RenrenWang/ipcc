@@ -8,6 +8,8 @@ const Api={
   kindList:BaseUrl+'/ippcInfoAction.action?classInfo=',
   resumeList:BaseUrl+'/ippcInfoAction.action?newsType=RM&',
   resumeD:BaseUrl+'/ippcInfoAction.action?newsType=RMD&rsmIds=',
+  resumePost:BaseUrl+'/ippcInfoAction.action?newsType=RMADD&',
+  resumeDelete:BaseUrl+'/ippcInfoAction.action?newsType=RMDT&rsmIds=',
   recruitList:BaseUrl+'/ippcInfoAction.action?newsType=PR&',
   recruitD:BaseUrl+'/ippcInfoAction.action?newsType=PRD&infoIds=',
   recruitDelete:BaseUrl+'/ippcInfoAction.action?newsType=PRDT&infoIds=',

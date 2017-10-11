@@ -91,8 +91,8 @@ export default {
           span{
 
            
-            
-              padding:5px 5px;
+               margin:0 5px;
+              padding:5px 2px;
               background:#ffc800;
             
               border-radius:5px;

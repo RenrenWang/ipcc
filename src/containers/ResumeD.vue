@@ -155,7 +155,7 @@ export default {
             width:60%;
             height:rem(90px);
             text-alig:center;
-            line-height:rem(100px);
+            line-height:rem(90px);
             background:#727272;
             font-size:25px;
             font-weight:bold;

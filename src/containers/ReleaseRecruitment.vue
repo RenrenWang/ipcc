@@ -29,6 +29,7 @@ export default {
     }
   },
   mounted(){
+	 if(this.pdlist.length<=0)
      this.initMescroll();
   },
   methods:{
@@ -154,6 +155,7 @@ export default {
   
     background:#bbbbbb;
     .recruit-list{
+	-webkit-overflow-scrolling : touch; 
      position: fixed;
     top: rem(100px);
     bottom:  rem(100px);

@@ -157,7 +157,7 @@ export default {
     },
     showPanel() {
       if (!this.kinds || this.kinds.length <= 0)
-      this.getKindsData();
+       this.getKindsData();
        this.isShowPanel = !this.isShowPanel;
     },
     ishowKindPanel(setArray) {
@@ -262,9 +262,9 @@ export default {
 @import "../assets/style/base.scss";
 .recruit-post {
   height: 100%;
-
+  
   .post-content {
-
+    -webkit-overflow-scrolling : touch; 
     width: 100%;
     position: fixed;
     overflow-y: scroll;
@@ -381,7 +381,7 @@ export default {
       height: 150px;
       ;
       textarea {
-        line-height: 150px *0.8;
+      
 
         text-align: center;
         height: 80%;

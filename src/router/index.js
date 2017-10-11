@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/containers/Home'
+import HomeF from '@/containers/HomeF'
+import HomeS from '@/containers/HomeS'
 import ReleaseRecruitment from '@/containers/ReleaseRecruitment'
 import RecruitD from '@/containers/RecruitD'
 import RecruitPost from '@/containers/RecruitPost'
+import RecruitShow from '@/containers/RecruitShow'
 import Resume from '@/containers/Resume'
 import ResumeD from '@/containers/ResumeD'
+import ResumePost from '@/containers/ResumePost'
 import Purchased from '@/containers/Purchased'
 import MyInfo from '@/containers/MyInfo'
 
@@ -15,8 +18,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home
+      name: 'HomeF',
+      component: HomeF
+    },
+   {
+      path: '/homeS',
+      name: 'HomeS',
+      component: HomeS
     },
      {
       path: '/releaseRecruitment',
@@ -32,7 +40,14 @@ export default new Router({
       path: '/recruitPost',
      name: 'RecruitPost',
      component: RecruitPost
-    },{
+    },
+     {
+      path: '/recruitShow',
+     name: 'RecruitShow',
+     component: RecruitShow
+    },
+    
+    {
       path: '/resume',
      name: 'Resume',
      component: Resume
@@ -41,6 +56,12 @@ export default new Router({
      name: 'ResumeD',
      component: ResumeD
     },{
+      path: '/resumePost',
+     name: 'ResumePost',
+     component: ResumePost
+    },
+    
+    {
       path: '/purchased',
      name: 'Purchased',
      component: Purchased

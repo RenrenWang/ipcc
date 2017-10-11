@@ -15,10 +15,10 @@
           </div>
           <div class="needs">
              <span class="need-item" v-if="rData.titleExt1name&&rData.titleExt1name!=''">{{rData.titleExt1name}}</span>
-             <span class="need-item" v-if="rData.titleExt2name&&rData.titleExt2name!=''">{{rData.titleExt2name}}</span>
+             <!--<span class="need-item" v-if="rData.titleExt2name&&rData.titleExt2name!=''">{{rData.titleExt2name}}</span>
              <span class="need-item" v-if="rData.titleExt3name&&rData.titleExt3name!=''">{{rData.titleExt3name}}</span>
              <span class="need-item" v-if="rData.titleExt4name&&rData.titleExt4name!=''">{{rData.titleExt4name}}</span>
-             <span class="need-item" v-if="rData.titleExt5name&&rData.titleExt5name!=''">{{rData.titleExt5name}}</span>
+             <span class="need-item" v-if="rData.titleExt5name&&rData.titleExt5name!=''">{{rData.titleExt5name}}</span>-->
           </div>
           <p class="rmb">薪资：{{rData.salaryClassname}}</p>
         </div>
@@ -29,7 +29,8 @@
                 <img :src="imgUrl+rData.pinfoUri" class="recruit-item-avater"/>
                 <span>{{rData.pinfoPname}}</span>
              </div>
-             <span class="iconfont icon-shanchu" @click="deleteItem"></span>
+            <span class="iconfont icon-shanchu" @click="deleteItem" v-if="!isAll"></span>
+            <p  v-if="isAll"><span >查看详情</span><span class="iconfont icon-xiangyou" ></span></p>
        </div>
   </li >
 </template>
@@ -38,6 +39,10 @@
 export default {
   name: 'recruitItem',
   props:{
+      isAll:{
+       type:Boolean,
+       default:false
+      },
       rData:{
        type:Object
       },

@@ -9,7 +9,7 @@
            <input  type="text" v-model="searchKey" placeholder="搜索"/>
        </div>
        <p class="link">
-          <router-link :to="{ name: 'Purchased'}">购买的</router-link>
+          <router-link :to="{ name: 'Purchased'}"  v-if="!isAll">购买的</router-link>
        </p>
   </div>
 </template>
@@ -17,7 +17,7 @@
 <script>
 export default {
   name: 'SearchNavbar',
-  props:['sCity'],
+  props:{'sCity':{},isAll:{default:false}},
   data () {
     return {
        searchKey:""

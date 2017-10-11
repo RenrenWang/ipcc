@@ -142,8 +142,8 @@ export default {
       }
       .save{
             margin:15px auto;
-            width:30%;
-            padding:10px 0;
+            width:50%;
+            padding:15px 0;
             font-size:16px;
             color:#fff;
             background:#ffc800;

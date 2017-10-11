@@ -21,11 +21,11 @@ export default {
 <style scoped lang="scss">
 @import "../assets/style/base.scss";
 .bottom{
-    margin-bottom:rem(80px);
+    margin-bottom:rem(60px);
     flex:1;
     background:#fdc800;
     height:rem(100px);
-    width:rem(380px);
+    width:50%;
     border-radius:8px;
     display:flex;
     flex-direction:row;

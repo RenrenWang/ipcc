@@ -1,7 +1,7 @@
 <template>
   <div class="home">
       <VHeader title="IPCC机构"/>   
-      <TopPanel/>
+      <TopPanel :setData="topDdata"/>
       <BottomPanel :Btns="links"/>
      
   </div>
@@ -17,10 +17,11 @@ export default {
   name: 'home',
   data () {
     return {
+      topDdata:{name:'机构端',firstName:"神仙姐姐有点黑"},
       links:[
           {name:"发布招聘",toUrl:"ReleaseRecruitment"},
           {name:"简历大全",toUrl:"Resume"},
-          {name:"IPCC专属教师服务",toUrl:"/"}
+          {name:"IPCC专属教师服务",toUrl:""}
       ]
     }
   },

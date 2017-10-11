@@ -33,7 +33,7 @@
                 </div>
                 <div class="map-box">
                     <p>工作地点</p>
-                    <iframe  style="width:100%;height:100%" :src="address+'&dest=116.470098,39.992838&destName=阜通西'"></iframe>
+                    <div id="map"></div>
                     <p>详细地址：{{data.infoAddr}}</p>
                 </div>
                 <div class="imgs-box">
@@ -67,20 +67,32 @@ export default {
         }
     },
     mounted(){
-      console.log(api.recruitD+this.$route.params.id);
-       this.$http.get(api.recruitD+1)//this.$route.params.id
+      
+       this.$http.get(api.recruitD+this.$route.params.id)//this.$route.params.id
        .then(response=>{
          let data=response.data;
           this.data=data.data[0];
           this.imgList=data.imgData;
           this.isError=false;
-          console.log(JSON.stringify(data));
+           this.showMap( this.data.mapAxis, this.data.mapAyis);
+         
        }).catch(error=>{
            console.log(error);
           this.isError=true;
        })
     },
     methods:{
+        showMap(x,y){
+        var map = new AMap.Map('map', {
+        resizeEnable: false,
+        center: [x, y],
+        zoom: 13
+      });
+      var marker = new AMap.Marker({
+        position: map.getCenter()
+        });
+        marker.setMap(map);
+        },
       AlertCancelActive(){
          this.isShowAlertConfirm=false;
       },
@@ -219,6 +231,14 @@ export default {
             margin:20px rem(100px);
             border-top:1px solid #bbb;
             border-bottom:1px solid #bbb;
+            font-size:16px;
+              #map{
+            margin:10px 0;
+            height:rem(250px);
+           }
+           p{
+               margin:5px 0;
+           }
         }
         .imgs-box{
             margin:20px 0 15px 0;
@@ -239,5 +259,7 @@ export default {
             }
         }
     }
+  
 }
+
 </style>

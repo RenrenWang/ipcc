@@ -42,7 +42,7 @@ footer, header, hgroup, menu, nav, section {
 html,body{
  
  height:100%;
-  -webkit-overflow-scrolling : touch; 
+ -webkit-overflow-scrolling : touch; 
 	
 }
 body {
