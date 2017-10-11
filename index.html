@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="/static/js/flexible.js" ></script>
     <script src="/static/js/mescroll.min.js" ></script>
+    <script type="text/javascript" src='http://webapi.amap.com/maps?v=1.3&key=1683a75e3995650aafd98176386ccb9a'></script>
+    <!-- UI组件库 1.0 -->
+    <script src="http://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
     <link rel="stylesheet" type="text/css" href="/static/fonts/iconfont.css">
     <link rel="stylesheet" type="text/css" href="/static/js/mescroll.min.css">
     <title>ipcc</title>
@@ -12,7 +15,17 @@
   <style>
   .mescroll-totop{
   bottom:60px;
-  }</style>
+}
+.amap-ui-mobi-city-picker .top_group .citylist .item{
+    font-size:16px !important;
+}
+.amap-ui-mobi-city-picker button, .amap-ui-mobi-city-picker input,.amap-ui-mobi-city-picker .search-box{
+  font-size:18px !important;
+}
+.amap-ui-mobi-city-picker .city_fixed_title, .amap-ui-mobi-city-picker .listgroup .title{
+  font-size:16px !important;
+}
+</style>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
