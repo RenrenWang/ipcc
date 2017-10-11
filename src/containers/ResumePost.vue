@@ -137,7 +137,8 @@ export default {
       }
     
      let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId=32';
-     this.postResume(str);
+     console.log(str);
+    this.postResume(str);
     },
     getKindsData() {
 
@@ -257,6 +258,7 @@ export default {
              position:relative;
              padding-bottom:rem(45px);
              text-align: center;
+             min-height: rem(120px);
            .speciality-items{
               
              
@@ -271,8 +273,8 @@ export default {
                 border-radius:5px; 
             }
             .iconfont{
-              font-size:rem(55px);
-               display:block;
+              font-size:rem(50px);
+              
                position:absolute;
                top:8px;
                right:-25px;
@@ -283,6 +285,7 @@ export default {
              width:100%;
               resize: none;
               height:rem(200px);
+            
               border-radius:15px;
               outline:none;
          }

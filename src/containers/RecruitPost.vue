@@ -379,16 +379,17 @@ export default {
     .work-demand {
       width: 80%;
       height: 150px;
-      ;
+     border-radius: 10px;
       textarea {
-      
-
+      padding: 0 10px;
         text-align: center;
+         width: 100%;
         height: 80%;
-        width: 80%;
+       
         border: none;
         resize: none;
         font-size: 14px;
+        outline: none;
       }
     }
     &:nth-last-of-type(1) {

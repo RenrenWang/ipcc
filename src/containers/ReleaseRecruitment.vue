@@ -2,7 +2,8 @@
   <div class="release-recruitment">
          <VHeader  :isSubPage="false" title="我的发布" :isFixed="true"/>
          <div class="recruit-list mescroll" id="mescroll">
-            <ul id="dataList" class="data-list">
+		
+            <ul id="dataList" class="data-list" v-if="!isError">
                   <RecruitItem v-for="(v,index) in pdlist"  :key="index" :rData="v" :selectIndex='index' @deleteItem="showAlertConfirm"/>
             </ul>
          </div>
@@ -25,7 +26,8 @@ export default {
 	  isShowAlertConfirm:false,
 	  deleteId:-1,
 	  deleteIndex:-1,
-	  mescroll:Object
+	  mescroll:Object,
+	  isError:false
     }
   },
   mounted(){
@@ -88,7 +90,8 @@ export default {
 					htmlNodata: '<p class="upwarp-nodata">-- 没有更多数据 --</p>',
 					page: {
 						
-						size: 10
+						size: 10,
+						time:3000
 					},
 					
 					empty: { //配置列表无任何数据的提示
@@ -111,7 +114,7 @@ export default {
 			console.log("page.num==" + page.num + ", page.size==" + page.size);
 			//联网加载数据
                 console.log("------->"+page.num);
-			this.$http.get(api.recruitList + 'pinfoId=32&pageno=' + page.num).then((response) => {
+			this.$http.get(api.recruitList + 'isAll=N&pinfoId=32&pageno=' + page.num).then((response) => {
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				let data = response.data.data;
 				// this.pdlist = data.data;
@@ -125,13 +128,18 @@ export default {
 				//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 				//传参:数据的总数; mescroll会自动判断列表是否有无下一页数据,如果数据不满一页则提示无更多数据;
 				this.mescroll.endSuccess(data.length);
-				console.log(	this.mescroll);
+				console.log(this.mescroll);
 					//更新列表数据
 				this.pdlist = this.pdlist.concat(data);
-				console.log("this.pdlist.length==" + this.pdlist.length);
+				//console.log("this.pdlist.length==" + this.pdlist.length);
 
 			}).catch(error=>{
-				 this.mescroll.endErr();
+				this.mescroll.endErr();
+				if(this.pdlist<=0){
+                     this.isError=true;
+				}
+				//this.mescroll.endSuccess(this.pdlist<0?);
+
 			})
 
 		}

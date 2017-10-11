@@ -145,7 +145,7 @@ export default {
 			console.log("page.num==" + page.num + ", page.size==" + page.size);
 			//联网加载数据
 
-			this.$http.get(api.resumeList + 'pinfoId=32&pageno=' + page.num).then((response) => {
+			this.$http.get(api.resumeList + 'isAll=Y&pinfoId=32&pageno=' + page.num).then((response) => {
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				let data = response.data.data;
 				// this.pdlist = data.data;
@@ -186,9 +186,12 @@ export default {
 
 	background: #edebe8;
 	.resume-list {
-
+ height: auto;
     position: fixed;
+    
+  
 	top: rem(100px) * 2 + rem(80px);
+	bottom: 0;
 		ul {
 			padding: 0 10px;
 		}

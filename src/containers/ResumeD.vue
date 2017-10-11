@@ -7,7 +7,7 @@
                     <p><span class="iconfont  icon-dizhi"></span><span>杭州市</span></p>
                 </div>
                 <div class="recruit-d-item">
-                    <img src="/static/images/avater.jpeg" class="avater-img">
+                    <img :src="imgUrl+data.pinfoUri" class="avater-img">
                     <p class="top-panel-item-txt">
                         <span>{{data.pinfoPname}}</span>
                         <span class="iconfont icon-nan" style="color:#1e9ee6"></span>
@@ -37,10 +37,11 @@
                   <div class="r-section">
                      <span>擅长：</span>
                      <div class="r-section-item">
-                         <span>民族舞</span>
-                         <span>芭蕾舞</span>
-                         <span>拉丁舞</span>
-                         <span>古典舞</span> 
+                         <span v-if="titleExt1name!=''||titleExt1name">{{data.titleExt1name}}</span>
+                         <span v-if="titleExt2name!=''||titleExt2name">{{data.titleExt2name}}</span>
+                         <span v-if="titleExt3name!=''||titleExt3name">{{data.titleExt3name}}</span>
+                         <span v-if="titleExt4name!=''||titleExt4name">{{data.titleExt4name}}</span>
+                         <span v-if="titleExt5name!=''||titleExt5name">{{data.titleExt5name}}</span>
                      </div>
                  </div>
                  <div class="nl-box">
@@ -65,7 +66,8 @@ export default {
         return {
            data:{},
            imgList:[],
-           isError:false
+           isError:false,
+           imgUrl:api.imgUrl
         }
     },
     mounted(){
