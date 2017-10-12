@@ -7,7 +7,21 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+
+  mounted(){
+    console.log( this.GetQueryString('pinfoId'));
+  },
+  methods:{
+	 GetQueryString(name){
+	  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if(r!=null)return  unescape(r[2]); return null;
+
+	  }
+  }
+
+
 }
 </script>
 

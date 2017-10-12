@@ -4,7 +4,7 @@ const BaseUrl='/appsrv';
 const Api={
   selectMapAddress:'https://m.amap.com/picker/?center=116.40,39.97&key=1683a75e3995650aafd98176386ccb9a',
   address:'https://m.amap.com/navi/?hideRouteIcon=1&key=1683a75e3995650aafd98176386ccb9a',
-  imgUrl:'http://www.hzrongzhi.com/imgsrv',
+  imgUrl:'http://www.hzrongzhi.com/imgsrv/',
   kindList:BaseUrl+'/ippcInfoAction.action?classInfo=',
   resumeList:BaseUrl+'/ippcInfoAction.action?newsType=RM&',
   resumeD:BaseUrl+'/ippcInfoAction.action?newsType=RMD&rsmIds=',

@@ -37,11 +37,11 @@
                   <div class="r-section">
                      <span>擅长：</span>
                      <div class="r-section-item">
-                         <span v-if="titleExt1name!=''||titleExt1name">{{data.titleExt1name}}</span>
-                         <span v-if="titleExt2name!=''||titleExt2name">{{data.titleExt2name}}</span>
-                         <span v-if="titleExt3name!=''||titleExt3name">{{data.titleExt3name}}</span>
-                         <span v-if="titleExt4name!=''||titleExt4name">{{data.titleExt4name}}</span>
-                         <span v-if="titleExt5name!=''||titleExt5name">{{data.titleExt5name}}</span>
+                         <span v-if="data.titleExt1name!=''||data.titleExt1name">{{data.titleExt1name}}</span>
+                         <span v-if="data.titleExt2name!=''||data.titleExt2name">{{data.titleExt2name}}</span>
+                         <span v-if="data.titleExt3name!=''||data.titleExt3name">{{data.titleExt3name}}</span>
+                         <span v-if="data.titleExt4name!=''||data.titleExt4name">{{data.titleExt4name}}</span>
+                         <span v-if="data.titleExt5name!=''||data.titleExt5name">{{data.titleExt5name}}</span>
                      </div>
                  </div>
                  <div class="nl-box">
