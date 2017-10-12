@@ -172,7 +172,8 @@ export default {
       this.rZKind = str;
     },
     postRecruit(str) {
-      this.$http.get(api.recruitAddAOrRevise + str)
+      console.log(api.recruitAddAOrRevise + str+'&&pinfoId='+GetQueryString('pinfoId'));
+      this.$http.get(api.recruitAddAOrRevise + str+'&&pinfoId='+GetQueryString('pinfoId'))
         .then(response => {
           // console.log(JSON.stringify(response.data));
           if (response.data.result == "success") {

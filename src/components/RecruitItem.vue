@@ -26,7 +26,7 @@
        </router-link>
        <div class="recruit-item-b">
              <div class="recruit-item-b-l">
-                <img :src="imgUrl+rData.pinfoUri" class="recruit-item-avater"/>
+                <img :src="rData.pinfoUri" class="recruit-item-avater"/>
                 <span>{{rData.pinfoPname}}</span>
              </div>
             <span class="iconfont icon-shanchu" @click="deleteItem" v-if="!isAll"></span>
@@ -57,6 +57,7 @@ export default {
   },
   methods:{
     deleteItem(){
+        alert(this.rData.infoIds);
        this.$emit('deleteItem',[this.rData.infoIds,this.selectIndex]);  
     }
   }

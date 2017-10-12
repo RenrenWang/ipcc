@@ -136,7 +136,7 @@ export default {
        return;
       }
     
-     let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId=32';
+     let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId='+GetQueryString('pinfoId');
      console.log(str);
     this.postResume(str);
     },

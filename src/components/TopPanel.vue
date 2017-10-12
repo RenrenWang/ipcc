@@ -5,7 +5,7 @@
            <p class="top-panel-item-txt"><span>{{setData.name}}</span></p>
         </div>
        <div class="top-panel-item">
-          <img src="/static/images/avater.jpeg" class="avater-img">
+          <img :src="setData.avatar" class="avater-img">
           <p class="top-panel-item-txt"><span class="iconfont icon-nv"></span><span>{{setData.firstName}}</span></p>
        </div>
        <div class="top-panel-item">

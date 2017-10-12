@@ -17,13 +17,21 @@ export default {
   name: 'home',
   data () {
     return {
-      topDdata:{name:'机构端',firstName:"神仙姐姐有点黑"},
+      topDdata:{name:'机构端',firstName:"",avatar:''},
       links:[
           {name:"发布招聘",toUrl:"ReleaseRecruitment"},
           {name:"简历大全",toUrl:"Resume"},
           {name:"IPCC专属教师服务",toUrl:""}
       ]
     }
+  },
+  mounted(){
+   this.topDdata.firstName=GetQueryString('pinfoSname')?GetQueryString('pinfoSname'):'';
+    this.topDdata.avatar=GetQueryString('pinfoSname')?GetQueryString('pinfoUri'):'';
+  
+  },
+  methods:{
+  
   },
   components:{
     VHeader,
