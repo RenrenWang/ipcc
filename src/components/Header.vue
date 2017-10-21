@@ -1,7 +1,7 @@
 <template>
   <header :class="['header',{fixed:isFixed}]">
         <div class="header-buttons header-left ">
-           <a href="javascript:;" @click="back()"><span class="iconfont icon-fanhui"></span></a>
+           <a href="javascript:;" @click="back()"><span class="iconfont icon-fanhui2"></span></a>
            <a href="javascript:;" v-if="isSubPage"><span class="iconfont icon-guanbi"></span></a>
         </div>
         <h1 class="header-title">{{title}}</h1>

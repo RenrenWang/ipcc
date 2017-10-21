@@ -71,6 +71,7 @@ export default {
         }
     },
     mounted(){
+  
        this.$http.get(api.resumeD+this.$route.params.id)
        .then(response=>{
          let data=response.data;

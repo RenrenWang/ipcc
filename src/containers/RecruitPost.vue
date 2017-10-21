@@ -63,14 +63,28 @@
       </div>
       <div class="selection">
         <p>机构图片上传</p>
-        <ul class="imgs-list">
+        <div style="text-align:center;" >
+
+    <VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer>
+
+     <form id="jvForm" action="/appsrv/servlet/fileUploadServlet?appType=PIMGE" method="post" enctype="multipart/form-data">
+      <VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer>  
+       
+        <input  type="hidden"  id="msgId" name="msgId" :value="msgid"/>
+        <input  type="hidden"  id="prdImgtype" name="prdImgtype" value="A"/>
+        <input type="submit"/>
+    </form>
+        </div>
+        <!--<ul class="imgs-list">
           <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
-        </ul>
+        </ul>-->
+     
       </div>
     </div>
     <selectMapAddress v-show="isShowSelectMap" @closeSelectMap="showMap"/>
     <FooterButton btnName="确认发布" @fBtnAction="btnAction()" />
     <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
+    <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
   </div>
 </template>
 
@@ -79,6 +93,8 @@ import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 import KindPanel from '../components/KindPanel.vue'
 import selectMapAddress from '../components/selectMapAddress.vue'
+import Prompt from '../components/Prompt.vue'
+import VueImgInputer from 'vue-img-inputer'
 export default {
   name: 'recruitPost',
   data() {
@@ -99,11 +115,38 @@ export default {
       selectKinds:[],
       selectKindsStr:'点击选择',
       isShowSelectMap:false,
+      pContent:'',
+      isPrompt:false,
+      picValue:{},
+      msgid:0
     }
   },
 
   
   methods: {
+    update(e){
+      
+          let file = e.target.files[0];   
+             
+         
+          let param = new FormData(); //创建form对象
+          param.append('msgid',1);//通过append向form对象添加数据
+          param.append('prdImgtype','a');//添加form表单中其他数据
+          param.append('filegCollImguri',file);//通过append向form对象添加数据
+  
+     
+        this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',param,{headers:{'Content-Type':'multipart/form-data'}})
+        .then(response=>{
+          console.log(response.data);
+        })       
+   },
+    promptCommon(str){
+       this.pAction();
+       this.pContent=str;
+    },
+    pAction(){
+     this.isPrompt=!this.isPrompt;
+    },
     isShowMap(){
         this.isShowSelectMap=!this.isShowSelectMap;
     },
@@ -113,6 +156,20 @@ export default {
        let xy=arr[1].split(',');
        this.rMapX=xy[0];
        this.rMapY=xy[1];
+    },
+
+    postImg(id){
+       
+        //console.log("---------"+id);
+        this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',{
+          // "name":"filegCollImguri",
+          "msgid":id,
+          "prdImgtype":'a',
+          "fileImg":this.picValue
+        },{headers:{'Content-Type':'multipart/form-data'}})
+        .then(response=>{
+          console.log(response.data);
+        })
     },
   selectKindsAction() {
        
@@ -172,22 +229,31 @@ export default {
       this.rZKind = str;
     },
     postRecruit(str) {
-      console.log(api.recruitAddAOrRevise + str+'&&pinfoId='+GetQueryString('pinfoId'));
-      this.$http.get(api.recruitAddAOrRevise + str+'&&pinfoId='+GetQueryString('pinfoId'))
+      console.log(api.recruitAddAOrRevise + str+'&pinfoId='+GetQueryString('pinfoId'));
+      this.$http.get(api.recruitAddAOrRevise + str+'&pinfoId='+GetQueryString('pinfoId'))
         .then(response => {
           // console.log(JSON.stringify(response.data));
           if (response.data.result == "success") {
-            alert('发布成功');
+              this.promptCommon('发布成功');
+              console.log(response.data);
+              this.postImg(response.data.infoIds);
+              this.msgid=response.data.infoIds;
+          }else{
+             this.promptCommon('发布失败');
           }
         })
     },
+
+
     btnAction() {
+
+        
       if (this.rTitle == '' || !this.rTitle) {
-        alert('标题不能为空');
+         this.promptCommon('标题不能为空');
         return;
       }
       if (this.rTitle.length > 10) {
-        alert('标题不能超过十个字');
+        this.promptCommon('标题不能超过十个字');
         return;
       }
       let kindStr = '';
@@ -208,30 +274,30 @@ export default {
           kindStr += '&titleExt1=' + this.selectKinds[0]['codeName'];
           break;
         case 0:
-          alert('艺术种类不能为空');
+          this.promptCommon('艺术种类不能为空');
           return;
       }
 
    
         if (this.rAddress == '' || !this.rAddress||this.rMapAddress == '') {
-          alert('请选择地址');
+          this.promptCommon('请选择地址');
           return;
         }
        if(this.rmb== '' || !this.rmb){
-          alert('薪资待遇不能为空');
+          this.promptCommon('薪资待遇不能为空');
           return;
        }
        if(isNaN(this.rmb)){
-          alert('薪资待遇格式有误');
+          this.promptCommon('薪资待遇格式有误');
           return;
        }
 
       if (this.workDemand == '' || !this.workDemand) {
-        alert('内容不能为空');
+        this.promptCommon('内容不能为空');
         return;
       }
       if (this.workDemand.length > 100) {
-        alert('内容不能超过100个字');
+        this.promptCommon('内容不能超过100个字');
         return;
       }
         let xzdy='';
@@ -242,7 +308,7 @@ export default {
            xzdy=this.rmb+'元/小时';
         }
     
-
+  
       this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&pinfoSex=' + this.rSex + kindStr + '&pinfoId=32';
       console.log(this.postString);
       this.postRecruit(this.postString);
@@ -252,8 +318,9 @@ export default {
     VHeader,
     FooterButton,
     KindPanel,
-    selectMapAddress
-    
+    selectMapAddress,
+    Prompt,
+    VueImgInputer
   }
 }
 </script>

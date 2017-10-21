@@ -1,5 +1,5 @@
 <template>
-  <p class="footer" @click="btnAction">
+  <p class="footer">
       本服务由IPCC提供，最终解释权由IPCC所有
  
   </p>

@@ -49,7 +49,8 @@
             </div>
        </div>
         <FooterButton  btnName="上传" @fBtnAction="save()"/>
-        <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
+        <KindPanel selectIndex=5 v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
+        <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
   </div>
 </template>
 
@@ -57,6 +58,7 @@
 import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 import KindPanel from '../components/KindPanel.vue'
+import Prompt from '../components/Prompt.vue'
 export default {
   name: 'ResumePost',
   data () {
@@ -70,7 +72,9 @@ export default {
       jobYear:'',
       isShowPanel:false,
       kinds:[],
-      selectKinds:[]
+      selectKinds:[],
+         pContent:'',
+      isPrompt:false
     }
   },
 
@@ -79,33 +83,39 @@ export default {
   },
   methods:{
 
-      
+   promptCommon(str){
+       this.pAction();
+       this.pContent=str;
+    },
+    pAction(){
+     this.isPrompt=!this.isPrompt;
+    },
     selectJqz(str){
        this.rZKind=str;
     },
     save(){
       if (this.name == '' || !this.name) {
-        alert('姓名不能为空');
+        this.promptCommon('姓名不能为空');
         return;
       }
      if (this.age == '' || !this.age) {
-        alert('年龄不能为空');
+         this.promptCommon('年龄不能为空');
         return;
       }
       if (isNaN(this.age)){
-        alert('年龄格式有误');
+         this.promptCommon('年龄格式有误');
         return;
       }
      if (this.school == '' || !this.school) {
-        alert('毕业学校不能为空');
+         this.promptCommon('毕业学校不能为空');
         return;
       }
       if (this.jobAddress == '' || !this.jobAddress) {
-        alert('希望在哪里工作不能为空');
+         this.promptCommon('希望在哪里工作不能为空');
         return;
       }
         if (this.jobYear == '' || !this.jobYear) {
-        alert('工作经验不能为空');
+         this.promptCommon('工作经验不能为空');
         return;
       }
 
@@ -127,12 +137,12 @@ export default {
           kindStr += '&titleExt1=' + this.selectKinds[0]['codeName'];
           break;
         case 0:
-          alert('请选择擅长');
+           this.promptCommon('请选择擅长');
           return;
       }
       
       if(this.resumeText.length<=0){
-       alert('个人介绍不能为空');
+        this.promptCommon('个人介绍不能为空');
        return;
       }
     
@@ -168,7 +178,7 @@ export default {
         .then(response => {
            console.log(JSON.stringify(response.data));
           if (response.data.result == "success") {
-            alert('发布成功');
+             this.promptCommon('发布成功');
           }
         })
     },
@@ -176,7 +186,8 @@ export default {
   components:{
       VHeader,
       FooterButton,
-      KindPanel
+      KindPanel,
+      Prompt
   }
 }
 </script>

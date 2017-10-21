@@ -1,7 +1,7 @@
 <template>
   <div class="kind-panel">
         <div class="kind-panel-nav-bar" >
-           <span class="iconfont icon-fanhui" @click="closeKp()"></span>
+           <span class="iconfont icon-fanhui2" @click="closeKp()"></span>
           <h2>{{sName}}</h2>
         </div>
       <div class="kinds"  v-for="(v,index) in sKinds">
@@ -10,12 +10,13 @@
            <li v-for="(sv,sindex) in  v.classData"  :class="{activeLi:sv.isSelect}" :key="sindex"  @click="selectKind(index,sindex)">{{sv.codeValue}}</li>
           </ul>
       </div>
-     
+    <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
   </div>
 </template>
  
 <script>
 import  VHeader   from './Header.vue'
+import Prompt from './Prompt.vue'
 export default {
   name: 'KindPanel',
   props:{
@@ -30,6 +31,10 @@ export default {
     selectIndex:{
       type:Number,
       required:true
+    },
+    selectSize:{
+      type:Number,
+      default:1
     }
    
   },
@@ -48,18 +53,29 @@ export default {
   },
   data () {
     return {
-     selectArray:[]
+     selectArray:[],
+      pContent:'',
+      isPrompt:false
     }
   },
   methods:{
+     promptCommon(str){
+       this.pAction();
+       this.pContent=str;
+    },
+    pAction(){
+     this.isPrompt=!this.isPrompt;
+    },
   closeKp(){
     this.$emit('closePanel',this.selectArray);
   },
   selectKind(index,sindex){
     let array=[];
     console.log("size--->"+this.selectArray.length);
-    if(this.selectArray.length>=5&&this.selectIndex==1){
-      if(!this.sKinds[index]['classData'][sindex]['isSelect']){alert('最多选择5个选项');}
+    if(this.selectArray.length>=this.selectSize&&this.selectIndex==1){
+      if(!this.sKinds[index]['classData'][sindex]['isSelect']){
+      //  this.promptCommon('最多选择'+this.selectSize+'个选项');
+        }
       this.sKinds[index]['classData'][sindex]['isSelect']=false;
        return;
     }else{
@@ -89,7 +105,8 @@ export default {
     }
   },
   components:{
-      VHeader
+      VHeader,
+      Prompt
   }
 }
 </script>
