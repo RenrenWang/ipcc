@@ -65,14 +65,18 @@
         <p>机构图片上传</p>
         <div style="text-align:center;" >
 
-    <VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer>
+   
 
-     <form id="jvForm" action="/appsrv/servlet/fileUploadServlet?appType=PIMGE" method="post" enctype="multipart/form-data">
-      <VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer>  
-       
+     <form id="jvForm" name="jvForm" action="/appsrv/servlet/fileUploadServlet?appType=PIMGE" method="post" enctype="multipart/form-data">
+  <!--<VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer> --> 
+        <div class="file-button">
+          <img :src="srcImgs" />
+          <input type="file" name="filegCollImguri" id="filegCollImguri"  @change="changFile" accept="image/*" >
+        </div>
         <input  type="hidden"  id="msgId" name="msgId" :value="msgid"/>
         <input  type="hidden"  id="prdImgtype" name="prdImgtype" value="A"/>
-        <input type="submit"/>
+       <!-- <input type="button" id="submit" @postImgActive="postImg"  value="" style="width:0;height:0"/> -->
+         <!-- <input type="submit" id="submit"   value="svae" /> -->
     </form>
         </div>
         <!--<ul class="imgs-list">
@@ -84,7 +88,8 @@
     <selectMapAddress v-show="isShowSelectMap" @closeSelectMap="showMap"/>
     <FooterButton btnName="确认发布" @fBtnAction="btnAction()" />
     <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
-    <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
+    <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction"/>
+    <BottomPlay v-show="isShowPlay"/>
   </div>
 </template>
 
@@ -95,6 +100,8 @@ import KindPanel from '../components/KindPanel.vue'
 import selectMapAddress from '../components/selectMapAddress.vue'
 import Prompt from '../components/Prompt.vue'
 import VueImgInputer from 'vue-img-inputer'
+import BottomPlay from '../components/BottomPlay'
+
 export default {
   name: 'recruitPost',
   data() {
@@ -118,25 +125,27 @@ export default {
       pContent:'',
       isPrompt:false,
       picValue:{},
-      msgid:0
+      msgid:0,
+      srcImgs:require('../assets/images/picIcon.png'),
+      isShowPlay:false
     }
   },
 
   
   methods: {
-    update(e){
-      
-          let file = e.target.files[0];   
-             
-         
-          let param = new FormData(); //创建form对象
-          param.append('msgid',1);//通过append向form对象添加数据
-          param.append('prdImgtype','a');//添加form表单中其他数据
-          param.append('filegCollImguri',file);//通过append向form对象添加数据
-  
+    
+    changFile(e){
+      this.srcImgs=URL.createObjectURL(e.target.files[0]);
      
-        this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',param,{headers:{'Content-Type':'multipart/form-data'}})
+     // console.log( URL.createObjectURL(e.target.files[0]));
+    
+    },
+    postImg(){
+       var form = document.getElementById('jvForm');  
+        let fData=new FormData(form);
+        this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',fData,{headers:{'Content-Type':'multipart/form-data'}})
         .then(response=>{
+          alert(JSON.stringify(response.data));
           console.log(response.data);
         })       
    },
@@ -148,29 +157,41 @@ export default {
      this.isPrompt=!this.isPrompt;
     },
     isShowMap(){
-        this.isShowSelectMap=!this.isShowSelectMap;
+      this.isShowSelectMap=!this.isShowSelectMap;
+      if(this.isShowSelectMap){
+        window.addEventListener("message",(e)=>{
+         console.log('您选择了:' + JSON.stringify(e.data));
+            this.isShowSelectMap=!this.isShowSelectMap;
+            this.showMap([e.data.name,e.data.location]);
+          //this.$emit('closeSelectMap',[e.data.name,e.data.location]);
+        }, false);
+      }
+        
     },
     showMap(arr){
-       this.isShowSelectMap=false;
+      if(arr){
+      this.isShowSelectMap=false;
        this.rMapAddress=arr[0];
        let xy=arr[1].split(',');
        this.rMapX=xy[0];
        this.rMapY=xy[1];
+      }
+      
     },
 
-    postImg(id){
+    // postImg(id){
        
-        //console.log("---------"+id);
-        this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',{
-          // "name":"filegCollImguri",
-          "msgid":id,
-          "prdImgtype":'a',
-          "fileImg":this.picValue
-        },{headers:{'Content-Type':'multipart/form-data'}})
-        .then(response=>{
-          console.log(response.data);
-        })
-    },
+    //     //console.log("---------"+id);
+    //     this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',{
+    //       // "name":"filegCollImguri",
+    //       "msgid":id,
+    //       "prdImgtype":'a',
+    //       "fileImg":this.picValue
+    //     },{headers:{'Content-Type':'multipart/form-data'}})
+    //     .then(response=>{
+    //       console.log(response.data);
+    //     })
+    // },
   selectKindsAction() {
        
       let kindStr = '';
@@ -236,8 +257,13 @@ export default {
           if (response.data.result == "success") {
               this.promptCommon('发布成功');
               console.log(response.data);
-              this.postImg(response.data.infoIds);
+              //response.data.infoIds
+              //this.postImg();
               this.msgid=response.data.infoIds;
+                 if(this.msgid>0){
+                  //  document.getElementById("submit").click();
+              this.postImg();
+                 }
           }else{
              this.promptCommon('发布失败');
           }
@@ -311,7 +337,8 @@ export default {
   
       this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&pinfoSex=' + this.rSex + kindStr + '&pinfoId=32';
       console.log(this.postString);
-      this.postRecruit(this.postString);
+      this.isShowPlay=!this.isShowPlay;
+      //this.postRecruit(this.postString);
     }
   },
   components: {
@@ -320,7 +347,8 @@ export default {
     KindPanel,
     selectMapAddress,
     Prompt,
-    VueImgInputer
+    VueImgInputer,
+    BottomPlay
   }
 }
 </script>
@@ -463,6 +491,29 @@ export default {
     &:nth-last-of-type(1) {
       border: none;
     }
+    #jvForm{
+       text-align:center;
+      text-align: -webkit-center;
+ height: 80px;
+     overflow: hidden;
+    }
+    .file-button{
+  width:30%;
+  position: relative;
+  input{
+    display: block;
+    width: 100%;
+     height: 100%;
+    position: absolute;
+    top:0px;
+    opacity: 0; 
+  }
+  img{
+    width: 100%;
+     width: 101px;
+     height: 80px;
+  }
+}
     .imgs-list {
       margin-top: 20px;
       display: flex;
@@ -470,12 +521,14 @@ export default {
       flex-direction: row;
       align-items: center;
       li {
+
         text-align: center;
         margin: 0 2px;
         img {
 
           height: auto;
-          width: 80%;
+          width: 101px;
+          height: 80px;
         }
       }
     }
@@ -484,4 +537,6 @@ export default {
     background: #ffc800 !important;
   }
 }
+
+
 </style>

@@ -15,20 +15,14 @@ export default {
     }
   },
   mounted(){
-   this.setMap();
+   
+   var iframe = document.getElementById('map').contentWindow;
+        document.getElementById('map').onload = function(){
+       iframe.postMessage('hello','https://m.amap.com/picker/');
+    };
   },
   methods:{
 
-    setMap(){
-        var iframe = document.getElementById('map').contentWindow;
-        document.getElementById('map').onload = function(){
-          iframe.postMessage('hello','https://m.amap.com/picker/');
-        };
-        window.addEventListener("message",(e)=>{
-         console.log('您选择了:' + JSON.stringify(e.data));
-           this.$emit('closeSelectMap',[e.data.name,e.data.location]);
-        }, false);
-      }
   }
 }
 </script>

@@ -246,11 +246,12 @@ export default {
             text-align: center;
         }
         .imgs-list{
-              display: flex;
+             display: flex;
             justify-content: center;
             flex-direction: row;
             align-items: center;
             li{
+                width: 33.33%;
                 margin: 5px 10px;
                 img{
                     height: 100%;

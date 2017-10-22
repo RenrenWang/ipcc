@@ -49,7 +49,7 @@
             </div>
        </div>
         <FooterButton  btnName="上传" @fBtnAction="save()"/>
-        <KindPanel selectIndex=5 v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
+        <KindPanel selectIndex=5  :selectSize=5 v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
         <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
   </div>
 </template>
