@@ -143,7 +143,7 @@ export default {
     postImg(){
        var form = document.getElementById('jvForm');  
         let fData=new FormData(form);
-        this.$http.post('/appsrv/servlet/fileUploadServlet?appType=PIMGE',fData,{headers:{'Content-Type':'multipart/form-data'}})
+        this.$http.post("http://192.168.2.100:8080/zhxz/servlet/VillFileUpload",fData,{headers:{'Content-Type':'multipart/form-data'}})
         .then(response=>{
           alert(JSON.stringify(response.data));
           console.log(response.data);
@@ -337,8 +337,8 @@ export default {
   
       this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&pinfoSex=' + this.rSex + kindStr + '&pinfoId=32';
       console.log(this.postString);
-      this.isShowPlay=!this.isShowPlay;
-      //this.postRecruit(this.postString);
+    //  this.isShowPlay=!this.isShowPlay;
+    this.postRecruit(this.postString);
     }
   },
   components: {

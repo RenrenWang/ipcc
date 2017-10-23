@@ -1,7 +1,7 @@
 <template>
     <div class="recruit-d">
-        <VHeader :isSubPage="false" title="我的发布" :isFixed="true" />
-        <div class="recruit-d-content">
+        <VHeader :isSubPage="false" :title="!this.$route.query.type?'我的发布':'详情'" :isFixed="true" />
+        <div class="recruit-d-content" >
             <div class="recruit-d-t">
                 <div class="recruit-d-item">
                     <p>发布者</p>
@@ -32,7 +32,7 @@
                      <p>{{data.titleSimdesc}}</p>
                 </div>
                 <div class="map-box">
-                    <p>工作地点</p>
+                    <p @click="showMapBig">工作地点(点击查看大图)</p>
                     <div id="map"></div>
                     <p>详细地址：{{data.infoAddr}}</p>
                 </div>
@@ -44,7 +44,8 @@
                 </div>
             </div>
         </div>
-         <FooterButton  btnName="删除" @fBtnAction="showAlertConfirm()"/>
+         <MapBig  v-if="isMapBig" :xy="mapXY" @hMap="showMapBig"/>
+         <FooterButton  :btnName="$route.query.type?'与他联系':'删除'" @fBtnAction="showAlertConfirm()"/>
          <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="删除后，该信息将无法被老师所看到。" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
     </div>
    
@@ -54,6 +55,9 @@
 import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 import AlertConfirm from '../components/AlertConfirm.vue'
+import MapBig from '../components/MapBig.vue'
+
+
 export default {
     name: 'recruitD',
     data() {
@@ -63,26 +67,34 @@ export default {
            isError:false,
            imgUrl:api.imgUrl,
            isShowAlertConfirm:false,
-           address:api.address
+           address:api.address,
+           isMapBig:false,
+           mapXY:{x:0,y:0}
         }
     },
     mounted(){
-      
-       this.$http.get(api.recruitD+this.$route.params.id)//this.$route.params.id
+      console.log(this.$route.query.type);
+       this.$http.get(api.recruitD+this.$route.query.id)//this.$route.params.id
        .then(response=>{
          let data=response.data;
           this.data=data.data[0];
           this.imgList=data.imgData;
           this.isError=false;
            this.showMap( this.data.mapAxis, this.data.mapAyis);
-         
+          this.mapXY={
+              x:this.data.mapAxis,
+              y:this.data.mapAyis
+          }
        }).catch(error=>{
            console.log(error);
           this.isError=true;
        })
     },
     methods:{
-        showMap(x,y){
+        showMapBig(){
+        this.isMapBig=!this.isMapBig;
+        },
+     showMap(x,y){
         var map = new AMap.Map('map', {
         resizeEnable: false,
         center: [x, y],
@@ -106,13 +118,19 @@ export default {
         
       },
       showAlertConfirm(){
-       this.isShowAlertConfirm=true;
+          if(this.$route.query.type){
+           
+          }else{
+            this.isShowAlertConfirm=true;
+          }
+    
       }
     },
     components: {
         VHeader,
         FooterButton,
-        AlertConfirm
+        AlertConfirm,
+        MapBig
     }
 }
 </script>
@@ -227,7 +245,7 @@ export default {
            background: #FFC800;
            border-radius: 5px;} 
         }.map-box{
-          
+            
             margin:20px rem(100px);
             border-top:1px solid #bbb;
             border-bottom:1px solid #bbb;
@@ -237,7 +255,7 @@ export default {
             height:rem(250px);
            }
            p{
-               margin:5px 0;
+               margin:15px 0;
            }
         }
         .imgs-box{

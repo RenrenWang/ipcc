@@ -7,7 +7,7 @@
                     <p><span class="iconfont  icon-dizhi"></span><span>杭州市</span></p>
                 </div>
                 <div class="recruit-d-item">
-                    <img :src="imgUrl+data.pinfoUri" class="avater-img">
+                    <img :src="data.pinfoUri" class="avater-img">
                     <p class="top-panel-item-txt">
                         <span>{{data.pinfoPname}}</span>
                         <span class="iconfont icon-nan" style="color:#1e9ee6"></span>
@@ -49,7 +49,11 @@
                      <p>{{data.pinfoNote}}</p>
                 </div>
                 <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
-                <div style="height:300px;"></div>
+                <div style="height:300px;">
+                     <ul>
+                        <li v-for="(v,index) in  imgList">{}}</li>
+                     </ul>
+                </div>
             </div>
         </div>
          <FooterButton  btnName="与他联系" bgFooterButton="#ff6b00"/>
@@ -72,7 +76,7 @@ export default {
     },
     mounted(){
   
-       this.$http.get(api.resumeD+this.$route.params.id)
+       this.$http.get(api.resumeD+this.$route.query.id)
        .then(response=>{
          let data=response.data;
           this.data=data.data[0];

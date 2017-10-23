@@ -1,6 +1,6 @@
 <template> 
   <li class="recruit-item" >
-       <router-link  class="recruit-item-t" :to="{name:'RecruitD',params: { id:rData.infoIds}}"  tag="div">
+       <router-link  class="recruit-item-t" :to="{name:'RecruitD',query: { id:rData.infoIds,type:isAll}}"  tag="div">
            <div class="recruit-item-tt">
            <h3 class="recruit-item-title">{{rData.infoTitle}}</h3>
            <span class="timing">倒计时{{rData.timeDays}}天</span>
@@ -48,7 +48,11 @@ export default {
       },
       selectIndex:{
        type:Number
+      },
+      type:{
+         type:String 
       }
+      
   },
   data () {
     return {

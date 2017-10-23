@@ -1,6 +1,6 @@
 <template>
   <div class="top-panel">
-       <div class="top-panel-item">
+       <div class="top-panel-item" @click="toHome(setData.hUrl)">
            <img src="../assets/images/topIco.png">
            <p class="top-panel-item-txt"><span>{{setData.name}}</span></p>
         </div>
@@ -26,7 +26,12 @@ export default {
     return {
       
     }
+  },
+ methods:{
+      toHome(url){
+      this.$router.push({ path:url})
   }
+ }
 }
 </script>
 

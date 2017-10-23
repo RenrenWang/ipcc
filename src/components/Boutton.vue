@@ -1,5 +1,5 @@
 <template>
-   <router-link class="bottom" :to="{ name: btn.toUrl}" tag="div">
+   <router-link class="bottom" :to="{ path: btn.toUrl}" tag="div">
         <span>{{btn.name}}</span>
  
   </router-link>

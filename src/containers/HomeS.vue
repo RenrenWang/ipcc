@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <VHeader title="IPCC机构"/>   
+      <VHeader title="IPCC机构"  :isSubPage="false"/>   
       <TopPanel  :setData="topDdata"/>
       <BottomPanel :Btns="links" :isPostResume="true" @resumeDelete="ShowAlertConfirm()"/>
       <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="是否确定删除简历" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
@@ -17,15 +17,19 @@ export default {
   name: 'home',
   data () {
     return {
-     topDdata:{name:'教师端',firstName:"神仙姐姐有点白"},
+     topDdata:{name:'教师端',firstName:"神仙姐姐有点白",hUrl:'/'},
      resumeId:1,
      isShowAlertConfirm:false,
       links:[
           
-          {name:"招聘信息大全",toUrl:"RecruitShow"},
+          {name:"招聘信息大全",toUrl:"/recruitShow"},
           {name:"IPCC专属教师服务",toUrl:""}
       ]
     }
+  },
+  mounted(){
+     this.topDdata.firstName=GetQueryString('pinfoSname')?GetQueryString('pinfoSname'):'';
+    this.topDdata.avatar=GetQueryString('pinfoSname')?GetQueryString('pinfoUri'):'';
   },
   methods:{
     ShowAlertConfirm(){

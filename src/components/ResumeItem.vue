@@ -1,8 +1,8 @@
 <template>
- <router-link class="resume-item" :to="{name:'ResumeD', params: { id: resume.rsmIds}}" tag="li">
+ <router-link class="resume-item" :to="{name:'ResumeD', query: { id: resume.rsmIds}}" tag="li">
   
     <div class="resume-item-top">
-         <img :src="imgUrl+resume.pinfoUri" class="resume-item-top-img" alt="头像"/> 
+         <img :src="resume.pinfoUri" class="resume-item-top-img" alt="头像"/> 
          <div class="resume-item-top-text">
               <div class="resume-item-top-text-t">
                    <p class="name-info">

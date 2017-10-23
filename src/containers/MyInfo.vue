@@ -1,11 +1,11 @@
 <template>
   <div class="my-info" >
-       <VHeader title="IPCC机构"/>   
+       <VHeader title="IPCC机构" :isSubPage="false"/>   
        <div class="my-info-content">
             <div class="input-group">
                 <div class="input-box">
                     <span style="font-weight:bold;">修改头像</span>
-                     <img src="/static/images/tx.jpeg" >  
+                     <img :src="avatar" >  
                     <span class="iconfont icon-xiangyou"></span>
                 </div>
                    
@@ -13,7 +13,7 @@
             <div class="input-group input-group-btn">
                 <div class="input-box">
                     <span style="font-weight:bold;">昵称</span> 
-                    <span class="addressBtn" style=" text-align: center;color:#bbb">神仙姐姐有点黑</span>
+                    <span class="addressBtn" style=" text-align: center;color:#bbb">{{firstName}}</span>
                    
                 </div>
             </div>  
@@ -57,8 +57,13 @@ export default {
   name: 'MyInfo',
   data () {
     return {
-      
+      firstName:'',
+      avatar:''
     }
+  },
+  mounted(){
+    this.firstName=GetQueryString('pinfoSname')?GetQueryString('pinfoSname'):'';
+    this.avatar=GetQueryString('pinfoSname')?GetQueryString('pinfoUri'):'';
   },
   components:{
     VHeader

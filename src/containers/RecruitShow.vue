@@ -5,7 +5,7 @@
 		<SearchKey :searchKeys="keyList" />
 		<div class="resume-list mescroll" id="mescroll">
 			<ul id="dataList" class="data-list">
-				<RecruitItem v-for="(v,index) in pdlist"  :key="index" :rData="v"  :isAll="true"/>
+				<RecruitItem v-for="(v,index) in pdlist"   :key="index" :rData="v"  :isAll="true"/>
             </ul>
 		</div>
       

@@ -1,10 +1,10 @@
 <template>
   <div class="purchased">
-       <VHeader  :isSubPage="false" title="已购买" :isFixed="true"/>
+       <VHeader  :isSubPage="false" :title="$route.query.type?'已联系':'已购买'" :isFixed="true"/>
       <SearchKey :searchKeys="keyList"/> 
-       <ul class="resume-list">
-           <ResumeItem v-for="(v,index) in 10" :key="index"/>
-       </ul> 
+    <ul class="resume-list">
+            <!--  <ResumeItem v-for="(v,index) in 10" :key="index"/> -->
+       </ul>
   </div>
 </template>
 

@@ -47,5 +47,6 @@ export default {
   background: #ffc800;
   text-align: center;
   line-height: rem(100px);
+  z-index:99999;
 }
 </style>
