@@ -7,17 +7,17 @@
                 <div class="input-grounp">
                      <span>姓名:</span><input v-model="name"/>
                 </div>
-                 <div class="input-grounp">
-                     <span>年龄:</span><input v-model="age"/>
+                 <div class="input-grounp" @click="ShowPicker('age')">
+                     <span>出生年月:</span><input v-model="age" disabled="disabled"/>
                 </div>
                  <div class="input-grounp">
                      <span>毕业院校:</span><input v-model="school"/>
                 </div>
-                 <div class="input-grounp">
-                     <span>希望在哪里工作:</span><input v-model="jobAddress"/>
+                 <div class="input-grounp" @click="selectAddressCity">
+                     <span>希望在哪里工作:</span><input v-model="jobAddress" disabled="disabled"/>
                 </div>
-                <div class="input-grounp">
-                     <span>教学经验:</span><input v-model="jobYear" />
+                <div class="input-grounp" @click="ShowPicker">
+                     <span>教学经验:</span><input v-model="jobYear" disabled="disabled"/>
                 </div>
             </div>
              <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
@@ -48,6 +48,11 @@
                </ul>
             </div>
        </div>
+       <picker v-model="visible" :data-items="items" @change="onValuesChange">
+    
+	<!--<div class="top-content" slot="top-content">Top of the content.</div>
+	<div class="bottom-content" slot="bottom-content">Bottom of the content.</div>-->
+</picker>
         <FooterButton  btnName="上传" @fBtnAction="save()"/>
         <KindPanel selectIndex=5  :selectSize=5 v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
         <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
@@ -59,6 +64,7 @@ import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 import KindPanel from '../components/KindPanel.vue'
 import Prompt from '../components/Prompt.vue'
+import picker from 'vue-3d-picker';
 export default {
   name: 'ResumePost',
   data () {
@@ -74,15 +80,108 @@ export default {
       kinds:[],
       selectKinds:[],
          pContent:'',
-      isPrompt:false
+      isPrompt:false,
+       visible: false,
+       istr:'',
+        items: [
+        {
+          values: ['1880', '1880', '2002', '2003', '2004', '2005', '2006', '2007'],
+        }, {
+          values: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        }
+      ]
     }
   },
 
-  mounted(){
-       
-  },
+mounted(){
+
+
+
+
+  
+
+  
+    
+ },
+
+
+
   methods:{
 
+  
+    selectAddressCity(){
+		
+		  AMapUI.loadUI(['misc/MobiCityPicker'],(MobiCityPicker)=> {
+
+          var cityPicker = new MobiCityPicker();
+         
+            cityPicker.show();
+             
+            // AMap.event.addDomListener(document.getElementById('openBtn'), 'click', function(e) {
+
+            //     cityPicker.show();
+            // });
+            cityPicker.on('citySelected', (cityInfo)=> {
+                //隐藏城市列表
+                cityPicker.hide();
+                this.jobAddress=cityInfo.name;
+                //选中的城市信息
+                console.log(JSON.stringify(cityInfo));
+               });
+            });
+            this.isSelectAddressCity=!this.isSelectAddressCity;  
+		},
+
+    vdate(){
+
+       let date=new Date();
+     let nowYear=date.getFullYear()
+     let arrYear=[];
+     let arrMouth=[];
+     let arrDay=[];
+      for(let i=nowYear;i>=1970;i--){
+        
+          arrYear.push(i);
+           for(let t=12;t>=1;t--){
+             arrMouth.push(t);
+             for(let n=1;n<=this.mGetDate(i,t);n++){
+                   arrDay.push(n);
+              }
+         }
+      }
+      
+     this.items=[{values:arrYear},{values:arrMouth}]//,{values:arrDay}
+
+    },
+
+    vyear(){
+      let arr=['1年','2年','3年','4年','5年','5年以上'];
+     
+      this.items=[{values:arr}]
+    },
+    ShowPicker(str){
+        this.istr=str;
+        this.visible=!this.visible;
+          if(str=='age'){
+            this.vdate();
+          }else{
+             this.vyear();
+          }
+    },
+     onValuesChange(result1, result2) {
+       if( this.istr=="age"){
+           this.age=result1+"-"+result2;
+       }else{
+          this.jobYear=result1;
+       }
+       
+    },
+  
+    mGetDate(year,month){
+     
+     var d = new Date(year, month, 0);
+     return d.getDate();
+   },
    promptCommon(str){
        this.pAction();
        this.pContent=str;
@@ -102,10 +201,10 @@ export default {
          this.promptCommon('年龄不能为空');
         return;
       }
-      if (isNaN(this.age)){
-         this.promptCommon('年龄格式有误');
-        return;
-      }
+      // if (isNaN(this.age)){
+      //    this.promptCommon('年龄格式有误');
+      //   return;
+      // }
      if (this.school == '' || !this.school) {
          this.promptCommon('毕业学校不能为空');
         return;
@@ -146,7 +245,7 @@ export default {
        return;
       }
     
-     let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId='+GetQueryString('pinfoId');
+     let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+"&pinfo_birthday="+this.age+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId='+GetQueryString('pinfoId');
      console.log(str);
     this.postResume(str);
     },
@@ -187,7 +286,8 @@ export default {
       VHeader,
       FooterButton,
       KindPanel,
-      Prompt
+      Prompt,
+      picker
   }
 }
 </script>

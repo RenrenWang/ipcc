@@ -63,14 +63,17 @@
       </div>
       <div class="selection">
         <p>机构图片上传</p>
-        <div style="text-align:center;" >
 
-   
+         <ul class="imgs-list">
+           <li v-for="(v,index) in srcImgs " ><img :src="v" /></li>
+        </ul>
+     
+        <div style="text-align:center;" >
 
      <form id="jvForm" name="jvForm" action="/appsrv/servlet/fileUploadServlet?appType=PIMGE" method="post" enctype="multipart/form-data">
   <!--<VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer> --> 
         <div class="file-button">
-          <img :src="srcImgs" />
+             <span class="iconfont icon-add_x" @click="showPanel"></span>
           <input type="file" name="filegCollImguri" id="filegCollImguri"  @change="changFile" accept="image/*" >
         </div>
         <input  type="hidden"  id="msgId" name="msgId" :value="msgid"/>
@@ -126,7 +129,7 @@ export default {
       isPrompt:false,
       picValue:{},
       msgid:0,
-      srcImgs:require('../assets/images/picIcon.png'),
+      srcImgs:[],
       isShowPlay:false
     }
   },
@@ -135,9 +138,10 @@ export default {
   methods: {
     
     changFile(e){
-      this.srcImgs=URL.createObjectURL(e.target.files[0]);
-     
-     // console.log( URL.createObjectURL(e.target.files[0]));
+      let arr=[];
+      arr.push(URL.createObjectURL(e.target.files[0]));
+      this.srcImgs=this.srcImgs.concat(arr);
+      console.log( URL.createObjectURL(e.target.files[0]));
     
     },
     postImg(){
@@ -262,7 +266,7 @@ export default {
               this.msgid=response.data.infoIds;
                  if(this.msgid>0){
                   //  document.getElementById("submit").click();
-              this.postImg();
+                      this.postImg();
                  }
           }else{
              this.promptCommon('发布失败');
@@ -506,7 +510,7 @@ export default {
      height: 100%;
     position: absolute;
     top:0px;
-    opacity: 0; 
+     opacity:0;
   }
   img{
     width: 100%;
