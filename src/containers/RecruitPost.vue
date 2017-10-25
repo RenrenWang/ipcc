@@ -57,33 +57,17 @@
         <div class="select-group">
           <div class="work-demand">
             <textarea v-model="workDemand" placeholder="对老师的要求，不超过100字" />
-
           </div>
         </div>
       </div>
       <div class="selection">
         <p>机构图片上传</p>
 
-         <ul class="imgs-list">
-           <li v-for="(v,index) in srcImgs " ><img :src="v" /></li>
-        </ul>
-     
-        <div style="text-align:center;" >
-
-     <form id="jvForm" name="jvForm" action="/appsrv/servlet/fileUploadServlet?appType=PIMGE" method="post" enctype="multipart/form-data">
-  <!--<VueImgInputer v-model="picValue"   name="filegCollImguri" theme="material" size="small" customerIcon="&#xe601"></VueImgInputer> --> 
-        <div class="file-button">
-             <span class="iconfont icon-add_x" @click="showPanel"></span>
-          <input type="file" name="filegCollImguri" id="filegCollImguri"  @change="changFile" accept="image/*" >
-        </div>
-        <input  type="hidden"  id="msgId" name="msgId" :value="msgid"/>
-        <input  type="hidden"  id="prdImgtype" name="prdImgtype" value="A"/>
-       <!-- <input type="button" id="submit" @postImgActive="postImg"  value="" style="width:0;height:0"/> -->
-         <!-- <input type="submit" id="submit"   value="svae" /> -->
-    </form>
-        </div>
-        <!--<ul class="imgs-list">
-          <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
+         <Upload  @uploadFile="uploadResult"/>
+        
+        
+    <!--<ul class="imgs-list">
+             <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
         </ul>-->
      
       </div>
@@ -93,6 +77,7 @@
     <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
     <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction"/>
     <BottomPlay v-show="isShowPlay"/>
+    <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="提示" alertContent="招聘信息已上传，支付后教师才能看到招聘信息" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
   </div>
 </template>
 
@@ -102,8 +87,10 @@ import FooterButton from '../components/FooterButton.vue'
 import KindPanel from '../components/KindPanel.vue'
 import selectMapAddress from '../components/selectMapAddress.vue'
 import Prompt from '../components/Prompt.vue'
-import VueImgInputer from 'vue-img-inputer'
+
 import BottomPlay from '../components/BottomPlay'
+import Upload from '../components/Upload'
+import AlertConfirm from '../components/AlertConfirm'
 
 export default {
   name: 'recruitPost',
@@ -127,31 +114,80 @@ export default {
       isShowSelectMap:false,
       pContent:'',
       isPrompt:false,
-      picValue:{},
+      refNameArr:[],
       msgid:0,
       srcImgs:[],
-      isShowPlay:false
+      isShowPlay:false,
+      isShowAlertConfirm:false
     }
   },
 
   
   methods: {
+  AlertCancelActive(){
+      this.isShowAlertConfirm=false;
+  },
+  AlertConfirmActive(){
     
-    changFile(e){
-      let arr=[];
-      arr.push(URL.createObjectURL(e.target.files[0]));
-      this.srcImgs=this.srcImgs.concat(arr);
-      console.log( URL.createObjectURL(e.target.files[0]));
-    
-    },
-    postImg(){
-       var form = document.getElementById('jvForm');  
-        let fData=new FormData(form);
-        this.$http.post("http://192.168.2.100:8080/zhxz/servlet/VillFileUpload",fData,{headers:{'Content-Type':'multipart/form-data'}})
-        .then(response=>{
-          alert(JSON.stringify(response.data));
-          console.log(response.data);
-        })       
+     location.href="http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=A&pinfoId="+GetQueryString('pinfoId')+"&msgId="+this.msgid;
+
+  },
+  uploadResult(arr){
+     console.log(arr);
+     this.refNameArr=arr;
+  },
+    postImg(refId){
+
+
+        let form1 = document.getElementById("upload_0");  
+        //this.$refs.refId
+        let fData1=new FormData(form1);
+        fData1.append("prdImgtype",'A');
+        fData1.append("msgId",this.msgid);
+
+
+       let form2 = document.getElementById("upload_1");
+        let fData2=new FormData(form2);
+        fData2.append("prdImgtype",'A');
+        fData2.append("msgId",this.msgid);
+
+
+        let form3 = document.getElementById("upload_2");
+         let fData3=new FormData(form3);
+        fData3.append("prdImgtype",'A');
+        fData3.append("msgId",this.msgid);
+
+        this.$http.all([
+         this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData1,{headers:{'Content-Type':'multipart/form-data'}}),
+         this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData2,{headers:{'Content-Type':'multipart/form-data'}}),
+          this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData3,{headers:{'Content-Type':'multipart/form-data'}}),
+       
+        ])
+       .then(this.$http.spread( (acct, perms)=> {
+              // Both requests are now complete
+            this.isShowAlertConfirm=true;
+
+            
+              console.log(acct);
+             console.log(perms);
+        }));
+    // alert(JSON.stringify(response.data));
+          // console.log(response.data);
+
+          console.log("------------------"+fData1==fData2);
+         console.log("------------------"+fData2==fData3);
+          console.log("------------------"+fData1==fData3);
+        // this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData1,{headers:{'Content-Type':'multipart/form-data'}})
+        // .then(response=>{
+        //         this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData2,{headers:{'Content-Type':'multipart/form-data'}})
+        //     .then(response=>{
+        //        this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData3,{headers:{'Content-Type':'multipart/form-data'}})
+        //         .then(response=>{
+                    
+        //         })   
+        //     })   
+        // })      
+  
    },
     promptCommon(str){
        this.pAction();
@@ -259,14 +295,19 @@ export default {
         .then(response => {
           // console.log(JSON.stringify(response.data));
           if (response.data.result == "success") {
-              this.promptCommon('发布成功');
+            
               console.log(response.data);
               //response.data.infoIds
               //this.postImg();
               this.msgid=response.data.infoIds;
                  if(this.msgid>0){
+                 
                   //  document.getElementById("submit").click();
-                      this.postImg();
+              
+                       this.postImg();
+                     
+              
+                     
                  }
           }else{
              this.promptCommon('发布失败');
@@ -351,8 +392,10 @@ export default {
     KindPanel,
     selectMapAddress,
     Prompt,
-    VueImgInputer,
-    BottomPlay
+   
+    BottomPlay,
+    Upload,
+    AlertConfirm
   }
 }
 </script>
