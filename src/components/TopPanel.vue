@@ -84,7 +84,7 @@ export default {
           height:rem(200px);
           width:rem(200px);
           border-radius:50%;
-          box-shadow: 0px 0px 10px #eeda90;
+          box-shadow: 0px 0px 5px #eeda90;
       }
     }
 }

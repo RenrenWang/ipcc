@@ -61,7 +61,7 @@ export default {
   },
   methods:{
     deleteItem(){
-        alert(this.rData.infoIds);
+     
        this.$emit('deleteItem',[this.rData.infoIds,this.selectIndex]);  
     }
   }

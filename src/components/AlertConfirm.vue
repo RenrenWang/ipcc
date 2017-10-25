@@ -51,6 +51,7 @@ export default {
  height:100%;
  width:100%;
  overflow:hidden;
+ z-index: 99999;
  .alert-bg{
    height:100%;
    width:100%;

@@ -237,9 +237,10 @@ mounted(){
           break;
         case 0:
            this.promptCommon('请选择擅长');
+           kindStr='';
           return;
       }
-      
+      this.kindStr=kindStr;
       if(this.resumeText.length<=0){
         this.promptCommon('个人介绍不能为空');
        return;

@@ -1,13 +1,13 @@
 <template>
     <div class="recruit-d">
-        <VHeader :isSubPage="false" :title="!this.$route.query.type?'我的发布':'详情'" :isFixed="true" />
+        <VHeader :isSubPage="false" :title="!this.$route.query.type?'详情':'详情'" :isFixed="true" />
         <div class="recruit-d-content" >
             <div class="recruit-d-t">
                 <div class="recruit-d-item">
                     <p>发布者</p>
                 </div>
                 <div class="recruit-d-item">
-                    <img src="/static/images/avater.jpeg" class="avater-img">
+                     <img :src="data['pinfoUri']" class="avater-img"/>
                     <p class="top-panel-item-txt">
                         <span>{{data.pinfoPname}}</span>
                     </p>

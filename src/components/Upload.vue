@@ -3,8 +3,13 @@
 
       <form :id="'upload_'+index" :ref="'upload_'+index" :name="'upload_'+index" method="post" enctype="multipart/form-data" v-for="(v,index)  in srcImgs"  :key="index">
          <div class="file-button">
-             <img  :src="v.imgSrc"/>
-             <span class="iconfont icon-add_x" ></span>
+             <img  :src="v.imgSrc"  v-show="v.imgSrc"/>
+
+           
+             <div class="file-btn" v-show="!v.imgSrc">
+                  <span class="iconfont icon-add_x" ></span>
+                  <p>选择图片</p>
+               </div>
             <input type="file" name="filegCollImguri" id="filegCollImguri"  @change="changFile($event,index)"  accept="image/*" >
          </div>
       </form>
@@ -49,6 +54,7 @@ export default {
 @import "../assets/style/base.scss";
 .uploads{
 display:flex;
+justify-content: space-between;
    form{
   position: relative;
   display: inline-block;
@@ -70,10 +76,16 @@ display:flex;
       width:100%;
       height:100%;
        }
-       .icon-add_x{
+       .file-btn{
+         text-align: center;
           position:absolute;
           top:50%;
           left:50%;
+          transform: translate3d(-50%,-50%,0);
+          p{
+            padding: 5px 0;
+            color: #bbb;
+          }
        }
        input{
            opacity: 0;

@@ -138,45 +138,51 @@ export default {
   },
     postImg(refId){
 
-
-        let form1 = document.getElementById("upload_0");  
+      let arr=[];
+    for(let i=0;i<this.refNameArr.length;i++){
+        let form= document.getElementById("upload_"+i);  
         //this.$refs.refId
-        let fData1=new FormData(form1);
-        fData1.append("prdImgtype",'A');
-        fData1.append("msgId",this.msgid);
+        let fData=new FormData(form);
+        fData.append("prdImgtype",'A');
+        fData.append("msgId",this.msgid);
+        arr.push(this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData,{headers:{'Content-Type':'multipart/form-data'}}));
+    }
+
+      
 
 
-       let form2 = document.getElementById("upload_1");
-        let fData2=new FormData(form2);
-        fData2.append("prdImgtype",'A');
-        fData2.append("msgId",this.msgid);
+      //  let form2 = document.getElementById("upload_1");
+      //   let fData2=new FormData(form2);
+      //   fData2.append("prdImgtype",'A');
+      //   fData2.append("msgId",this.msgid);
 
 
-        let form3 = document.getElementById("upload_2");
-         let fData3=new FormData(form3);
-        fData3.append("prdImgtype",'A');
-        fData3.append("msgId",this.msgid);
+      //   let form3 = document.getElementById("upload_2");
+      //    let fData3=new FormData(form3);
+      //   fData3.append("prdImgtype",'A');
+      //   fData3.append("msgId",this.msgid);
 
-        this.$http.all([
-         this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData1,{headers:{'Content-Type':'multipart/form-data'}}),
-         this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData2,{headers:{'Content-Type':'multipart/form-data'}}),
-          this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData3,{headers:{'Content-Type':'multipart/form-data'}}),
+        this.$http.all(
+          arr
+        //  this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData1,{headers:{'Content-Type':'multipart/form-data'}}),
+        //  this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData2,{headers:{'Content-Type':'multipart/form-data'}}),
+        //   this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData3,{headers:{'Content-Type':'multipart/form-data'}}),
        
-        ])
+        )
        .then(this.$http.spread( (acct, perms)=> {
               // Both requests are now complete
             this.isShowAlertConfirm=true;
 
             
-              console.log(acct);
+             console.log(acct);
              console.log(perms);
         }));
     // alert(JSON.stringify(response.data));
           // console.log(response.data);
 
-          console.log("------------------"+fData1==fData2);
-         console.log("------------------"+fData2==fData3);
-          console.log("------------------"+fData1==fData3);
+        //   console.log("------------------"+fData1==fData2);
+        //  console.log("------------------"+fData2==fData3);
+        //   console.log("------------------"+fData1==fData3);
         // this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData1,{headers:{'Content-Type':'multipart/form-data'}})
         // .then(response=>{
         //         this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData2,{headers:{'Content-Type':'multipart/form-data'}})
@@ -300,14 +306,11 @@ export default {
               //response.data.infoIds
               //this.postImg();
               this.msgid=response.data.infoIds;
-                 if(this.msgid>0){
+                 if(this.msgid>0&&this.refNameArr.length>0){
                  
                   //  document.getElementById("submit").click();
-              
+                  
                        this.postImg();
-                     
-              
-                     
                  }
           }else{
              this.promptCommon('发布失败');
@@ -378,9 +381,9 @@ export default {
         }else if(this.rZKind=="J"){
            xzdy=this.rmb+'元/小时';
         }
-    
+ 
   
-      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&pinfoSex=' + this.rSex + kindStr + '&pinfoId=32';
+      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&titleSex=' + this.rSex + kindStr + '&pinfoId=32';
       console.log(this.postString);
     //  this.isShowPlay=!this.isShowPlay;
     this.postRecruit(this.postString);
