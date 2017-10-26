@@ -1,5 +1,5 @@
-//const BaseUrl='http://www.hzrongzhi.com/appsrv';
-const BaseUrl='/appsrv';
+const BaseUrl='http://www.hzrongzhi.com/appsrv';
+//const BaseUrl='/appsrv';
 //http://120.26.85.1
 const Api={
   selectMapAddress:'https://m.amap.com/picker/?center=116.40,39.97&key=1683a75e3995650aafd98176386ccb9a',
@@ -7,7 +7,7 @@ const Api={
   imgUrl:'http://www.hzrongzhi.com/imgsrv/',
   kindList:BaseUrl+'/ippcInfoAction.action?classInfo=',
   resumeList:BaseUrl+'/ippcInfoAction.action?newsType=RM&',
-  resumeD:BaseUrl+'/ippcInfoAction.action?newsType=RMD&rsmIds=',
+  resumeD:BaseUrl+'/ippcInfoAction.action?newsType=RMDR&rsmIds=',
   resumePost:BaseUrl+'/ippcInfoAction.action?newsType=RMADD&',
   resumeDelete:BaseUrl+'/ippcInfoAction.action?newsType=RMDT&rsmIds=',
   recruitList:BaseUrl+'/ippcInfoAction.action?newsType=PR&',

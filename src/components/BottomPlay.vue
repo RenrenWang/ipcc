@@ -1,15 +1,30 @@
 <template>
   <div class="bottom-play">
      <div class="bp-bg"></div>
-     <a  :href="'http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=B&pinfoId='+pId" class="bp-content">
+
+    
+     <a   v-if="isPay" :href="'tel:'+phoneNumber" class="bp-content">
+        {{phoneNumber}}
+     </a>
+     <a v-else :href="'http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=B&pinfoId='+pId" class="bp-content">
         微信支付
-     </a>   
+     </a>
+        
  </div>
 </template>
 
 <script>
 export default {
   name: 'BottomPlay',
+  props:{
+    isPay:{
+      type:Boolean,
+      default:false
+      },
+    phoneNumber:{
+      type:Number,
+    }
+  },
   data () {
     return {
       pId:''

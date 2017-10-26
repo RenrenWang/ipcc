@@ -83,7 +83,7 @@ export default {
       isShowPanel:false,
       kinds:[],
       selectKinds:[],
-         pContent:'',
+      pContent:'',
       isPrompt:false,
        visible: false,
        istr:'',
@@ -100,18 +100,58 @@ export default {
 
 mounted(){
 
-
-
-
-  
-
-  
-    
- },
+this.getDataD()
+},
 
 
 
   methods:{
+
+  getDataD(){
+    this.$http.get(api.presumeD+this.$route.query.id)//this.$route.params.id
+       .then(response=>{
+             let data=response.data;
+          console.log(data);
+           let  sdata=data.data[0];
+            this.school=sdata.collName;
+                this.jobAddress=sdata.pinfoIdea;
+                this.jobYear=sdata.teacherYear;
+                this.age=sdata.pinfoBirthday;
+                this.name=sdata.pinfoPname;
+                this.rZKind=sdata.titleClassname=="兼职"?'J':'C';
+                this.resumeText=sdata.pinfoNote;
+             
+                 if(sdata.titleExt1!=''){
+                      this.selectKinds.push({codeValue:sdata.titleExt1name,codeName:sdata.titleExt1});
+                 }
+                  if(sdata.titleExt2!=''){
+                      this.selectKinds.push({codeValue:sdata.titleExt2name,codeName:sdata.titleExt2});
+                 }
+                  if(sdata.titleExt3!=''){
+                      this.selectKinds.push({codeValue:sdata.titleExt3name,codeName:sdata.titleExt3});
+                 }
+                  if(sdata.titleExt4!=''){
+                      this.selectKinds.push({codeValue:sdata.titleExt4name,codeName:sdata.titleExt4});
+                 }
+                  if(sdata.titleExt5!=''){
+                      this.selectKinds.push({codeValue:sdata.titleExt5name,codeName:sdata.titleExt5});
+                 }
+                 
+              // this.rTitle=data.data[0].infoTitle;
+              //  this.rZKind=data.data[0].titleClassname=="全职"?"C":"J";
+              //  this.rSex=data.data[0].pinfoSex;
+              //  this.selectKindsStr=data.data[0].titleExt1name;
+              //  this.rAddress=data.data[0].infoAddr;
+              //  this.rmb=data.data[0].salaryClassname;
+              //  this.workDemand=data.data[0].titleSimdesc;
+              //  this.selectKinds=[{codeValue:data.data[0].titleExt1name,codeName:data.data[0].titleExt1}];
+              //  this.srcImgs=data.imgData;
+              //  if(this.srcImgs.length>0){
+              //     this.isUpload=false;
+              //  }
+       })
+    },
+
   uploadResult(arr){
      console.log(arr);
      this.refNameArr=arr;

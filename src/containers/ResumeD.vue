@@ -49,15 +49,15 @@
                      <p>{{data.pinfoNote}}</p>
                 </div>
                 <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
-                <div >
-                     <ul class="imgs-list">
+              
+                     <ul class="imgs-list" style="min-height:150px">
                       <li v-for="(v,idnex) in imgList"><img  :src="imgUrl+v.lidFileuri"/></li>
                    </ul>
+               
                 </div>
-            </div>
         </div>
-        <BottomPlay  v-show="isShowbp"/>
-         <FooterButton  btnName="与他联系" bgFooterButton="#ff6b00" @fBtnAction="play"/>
+         <BottomPlay  v-show="isShowbp"  :isPay="ispay" :phoneNumber="data.pinfoPhone"/>
+         <FooterButton  :btnName="$route.query.isP?'编辑':'与他联系'" bgFooterButton="#ff6b00" @fBtnAction="play"/>
     </div>
 </template>
 
@@ -75,20 +75,26 @@ export default {
            isError:false,
            imgUrl:api.imgUrl,
            isShowbp:false,
+           ispay:false,
+           pinfoPhone:''
         }
     },
     mounted(){
         let url="";
        if(this.$route.query.isP){
-          url=api.presumeD;
+          url=api.presumeD+this.$route.query.id;
        }else{
-           url=api.resumeD
+           url=api.resumeD+this.$route.query.id+'&pinfoId='+GetQueryString('pinfoId');
        }
-       this.$http.get(url+this.$route.query.id)
+       this.$http.get(url)
        .then(response=>{
          let data=response.data;
          console.log(data);
           this.data=data.data[0];
+          
+          this.ispay=data.ispay=='Y'?true:false;
+          
+         
           this.imgList=data.imgData;
           this.isError=false;
        }).catch(error=>{
@@ -101,7 +107,12 @@ export default {
 
         },
         play(){
-            this.isShowbp=!this.isShowbp;
+            if(this.$route.query.isP){
+               this.$router.push({path:'/resumePost',query:{id:this.$route.query.id}});
+            }else{
+               this.isShowbp=!this.isShowbp;
+            }
+           
         }
     },
     components: {
