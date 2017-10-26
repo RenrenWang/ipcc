@@ -13,6 +13,8 @@ const Api={
   recruitList:BaseUrl+'/ippcInfoAction.action?newsType=PR&',
   recruitD:BaseUrl+'/ippcInfoAction.action?newsType=PRD&infoIds=',
   recruitDelete:BaseUrl+'/ippcInfoAction.action?newsType=PRDT&infoIds=',
-  recruitAddAOrRevise:BaseUrl+'/ippcInfoAction.action?newsType=PRADD&'
+  recruitAddAOrRevise:BaseUrl+'/ippcInfoAction.action?newsType=PRADD&',
+  gmJLList:BaseUrl+'/ippcInfoAction.action?newsType=SELLRM&pinfoId=',
+   presumeD:BaseUrl+'/ippcInfoAction.action?newsType=RMD&pinfoId='
 };
 export{BaseUrl,Api}

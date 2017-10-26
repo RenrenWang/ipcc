@@ -1,9 +1,9 @@
 <template>
   <div class="bottom-play">
      <div class="bp-bg"></div>
-     <div class="bp-content">
+     <a  :href="'http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=B&pinfoId='+pId" class="bp-content">
         微信支付
-     </div>   
+     </a>   
  </div>
 </template>
 
@@ -12,9 +12,13 @@ export default {
   name: 'BottomPlay',
   data () {
     return {
-      
+      pId:''
     }
+  },
+  mounted(){
+    this.pId=GetQueryString('pinfoSname');
   }
+
 }
 </script>
 
@@ -46,5 +50,6 @@ export default {
   transform: translate(-50%, -50%);
   color: #1c74d9;
   border: 1px solid #bbbbbb;
+  border-radius: 5px;
 }
 </style>

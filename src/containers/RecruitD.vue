@@ -1,6 +1,6 @@
 <template>
     <div class="recruit-d">
-        <VHeader :isSubPage="true" iconRight="icon-bianji2"  @rightAction="nrAction" :title="!this.$route.query.type?'详情':'详情'" :isFixed="true" />
+        <VHeader :isSubPage="true" :iconRight="isJS?'icon-bianji2':''"  @rightAction="nrAction" :title="!this.$route.query.type?'详情':'详情'" :isFixed="true" />
         <div class="recruit-d-content" >
             <div class="recruit-d-t">
                 <div class="recruit-d-item">
@@ -69,14 +69,15 @@ export default {
            isShowAlertConfirm:false,
            address:api.address,
            isMapBig:false,
-           mapXY:{x:0,y:0}
+           mapXY:{x:0,y:0},
+           isJS:false
         }
     },
     mounted(){
-      console.log(this.$route.query.type);
+    //   console.log(this.$route.query.type);
        this.$http.get(api.recruitD+this.$route.query.id)//this.$route.params.id
        .then(response=>{
-         let data=response.data;
+          let data=response.data;
           this.data=data.data[0];
           this.imgList=data.imgData;
           this.isError=false;
@@ -85,6 +86,9 @@ export default {
               x:this.data.mapAxis,
               y:this.data.mapAyis
           }
+        
+            this.isJS=GetQueryString('pinfoId')== this.data.pinfoId?true:false;
+         
        }).catch(error=>{
            console.log(error);
           this.isError=true;

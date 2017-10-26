@@ -1,17 +1,17 @@
 <template>
     <div class="recruit-d">
-        <VHeader :isSubPage="false" title="详细" :isFixed="true" />
+        <VHeader :isSubPage="false"  iconRight="icon-bianji2"  @rightAction="nrAction" title="详细" :isFixed="true" />
         <div class="recruit-d-content">
             <div class="recruit-d-t">
                 <div class="recruit-d-item">
-                    <p><span class="iconfont  icon-dizhi"></span><span>杭州市</span></p>
+                    <p><span class="iconfont  icon-dizhi"></span><span>{{data.pinfoIdea}}</span></p>
                 </div>
                 <div class="recruit-d-item">
                     <img :src="data.pinfoUri" class="avater-img">
                     <p class="top-panel-item-txt">
                         <span>{{data.pinfoPname}}</span>
                         <span class="iconfont icon-nan" style="color:#1e9ee6"></span>
-                        <span>{{data.pinfoAge}}岁</span>
+                        <span>{{data.pinfoBirthday}}</span>
                     </p>
                 </div>
                 <div class="recruit-d-item">
@@ -49,14 +49,15 @@
                      <p>{{data.pinfoNote}}</p>
                 </div>
                 <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
-                <div style="height:300px;">
-                     <ul>
-                        <li v-for="(v,index) in  imgList">{}}</li>
-                     </ul>
+                <div >
+                     <ul class="imgs-list">
+                      <li v-for="(v,idnex) in imgList"><img  :src="imgUrl+v.lidFileuri"/></li>
+                   </ul>
                 </div>
             </div>
         </div>
-         <FooterButton  btnName="与他联系" bgFooterButton="#ff6b00"/>
+        <BottomPlay  v-show="isShowbp"/>
+         <FooterButton  btnName="与他联系" bgFooterButton="#ff6b00" @fBtnAction="play"/>
     </div>
 </template>
 
@@ -64,6 +65,7 @@
 import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 
+import BottomPlay from '../components/BottomPlay.vue'
 export default {
     name: 'redumeD',
     data() {
@@ -71,14 +73,21 @@ export default {
            data:{},
            imgList:[],
            isError:false,
-           imgUrl:api.imgUrl
+           imgUrl:api.imgUrl,
+           isShowbp:false,
         }
     },
     mounted(){
-  
-       this.$http.get(api.resumeD+this.$route.query.id)
+        let url="";
+       if(this.$route.query.isP){
+          url=api.presumeD;
+       }else{
+           url=api.resumeD
+       }
+       this.$http.get(url+this.$route.query.id)
        .then(response=>{
          let data=response.data;
+         console.log(data);
           this.data=data.data[0];
           this.imgList=data.imgData;
           this.isError=false;
@@ -86,9 +95,19 @@ export default {
           this.isError=true;
        })
     },
+
+    methods:{
+       nrAction(){
+
+        },
+        play(){
+            this.isShowbp=!this.isShowbp;
+        }
+    },
     components: {
         VHeader,
-        FooterButton
+        FooterButton,
+        BottomPlay
     }
 }
 </script>

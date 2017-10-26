@@ -5,7 +5,7 @@
           <!-- <a href="javascript:;" v-if="isSubPage"><span class="iconfont icon-guanbi"></span></a>-->
         </div>
         <h1 class="header-title">{{title}}</h1>
-        <div class="header-buttons header-left">
+        <div class="header-buttons header-left" v-if="iconRight&&iconRight!=''">
            <a href="javascript:;" v-if="isSubPage" @click="rightAction"><span :class="['iconfont',iconRight]"></span></a>
         </div>
   </header>

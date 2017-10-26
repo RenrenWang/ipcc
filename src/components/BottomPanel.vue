@@ -5,7 +5,8 @@
              <div class="resume-post" v-if="isPostResume">
                 <h5>我的简历</h5>
                 <div class="resume-post-btns">
-                   <a href="javascript:;" @click="resumeAction()">删除</a>
+                   <!-- <a href="javascript:;" @click="resumeAction()">详情</a> -->
+                    <a href="javascript:;" @click="xqAction()">详情</a>
                    <router-link to="/resumePost">发布</router-link tag="a"> 
                 </div>
              </div>
@@ -31,6 +32,9 @@ export default {
   methods:{
    resumeAction(){
       this.$emit('resumeDelete');
+   },
+   xqAction(){
+      this.$router.push({ path:'/resumeD',query:{id:GetQueryString('pinfoId'),isP:true}})
    }
   },
   components:{

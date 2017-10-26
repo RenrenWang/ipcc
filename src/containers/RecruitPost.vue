@@ -63,7 +63,7 @@
       <div class="selection">
         <p>机构图片上传</p>
      
-         <span @click="reUpload" style="color:#f00" v-if="$route.query.id&&$route.query.id>0">{{!isUpload?'重新上传':'重置'}}</span>    
+         <span @click="reUpload" style="color:#f00" v-if="$route.query.id&&$route.query.id>0">{{!isUpload?'图片上传':'重置'}}</span>    
          <Upload   v-show="isUpload"  @uploadFile="uploadResult"/>
         
            <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">

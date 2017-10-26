@@ -8,7 +8,7 @@
                      <span>姓名:</span><input v-model="name"/>
                 </div>
                  <div class="input-grounp" @click="ShowPicker('age')">
-                     <span>出生年月:</span><input v-model="age" disabled="disabled"/>
+                     <span>出生日期:</span><input v-model="age" disabled="disabled"/>
                 </div>
                  <div class="input-grounp">
                      <span>毕业院校:</span><input v-model="school"/>
@@ -43,19 +43,21 @@
             <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
              <div class="section">
                  <h2 class="title">艺术照</h2>
-               <ul class="imgs-list">
-                   <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
-               </ul>
+                   <Upload   @uploadFile="uploadResult"/>
+                  <!-- <ul class="imgs-list">
+                      <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
+                  </ul> -->
             </div>
        </div>
-       <picker v-model="visible" :data-items="items" @change="onValuesChange">
+       <picker v-model="visible" :data-items="items" @change="onValuesChange"></picker>
     
 	<!--<div class="top-content" slot="top-content">Top of the content.</div>
 	<div class="bottom-content" slot="bottom-content">Bottom of the content.</div>-->
-</picker>
+
         <FooterButton  btnName="上传" @fBtnAction="save()"/>
         <KindPanel selectIndex=5  :selectSize=5 v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
         <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
+      
   </div>
 </template>
 
@@ -65,10 +67,12 @@ import FooterButton from '../components/FooterButton.vue'
 import KindPanel from '../components/KindPanel.vue'
 import Prompt from '../components/Prompt.vue'
 import picker from 'vue-3d-picker';
+import Upload from '../components/Upload'
 export default {
   name: 'ResumePost',
   data () {
     return {
+     
         name:'',
         jobAddress:'',
         age:'',
@@ -89,7 +93,8 @@ export default {
         }, {
           values: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         }
-      ]
+      ],
+      refNameArr:[]
     }
   },
 
@@ -107,8 +112,37 @@ mounted(){
 
 
   methods:{
+  uploadResult(arr){
+     console.log(arr);
+     this.refNameArr=arr;
+  },
+  pAction(str){
+    this.isPrompt=! this.isPrompt;
+    this.pContent=str;
+  },
 
-  
+    postImg(){
+
+      let arr=[];
+    for(let i=0;i<this.refNameArr.length;i++){
+        let form= document.getElementById("upload_"+i);  
+        //this.$refs.refId
+        let fData=new FormData(form);
+        fData.append("prdImgtype",'B');
+        fData.append("msgId",this.msgid);
+        arr.push(this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData,{headers:{'Content-Type':'multipart/form-data'}}));
+    }
+      
+    this.$http.all(arr)
+       .then(this.$http.spread( (acct, perms)=> {
+              // Both requests are now complete
+            this.isShowAlertConfirm=true;
+
+            
+             console.log(acct);
+             console.log(perms);
+        }));
+    },
     selectAddressCity(){
 		
 		  AMapUI.loadUI(['misc/MobiCityPicker'],(MobiCityPicker)=> {
@@ -150,7 +184,7 @@ mounted(){
          }
       }
       
-     this.items=[{values:arrYear},{values:arrMouth}]//,{values:arrDay}
+     this.items=[{values:arrYear},{values:arrMouth},{values:arrDay}]//,{values:arrDay}
 
     },
 
@@ -168,9 +202,9 @@ mounted(){
              this.vyear();
           }
     },
-     onValuesChange(result1, result2) {
+     onValuesChange(result1, result2,result3) {
        if( this.istr=="age"){
-           this.age=result1+"-"+result2;
+           this.age=result1+"-"+result2+"-"+result3;
        }else{
           this.jobYear=result1;
        }
@@ -279,6 +313,22 @@ mounted(){
            console.log(JSON.stringify(response.data));
           if (response.data.result == "success") {
              this.promptCommon('发布成功');
+             this.msgid=response.data.infoIds;
+                 if(this.msgid>0&&this.refNameArr.length>0){
+                 
+                  //  document.getElementById("submit").click();
+               
+                               this.postImg();
+                              
+                    }else{
+                      if(this.$route.query.id){
+                             this.promptCommon('信息修改成功');
+                      }else{
+                         this.isShowAlertConfirm=true;
+                      }
+                      
+                   
+                 }
           }
         })
     },
@@ -288,7 +338,8 @@ mounted(){
       FooterButton,
       KindPanel,
       Prompt,
-      picker
+      picker,
+      Upload
   }
 }
 </script>
