@@ -1,6 +1,6 @@
 <template>
     <div class="recruit-d">
-        <VHeader :isSubPage="false" :title="!this.$route.query.type?'详情':'详情'" :isFixed="true" />
+        <VHeader :isSubPage="true" iconRight="icon-bianji2"  @rightAction="nrAction" :title="!this.$route.query.type?'详情':'详情'" :isFixed="true" />
         <div class="recruit-d-content" >
             <div class="recruit-d-t">
                 <div class="recruit-d-item">
@@ -91,6 +91,10 @@ export default {
        })
     },
     methods:{
+
+        nrAction(){
+              this.$router.push({path:'/recruitPost',query:{id:this.$route.query.id}});
+        },
         showMapBig(){
         this.isMapBig=!this.isMapBig;
         },
@@ -109,8 +113,8 @@ export default {
          this.isShowAlertConfirm=false;
       },
       AlertConfirmActive(){
-          console.log(api.recruitDelete+this.$route.params.id);
-          this.$http.get(api.recruitDelete+this.$route.params.id)
+          console.log(api.recruitDelete+this.$route.query.id);
+          this.$http.get(api.recruitDelete+this.$route.query.id)
           .then((response)=>{
               console.log(JSON.stringify(response.data));
                this.isShowAlertConfirm=false;

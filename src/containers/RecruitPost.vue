@@ -62,19 +62,20 @@
       </div>
       <div class="selection">
         <p>机构图片上传</p>
-
-         <Upload  @uploadFile="uploadResult"/>
+     
+         <span @click="reUpload" style="color:#f00" v-if="$route.query.id&&$route.query.id>0">{{!isUpload?'重新上传':'重置'}}</span>    
+         <Upload   v-show="isUpload"  @uploadFile="uploadResult"/>
         
-        
-    <!--<ul class="imgs-list">
-             <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
-        </ul>-->
+           <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">
+               <li v-for="(v,idnex) in srcImgs"><img  :src="imgUrl+v.lidFileuri"/></li>
+          </ul>
+  
      
       </div>
     </div>
     <selectMapAddress v-show="isShowSelectMap" @closeSelectMap="showMap"/>
-    <FooterButton btnName="确认发布" @fBtnAction="btnAction()" />
-    <KindPanel v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
+    <FooterButton :btnName="$route.query.id?'保存':'确认发布'" @fBtnAction="btnAction()" />
+    <KindPanel  :selectItem="selectKindsStr" v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
     <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction"/>
     <BottomPlay v-show="isShowPlay"/>
     <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="提示" alertContent="招聘信息已上传，支付后教师才能看到招聘信息" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
@@ -118,12 +119,41 @@ export default {
       msgid:0,
       srcImgs:[],
       isShowPlay:false,
-      isShowAlertConfirm:false
+      isShowAlertConfirm:false,
+      imgUrl:api.imgUrl,
+      isUpload:true
+    
     }
   },
 
-  
+   mounted(){
+    if(this.$route.query.id){
+      this.getDataD();
+    }
+   },
   methods: {
+    reUpload(){
+   this.isUpload=!this.isUpload;
+    },
+    getDataD(){
+    this.$http.get(api.recruitD+this.$route.query.id)//this.$route.params.id
+       .then(response=>{
+             let data=response.data;
+          console.log(data);
+              this.rTitle=data.data[0].infoTitle;
+               this.rZKind=data.data[0].titleClassname=="全职"?"C":"J";
+               this.rSex=data.data[0].pinfoSex;
+               this.selectKindsStr=data.data[0].titleExt1name;
+               this.rAddress=data.data[0].infoAddr;
+               this.rmb=data.data[0].salaryClassname;
+               this.workDemand=data.data[0].titleSimdesc;
+               this.selectKinds=[{codeValue:data.data[0].titleExt1name,codeName:data.data[0].titleExt1}];
+               this.srcImgs=data.imgData;
+               if(this.srcImgs.length>0){
+                  this.isUpload=false;
+               }
+       })
+    },
   AlertCancelActive(){
       this.isShowAlertConfirm=false;
   },
@@ -146,6 +176,9 @@ export default {
         fData.append("prdImgtype",'A');
         fData.append("msgId",this.msgid);
         arr.push(this.$http.post(baseUrl+'/servlet/fileUploadServlet?appType=PIMGE',fData,{headers:{'Content-Type':'multipart/form-data'}}));
+   
+   
+   
     }
 
       
@@ -302,15 +335,24 @@ export default {
           // console.log(JSON.stringify(response.data));
           if (response.data.result == "success") {
             
-              console.log(response.data);
+           
               //response.data.infoIds
               //this.postImg();
               this.msgid=response.data.infoIds;
                  if(this.msgid>0&&this.refNameArr.length>0){
                  
                   //  document.getElementById("submit").click();
-                  
-                       this.postImg();
+               
+                               this.postImg();
+                              
+                    }else{
+                      if(this.$route.query.id){
+                             this.promptCommon('信息修改成功');
+                      }else{
+                         this.isShowAlertConfirm=true;
+                      }
+                      
+                   
                  }
           }else{
              this.promptCommon('发布失败');
@@ -354,7 +396,7 @@ export default {
 
    
         if (this.rAddress == '' || !this.rAddress||this.rMapAddress == '') {
-          this.promptCommon('请选择地址');
+          this.promptCommon('请地址不完整');
           return;
         }
        if(this.rmb== '' || !this.rmb){
@@ -376,14 +418,14 @@ export default {
       }
         let xzdy='';
         if(this.rZKind=="C"){
-           xzdy=this.rmb+'元/月';
+           xzdy=this.rmb;//+'元/月';
 
         }else if(this.rZKind=="J"){
-           xzdy=this.rmb+'元/小时';
+           xzdy=this.rmb;//+'元/小时';
         }
  
   
-      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&titleSex=' + this.rSex + kindStr + '&pinfoId=32';
+      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&titleSex=' + this.rSex + kindStr +(this.$route.query.id?('&infoIds='+this.$route.query.id):'');
       console.log(this.postString);
     //  this.isShowPlay=!this.isShowPlay;
     this.postRecruit(this.postString);
@@ -565,7 +607,7 @@ export default {
   }
 }
     .imgs-list {
-      margin-top: 20px;
+      // margin-top: 20px;
       display: flex;
       justify-content: center;
       flex-direction: row;

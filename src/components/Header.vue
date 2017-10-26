@@ -2,11 +2,11 @@
   <header :class="['header',{fixed:isFixed}]">
         <div class="header-buttons header-left ">
            <a href="javascript:;" @click="back()"><span class="iconfont icon-fanhui2"></span></a>
-           <a href="javascript:;" v-if="isSubPage"><span class="iconfont icon-guanbi"></span></a>
+          <!-- <a href="javascript:;" v-if="isSubPage"><span class="iconfont icon-guanbi"></span></a>-->
         </div>
         <h1 class="header-title">{{title}}</h1>
         <div class="header-buttons header-left">
-           <a href="javascript:;" v-if="isSubPage"><span class="iconfont icon-fenxiang"></span></a>
+           <a href="javascript:;" v-if="isSubPage" @click="rightAction"><span :class="['iconfont',iconRight]"></span></a>
         </div>
   </header>
 </template>
@@ -22,7 +22,13 @@ export default {
   },
   "isFixed":{
        default:false
-  }},
+  },
+  "iconRight":{
+    type:String,
+    default:'icon-fenxiang'
+  }
+  
+  },
   data () {
     return {
       
@@ -31,6 +37,9 @@ export default {
   methods:{
      back(){
          this.$router.go(-1);
+     },
+     rightAction(){
+       this.$emit('rightAction');
      }
   }
 }

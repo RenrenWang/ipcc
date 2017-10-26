@@ -35,28 +35,51 @@ export default {
     selectSize:{
       type:Number,
       default:1
+    },
+    selectItem:{
+      type:String,
+    default:''
     }
    
   },
 
-
-  updated(){
- let array=[];
-     this.sKinds.map((item1,index1)=>{
-             item1.classData.map((item2,idnex2)=>{
-                if(item2.isSelect){
-                  array.push({codeName:item2.codeName,codeValue:item2.codeValue}); 
-                }
-             })
-       });
-     this.selectArray=array;
-  },
   data () {
     return {
      selectArray:[],
       pContent:'',
-      isPrompt:false
+      isPrompt:false,
+      isFirst:true
     }
+  },
+
+  mounted(){
+    
+
+        this.sKinds.map((item1,index1)=>{
+                item1.classData.map((item2,idnex2)=>{
+                    if(this.selectItem==item2.codeValue){
+                        item2.isSelect=true;
+                    }
+               })
+          });
+         
+  },
+
+  updated(){
+ let array=[];
+
+     this.sKinds.map((item1,index1)=>{
+             item1.classData.map((item2,idnex2)=>{
+                if(this.selectItem==item2.codeValue&&this.isFirst){
+                        item2.isSelect=true;
+                }
+                if(item2.isSelect){
+                  array.push({codeName:item2.codeName,codeValue:item2.codeValue,isSelect:item2.isSelect}); 
+                }
+                 
+             })
+       });
+     this.selectArray=array;
   },
   methods:{
      promptCommon(str){
@@ -71,7 +94,8 @@ export default {
   },
   selectKind(index,sindex){
     let array=[];
-    console.log("size--->"+this.selectArray.length);
+    this.isFirst=false;
+  
     if(this.selectArray.length>=this.selectSize&&this.selectIndex==1){
       if(!this.sKinds[index]['classData'][sindex]['isSelect']){
       //  this.promptCommon('最多选择'+this.selectSize+'个选项');
@@ -88,7 +112,7 @@ export default {
           
       
       this.sKinds[index]['classData'][sindex]['isSelect']=!this.sKinds[index]['classData'][sindex]['isSelect'];
-         // this.selectArray.push(this.sKinds[index]['classData'][sindex]['ids']); 
+         
        
     }
    
@@ -101,7 +125,7 @@ export default {
        });
      this.selectArray=array;
     
-     console.log( this.selectArray);
+     console.log(this.selectArray);
     }
   },
   components:{
