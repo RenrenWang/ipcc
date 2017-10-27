@@ -25,7 +25,7 @@
                 </ul>
                 <div class="dy-box">
                     <p>薪资待遇：</p>
-                    <p>{{data.salaryClassname}}</p>
+                    <p>{{setDy()}}</p>
                 </div>
                 <div class="nl-box">
                      <h3 style="border:none">工作内容与要求</h3>
@@ -34,7 +34,7 @@
                 <div class="map-box">
                     <p @click="showMapBig">工作地点(点击查看大图)</p>
                     <div id="map"></div>
-                    <p>详细地址：{{data.infoAddr}}</p>
+                    <p>详细地址：{{data.mapAddr+data.infoAddr}}</p>
                 </div>
                 <div class="imgs-box">
                     <p>机构图片</p>
@@ -45,7 +45,9 @@
             </div>
         </div>
          <MapBig  v-if="isMapBig" :xy="mapXY" @hMap="showMapBig"/>
-         <FooterButton  :btnName="$route.query.type?'与他联系':'删除'" @fBtnAction="showAlertConfirm()"/>
+         <BottomPlay  v-show="isShowbp"  :isPay="true" :phoneNumber="data.pinfoPhone"/>
+         <FooterButton  v-if="$route.query.type" btnName="与他联系" @fBtnAction="showPhone()"/>
+         <FooterButton  v-else  btnName="删除" @fBtnAction="showAlertConfirm()"/>
          <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="删除后，该信息将无法被老师所看到。" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
     </div>
    
@@ -56,7 +58,7 @@ import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
 import AlertConfirm from '../components/AlertConfirm.vue'
 import MapBig from '../components/MapBig.vue'
-
+import BottomPlay from '../components/BottomPlay.vue'
 
 export default {
     name: 'recruitD',
@@ -70,7 +72,8 @@ export default {
            address:api.address,
            isMapBig:false,
            mapXY:{x:0,y:0},
-           isJS:false
+           isJS:false,
+           isShowbp:false
         }
     },
     mounted(){
@@ -95,7 +98,12 @@ export default {
        })
     },
     methods:{
-
+        setDy(){
+          return  this.data.titleClassname=='全职'?this.data.salaryClassname+"元/月":this.data.salaryClassname+"元/小时";
+        },
+       showPhone(){
+            this.isShowbp=!this.isShowbp;
+        },
         nrAction(){
               this.$router.push({path:'/recruitPost',query:{id:this.$route.query.id}});
         },
@@ -138,7 +146,8 @@ export default {
         VHeader,
         FooterButton,
         AlertConfirm,
-        MapBig
+        MapBig,
+        BottomPlay
     }
 }
 </script>
@@ -220,7 +229,7 @@ export default {
             justify-content: center;
             flex-direction: row;
             align-items: center;
-            
+            white-space:nowrap;
             li{
               background: #FFC800;
               padding: 3px 20px;

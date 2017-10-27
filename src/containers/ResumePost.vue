@@ -43,11 +43,16 @@
             <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
              <div class="section">
                  <h2 class="title">艺术照</h2>
-                   <Upload   @uploadFile="uploadResult"/>
-                  <!-- <ul class="imgs-list">
-                      <li v-for="v in 3"><img src="../assets/images/picIcon.png" /></li>
-                  </ul> -->
+                   <span class="reUpload iconfont icon-add_x" v-if="$route.query.id&&$route.query.id>0&&!isUpload"   @click="reUpload"></span>
+                <span class="reUpload" v-if="$route.query.id&&$route.query.id>0&&isUpload"  @click="reUpload">取消</span>    
+                <Upload   v-show="isUpload"  @uploadFile="uploadResult"/>
+        
+              <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">
+                    <li v-for="(v,idnex) in srcImgs"><img  :src="imgUrl+v.lidFileuri"/></li>
+                </ul>
             </div>
+
+           
        </div>
        <picker v-model="visible" :data-items="items" @change="onValuesChange"></picker>
     
@@ -85,8 +90,12 @@ export default {
       selectKinds:[],
       pContent:'',
       isPrompt:false,
-       visible: false,
+      visible: false,
        istr:'',
+       msgid:0,
+       srcImgs:[],
+       isUpload:false,
+        imgUrl:api.imgUrl,
         items: [
         {
           values: ['1880', '1880', '2002', '2003', '2004', '2005', '2006', '2007'],
@@ -106,7 +115,9 @@ this.getDataD()
 
 
   methods:{
-
+  reUpload(){
+   this.isUpload=!this.isUpload;
+    },
   getDataD(){
     this.$http.get(api.presumeD+this.$route.query.id)//this.$route.params.id
        .then(response=>{
@@ -120,23 +131,26 @@ this.getDataD()
                 this.name=sdata.pinfoPname;
                 this.rZKind=sdata.titleClassname=="兼职"?'J':'C';
                 this.resumeText=sdata.pinfoNote;
-             
-                 if(sdata.titleExt1!=''){
+                
+                 if(sdata.titleExt1name!=""&&sdata.titleExt1name){
                       this.selectKinds.push({codeValue:sdata.titleExt1name,codeName:sdata.titleExt1});
                  }
-                  if(sdata.titleExt2!=''){
+                  if(sdata.titleExt2name!=""&&sdata.titleExtname){
                       this.selectKinds.push({codeValue:sdata.titleExt2name,codeName:sdata.titleExt2});
                  }
-                  if(sdata.titleExt3!=''){
+                  if(sdata.titleExt1name!=""&&sdata.titleExt3name){
                       this.selectKinds.push({codeValue:sdata.titleExt3name,codeName:sdata.titleExt3});
                  }
-                  if(sdata.titleExt4!=''){
+                  if(sdata.titleExt4name!=""&&sdata.titleExt4name){
                       this.selectKinds.push({codeValue:sdata.titleExt4name,codeName:sdata.titleExt4});
                  }
-                  if(sdata.titleExt5!=''){
+                  if(sdata.titleExt5name!=""&&sdata.titleExt5name){
                       this.selectKinds.push({codeValue:sdata.titleExt5name,codeName:sdata.titleExt5});
                  }
-                 
+                   this.srcImgs=data.imgData;
+                    if(this.srcImgs.length>0){
+                  this.isUpload=false;
+               }
               // this.rTitle=data.data[0].infoTitle;
               //  this.rZKind=data.data[0].titleClassname=="全职"?"C":"J";
               //  this.rSex=data.data[0].pinfoSex;
@@ -156,10 +170,7 @@ this.getDataD()
      console.log(arr);
      this.refNameArr=arr;
   },
-  pAction(str){
-    this.isPrompt=! this.isPrompt;
-    this.pContent=str;
-  },
+
 
     postImg(){
 
@@ -176,8 +187,8 @@ this.getDataD()
     this.$http.all(arr)
        .then(this.$http.spread( (acct, perms)=> {
               // Both requests are now complete
-            this.isShowAlertConfirm=true;
-
+          //  this.isShowAlertConfirm=true;
+            this.promptCommon('信息修改成功');
             
              console.log(acct);
              console.log(perms);
@@ -257,7 +268,7 @@ this.getDataD()
      return d.getDate();
    },
    promptCommon(str){
-       this.pAction();
+      this.isPrompt=true;
        this.pContent=str;
     },
     pAction(){
@@ -320,7 +331,7 @@ this.getDataD()
        return;
       }
     
-     let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+"&pinfo_birthday="+this.age+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId='+GetQueryString('pinfoId');
+     let  str='titleClass='+this.rZKind+'&pinfoPname='+this.name+"&pinfoBirthday="+this.age+'&teacherYear='+this.jobYear+'&collName='+this.school+'&pinfoIdea='+this.jobAddress+'&pinfoNote='+this.resumeText+this.kindStr+'&pinfoId='+GetQueryString('pinfoId')+(this.$route.query.rsmIds>0?'&rsmIds='+this.$route.query.rsmIds:'');
      console.log(str);
     this.postResume(str);
     },
@@ -350,26 +361,23 @@ this.getDataD()
    postResume(str) {
       this.$http.get(api.resumePost + str)
         .then(response => {
-           console.log(JSON.stringify(response.data));
+        
           if (response.data.result == "success") {
+              
              this.promptCommon('发布成功');
-             this.msgid=response.data.infoIds;
+             this.msgid=response.data.rsmIds;
+           
                  if(this.msgid>0&&this.refNameArr.length>0){
+                   //document.getElementById("submit").click();
                  
-                  //  document.getElementById("submit").click();
-               
-                               this.postImg();
-                              
+                          this.postImg();
                     }else{
-                      if(this.$route.query.id){
-                             this.promptCommon('信息修改成功');
-                      }else{
-                         this.isShowAlertConfirm=true;
-                      }
-                      
                    
-                 }
-          }
+                       this.promptCommon('信息修改成功');
+                       //this.isShowAlertConfirm=true;
+                    }
+                }
+          
         })
     },
   },
@@ -396,6 +404,7 @@ this.getDataD()
          width:100%;
          overflow-y:auto;
         .section{
+          position:relative;
            padding:10px 0;
            width:80%;
            margin:0 auto;
@@ -504,14 +513,23 @@ this.getDataD()
         margin: 0 2px;
         img {
 
-          height: auto;
-          width: 80%;
+            width: 101px;
+          height: 80px;
         }
       }
     }
         }
         
     }
- 
+  .reUpload{
+       position:absolute;
+       right:0;
+       top:10px;
+       color:"#bbb";
+       font-size:14px;
+       &.icon-add_x{
+         font-size:rem(40px);
+       }
+    }
 }
 </style>

@@ -14,7 +14,9 @@ global.GetQueryString=function(name){
     var r = window.location.search.substr(1).match(reg);
     if(r!=null)return  unescape(r[2]); return null;
 }
-
+global.getType=function(){
+     window.location.indexOf('')
+}
 
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false

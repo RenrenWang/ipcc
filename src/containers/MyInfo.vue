@@ -6,7 +6,7 @@
                 <div class="input-box">
                     <span style="font-weight:bold;">修改头像</span>
                      <img :src="avatar" >  
-                    <span class="iconfont icon-xiangyou"></span>
+                     <span class="iconfont icon-xiangyou"></span>
                 </div>
                    
             </div>

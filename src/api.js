@@ -1,5 +1,5 @@
-const BaseUrl='http://www.hzrongzhi.com/appsrv';
-//const BaseUrl='/appsrv';
+//const BaseUrl='http://www.hzrongzhi.com/appsrv';
+const BaseUrl='/appsrv';
 //http://120.26.85.1
 const Api={
   selectMapAddress:'https://m.amap.com/picker/?center=116.40,39.97&key=1683a75e3995650aafd98176386ccb9a',

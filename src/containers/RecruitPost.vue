@@ -62,11 +62,11 @@
       </div>
       <div class="selection">
         <p>机构图片上传</p>
-     
-         <span @click="reUpload" style="color:#f00" v-if="$route.query.id&&$route.query.id>0">{{!isUpload?'图片上传':'重置'}}</span>    
+         <span class="reUpload iconfont icon-add_x" v-if="$route.query.id&&$route.query.id>0&&!isUpload"   @click="reUpload"></span>
+         <span class="reUpload" v-if="$route.query.id&&$route.query.id>0&&isUpload"  @click="reUpload">取消</span>    
          <Upload   v-show="isUpload"  @uploadFile="uploadResult"/>
         
-           <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">
+         <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">
                <li v-for="(v,idnex) in srcImgs"><img  :src="imgUrl+v.lidFileuri"/></li>
           </ul>
   
@@ -121,7 +121,8 @@ export default {
       isShowPlay:false,
       isShowAlertConfirm:false,
       imgUrl:api.imgUrl,
-      isUpload:true
+      isUpload:true,
+      
     
     }
   },
@@ -149,6 +150,7 @@ export default {
                this.workDemand=data.data[0].titleSimdesc;
                this.selectKinds=[{codeValue:data.data[0].titleExt1name,codeName:data.data[0].titleExt1}];
                this.srcImgs=data.imgData;
+               this.rMapAddress=data.data[0].mapAddr;
                if(this.srcImgs.length>0){
                   this.isUpload=false;
                }
@@ -393,7 +395,7 @@ export default {
           this.promptCommon('艺术种类不能为空');
           return;
       }
-
+           
    
         if (this.rAddress == '' || !this.rAddress||this.rMapAddress == '') {
           this.promptCommon('请地址不完整');
@@ -425,7 +427,7 @@ export default {
         }
  
   
-      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' + this.rMapAddress+this.rAddress + '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&titleSex=' + this.rSex + kindStr +(this.$route.query.id?('&infoIds='+this.$route.query.id):'');
+      this.postString = 'infoTitle=' + this.rTitle + '&titleClass=' + this.rZKind + '&salaryClass='+xzdy+'&titleDesc=' + this.workDemand + '&titleAddr=' +this.rAddress +'&mapAddr='+ this.rMapAddress+ '&mapAxis='+this.rMapX+'&mapAyis='+this.rMapY+'&titleSex=' + this.rSex + kindStr +(this.$route.query.id?('&infoIds='+this.$route.query.id):'');
       console.log(this.postString);
     //  this.isShowPlay=!this.isShowPlay;
     this.postRecruit(this.postString);
@@ -520,8 +522,19 @@ export default {
     }
   }
   .selection {
+    position:relative;
     margin: 20px;
     border-bottom: 1px solid #bbb;
+   .reUpload{
+       position:absolute;
+       right:0;
+       top:0px;
+       color:"#bbb";
+       font-size:14px;
+       &.icon-add_x{
+         font-size:rem(40px);
+       }
+    }
     p {
       margin: 15px 0 10px 0;
       font-size: 16px;
@@ -625,6 +638,7 @@ export default {
       }
     }
   }
+
   .selectBtnbox {
     background: #ffc800 !important;
   }

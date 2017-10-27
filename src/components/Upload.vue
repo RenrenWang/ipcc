@@ -23,11 +23,19 @@
 <script>
 export default {
   name: 'Upload',
+  porps:{
+   setNull:{
+     type:Boolean,
+     default:false
+   }
+  },
   data () {
     return {
       srcImgs:[{imgSrc:''},{imgSrc:''},{imgSrc:''}],
+      formArr:[]
     }
   },
+
   methods:{
    changFile(e,index){
       // let arr=this.srcImgs;
@@ -41,9 +49,13 @@ export default {
       //   refNameArr.push("upload_"+i);
       // }
        console.log(e);
-        this.srcImgs[index].imgSrc=URL.createObjectURL(e.target.files[0]);
-     
-       this.$emit('uploadFile',['upload_0','upload_1','upload_2']);
+      
+         let imgSrc=URL.createObjectURL(e.target.files[0]);
+        this.srcImgs[index].imgSrc=imgSrc;
+         if(imgSrc&&imgSrc!=''){
+            this.formArr[index]='upload_'+index;
+         }
+       this.$emit('uploadFile',this.formArr);
       }
   }
 }

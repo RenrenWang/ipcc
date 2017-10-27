@@ -5,8 +5,8 @@
            <p class="top-panel-item-txt"><span>{{setData.name}}</span></p>
         </div>
        <div class="top-panel-item">
-          <img :src="setData.avatar" class="avater-img">
-          <p class="top-panel-item-txt"><span class="iconfont icon-nv"></span><span>{{setData.firstName}}</span></p>
+          <img :src="setData.avatar" class="avater-img"><!--{'icon-nv':isSex}-->
+          <p class="top-panel-item-txt"><span :class="['iconfont',isSex()]"></span><span>{{setData.firstName}}</span></p>
        </div>
        <div class="top-panel-item">
            <router-link :to="{ name: 'MyInfo'}" class="iconfont icon-shezhi1" tag="span"></router-link>
@@ -30,7 +30,10 @@ export default {
  methods:{
       toHome(url){
       this.$router.push({ path:url})
-  }
+  },
+  isSex(){
+       return GetQueryString('pinfoSex')=='男'?'icon-nan':'icon-nv';
+   }
  }
 }
 </script>
@@ -68,9 +71,9 @@ export default {
          position:relative;
         
          .icon-nv{
-             position:absolute;
+            
              font-size:22px;
-             left:rem(15px);  
+             
              bottom:0;
              
           }
@@ -86,6 +89,12 @@ export default {
           border-radius:50%;
           box-shadow: 0px 0px 5px #eeda90;
       }
+    }
+    .icon-nan{
+        color:#a7c7f0;
+    }
+    .icon-nv{
+        color:#f3688d;
     }
 }
 </style>

@@ -2,13 +2,19 @@
   <div class="bottom-play">
      <div class="bp-bg"></div>
 
+  
+     <a    v-if="isPay" :href="'tel:'+returnPhoneNumber()" class="bp-btn-number bp-content bp-btn">
+        {{returnPhoneNumber()}}
+     </a>
+     <div class="bp-content" v-else>
+       <a  class="bp-btn bp-btn-tip" href="javascript:;">
+            付费后可获取教师联系方式！
+        </a>
+        <a  class="bp-btn" :href="'http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=B&pinfoId='+pId+'&msgId='+msgId">
+            微信支付
+        </a>
+     </div>
     
-     <a   v-if="isPay" :href="'tel:'+phoneNumber" class="bp-content">
-        {{phoneNumber}}
-     </a>
-     <a v-else :href="'http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=B&pinfoId='+pId" class="bp-content">
-        微信支付
-     </a>
         
  </div>
 </template>
@@ -22,8 +28,12 @@ export default {
       default:false
       },
     phoneNumber:{
-      type:Number,
-    }
+      type:String,
+      phoneNumber:''
+    },
+    msgId:{
+          
+    },
   },
   data () {
     return {
@@ -31,9 +41,13 @@ export default {
     }
   },
   mounted(){
-    this.pId=GetQueryString('pinfoSname');
+    this.pId=GetQueryString('pinfoId');
+  },
+  methods:{
+     returnPhoneNumber(){
+       return (this.phoneNumber==""||!this.phoneNumber)?"号码为空":this.phoneNumber;
+     }
   }
-
 }
 </script>
 
@@ -53,18 +67,34 @@ export default {
   //  opacity:.5;
   // }
 }
+
+.bp-btn{
+  display:block;
+  background: rgba(255,255,255,.8);
+  border-color: #bbbbbb;
+   border-radius: 10px;
+   width:100%;
+  height: rem(90px);
+  line-height:  rem(90px);
+}
+.bp-btn.bp-btn-tip{
+  margin-bottom:15px;
+   border-radius: 0px;
+}
+
 .bp-content{
   width:70%;
-  background: #fff;
-  height: rem(85px);
-  line-height: rem(85px);
   text-align: center;
   position: fixed;
-  bottom: rem(80px);
+  bottom: rem(20px);
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #1c74d9;
-  border: 1px solid #bbbbbb;
-  border-radius: 5px;
+   color: #555;
+   z-index:9999;
+}
+
+.bp-btn-number {
+    bottom: rem(80px);
+    color:#6694ff;
 }
 </style>

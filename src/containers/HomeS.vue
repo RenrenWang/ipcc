@@ -28,6 +28,7 @@ export default {
     }
   },
   mounted(){
+    console.log("pinfoSex----"+GetQueryString('pinfoSex'));
      this.topDdata.firstName=GetQueryString('pinfoSname')?GetQueryString('pinfoSname'):'';
     this.topDdata.avatar=GetQueryString('pinfoSname')?GetQueryString('pinfoUri'):'';
   },

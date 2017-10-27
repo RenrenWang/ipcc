@@ -84,7 +84,7 @@ export default {
 					//以下参数可删除,不配置
 					//page:{size:8}, //可配置每页8条数据,默认10
 					toTop: { //配置回到顶部按钮
-						src: "/static/images/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+						src: require("../assets/images/mescroll-totop.png"), //默认滚动到1000px显示,可配置offset修改
 						//offset : 1000
 					},
 					htmlNodata: '<p class="upwarp-nodata">-- 没有更多数据 --</p>',
@@ -96,11 +96,11 @@ export default {
 					
 					empty: { //配置列表无任何数据的提示
 						warpId: "dataList",
-						icon: "/static/images/mescroll-empty.png",
+						icon:require('../assets/images/mescroll-empty.png'),
 						tip: "亲,暂无相关数据哦~",
 						btntext: "去逛逛 >",
 						btnClick() {
-							alert("点击了去逛逛按钮");
+							// alert("点击了去逛逛按钮");
 						}
 					}
 				}

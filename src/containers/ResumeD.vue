@@ -8,7 +8,7 @@
                 </div>
                 <div class="recruit-d-item">
                     <img :src="data.pinfoUri" class="avater-img">
-                    <p class="top-panel-item-txt">
+                    <p class="top-panel-item-txt" style="white-space:nowrap;">
                         <span>{{data.pinfoPname}}</span>
                         <span class="iconfont icon-nan" style="color:#1e9ee6"></span>
                         <span>{{data.pinfoBirthday}}</span>
@@ -37,26 +37,29 @@
                   <div class="r-section">
                      <span>擅长：</span>
                      <div class="r-section-item">
-                         <span v-if="data.titleExt1name!=''||data.titleExt1name">{{data.titleExt1name}}</span>
-                         <span v-if="data.titleExt2name!=''||data.titleExt2name">{{data.titleExt2name}}</span>
-                         <span v-if="data.titleExt3name!=''||data.titleExt3name">{{data.titleExt3name}}</span>
-                         <span v-if="data.titleExt4name!=''||data.titleExt4name">{{data.titleExt4name}}</span>
-                         <span v-if="data.titleExt5name!=''||data.titleExt5name">{{data.titleExt5name}}</span>
+                         <span v-if="data.titleExt1name!=''&&data.titleExt1name">{{data.titleExt1name}}</span>
+                         <span v-if="data.titleExt2name!=''&&data.titleExt2name">{{data.titleExt2name}}</span>
+                         <span v-if="data.titleExt3name!=''&&data.titleExt3name">{{data.titleExt3name}}</span>
+                         <span v-if="data.titleExt4name!=''&&data.titleExt4name">{{data.titleExt4name}}</span>
+                         <span v-if="data.titleExt5name!=''&&data.titleExt5name">{{data.titleExt5name}}</span>
                      </div>
                  </div>
                  <div class="nl-box">
-                     <h3 style="border:none;margin-bottom:15px;">个人简历</h3>
+                     <h3 class="section-title">个人简历</h3>
                      <p>{{data.pinfoNote}}</p>
-                </div>
-                <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
-              
-                     <ul class="imgs-list" style="min-height:150px">
-                      <li v-for="(v,idnex) in imgList"><img  :src="imgUrl+v.lidFileuri"/></li>
-                   </ul>
-               
-                </div>
+                 </div>
+                <div class="line3"></div>
+                   <div class="nl-box">
+                        <h3 class="section-title">艺术照</h3>
+                        <ul class="imgs-list">
+                            <li v-for="(v,idnex) in imgList"><img  :src="imgUrl+v.lidFileuri"/></li>
+                        </ul>
+                    </div>
+                   
+               </div>
+             
         </div>
-         <BottomPlay  v-show="isShowbp"  :isPay="ispay" :phoneNumber="data.pinfoPhone"/>
+         <BottomPlay  v-show="isShowbp"  :isPay="ispay" :phoneNumber="pinfoPhone" :msgId="rsmIds"/>
          <FooterButton  :btnName="$route.query.isP?'编辑':'与他联系'" bgFooterButton="#ff6b00" @fBtnAction="play"/>
     </div>
 </template>
@@ -75,8 +78,9 @@ export default {
            isError:false,
            imgUrl:api.imgUrl,
            isShowbp:false,
-           ispay:false,
-           pinfoPhone:''
+           ispay:true,
+           pinfoPhone:'',
+           rsmIds:0
         }
     },
     mounted(){
@@ -92,9 +96,9 @@ export default {
          console.log(data);
           this.data=data.data[0];
           
-          this.ispay=data.ispay=='Y'?true:false;
-          
-         
+          this.ispay=(data.ispay=='Y'?true:false);
+          this.pinfoPhone=data.data[0].pinfoPhone;
+          this.rsmIds=data.data[0].rsmIds;
           this.imgList=data.imgData;
           this.isError=false;
        }).catch(error=>{
@@ -107,8 +111,10 @@ export default {
 
         },
         play(){
+           
             if(this.$route.query.isP){
-               this.$router.push({path:'/resumePost',query:{id:this.$route.query.id}});
+          
+               this.$router.push({path:'/resumePost',query:{id:this.$route.query.id,rsmIds:this.rsmIds}});
             }else{
                this.isShowbp=!this.isShowbp;
             }
@@ -229,7 +235,7 @@ export default {
           }
         }
          .nl-box{
-         margin:15px 25px;
+         padding:15px 25px;
          p{
              line-height: 20px;
          padding: 20px 10px;     
@@ -238,5 +244,29 @@ export default {
            border-radius: 5px;} 
         }
     }
+        .section-title{
+            padding:0px  0 10px 0;
+            font-size:16px;
+        }
+        .line3{
+           height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;
+        }
+     .imgs-list {
+    
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      align-items: center;
+      li {
+        text-align: center;
+        margin: 0 2px;
+        width:30%;
+        img {
+            height: auto;
+          width:100%;
+        }
+      }
+    }
+    
 }
 </style>

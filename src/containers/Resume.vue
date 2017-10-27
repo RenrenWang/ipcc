@@ -131,7 +131,7 @@ export default {
 						tip: "亲,暂无相关数据哦~",
 						btntext: "去逛逛 >",
 						btnClick() {
-							alert("点击了去逛逛按钮");
+							// alert("点击了去逛逛按钮");
 						}
 					}
 				}
@@ -145,7 +145,7 @@ export default {
 			console.log("page.num==" + page.num + ", page.size==" + page.size);
 			//联网加载数据
 
-			this.$http.get(api.resumeList + 'isAll=Y&pinfoId=32&pageno=' + page.num).then((response) => {
+			this.$http.get(api.resumeList + 'isAll=Y&pinfoId='+GetQueryString('pinfoId')+'&pageno=' + page.num).then((response) => {
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				let data = response.data.data;
 				// this.pdlist = data.data;
