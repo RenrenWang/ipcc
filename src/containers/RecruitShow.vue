@@ -1,8 +1,8 @@
 <template>
 	<div class="resume">
 		<VHeader :isSubPage="false" title="招聘信息大全" :isFixed="true" />
-		<SearchNavbar @searchNavLeftBtn="selectAddressCity" :sCity="city" :isAll="true"/>
-		<SearchKey :searchKeys="keyList" />
+		<SearchNavbar @searchNavLeftBtn="selectAddressCity" :sCity="city" :isAll="true" @changKey="getKey"/>
+		<SearchKey :searchKeys="keyList" @resultKinds="getkinds"/>
 		<div class="resume-list mescroll" id="mescroll">
 			<ul id="dataList" class="data-list">
 				<RecruitItem v-for="(v,index) in pdlist"   :key="index" :rData="v"  :isAll="true"/>
@@ -29,7 +29,7 @@ export default {
 					name: "兼全职", kinds: [
 						{
 							title: "",
-							classData: [{codeName:'C', codeValue: '兼职', isSelect: true }, {codeName:'J', codeValue: '全职', isSelect: false }]
+							classData: [{codeName:'J', codeValue: '兼职', isSelect: true }, {codeName:'C', codeValue: '全职', isSelect: false }]
 						}
 					]
 				},
@@ -51,7 +51,12 @@ export default {
 				},
 			],
 			pdlist: [],
-			page: 1
+			page: 1,
+			searchStr:'',
+			titleSex:'',
+			titleExt:'',
+			titleClass:'',
+			searchVal:''
 		}
 	},
 	// mounted() {
@@ -63,6 +68,31 @@ export default {
 		this.initMescroll();
 	},
 	methods: {
+		getKey(key){
+		   this.searchVal=key!=''?'&searchVal='+key:'';
+		   this.mescroll.resetUpScroll( false );
+		},
+      getkinds(arr){
+	
+	
+			switch(arr[0]['selectIndex']){
+					case 0 :
+					this.titleClass=arr[0]['data']['codeName'];
+					break;
+					case 1:
+					this.titleExt=arr[0]['data']['codeName'];
+					break;
+					case 2:
+				    this.titleSex=arr[0]['data']['codeName']
+					break;
+			}
+		 this.searchStr=this.resStr("titleSex",this.titleSex)+this.resStr("titleExt",this.titleExt)+this.resStr("titleClass",this.titleClass);
+		console.log( this.searchStr);
+		this.mescroll.resetUpScroll( false );
+		},
+		resStr(name,value){
+        return  value!=''?'&'+name+'='+value:'';
+       },
 		selectAddressCity(){
 		
 		  AMapUI.loadUI(['misc/MobiCityPicker'],(MobiCityPicker)=> {
@@ -145,7 +175,7 @@ export default {
 			console.log("page.num==" + page.num + ", page.size==" + page.size);
 			//联网加载数据
 
-			this.$http.get(api.recruitList + 'isAll=Y&pinfoId=32&pageno=' + page.num).then((response) => {
+			this.$http.get(api.recruitList + 'isAll=Y&pinfoId='+GetQueryString('pinfoId')+'&pageno=' + page.num+this.searchStr+this.searchVal).then((response) => {
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				let data = response.data.data;
 				// this.pdlist = data.data;

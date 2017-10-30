@@ -1,17 +1,18 @@
 <template>
-    <div class="recruit-d">
-        <VHeader :isSubPage="false"  iconRight="icon-bianji2"  @rightAction="nrAction" title="详细" :isFixed="true" />
-        <div class="recruit-d-content">
+    <div class="recruit-d"><!--iconRight="icon-bianji2"  @rightAction="nrAction"-->
+        <VHeader :isSubPage="false"   title="详细" :isFixed="true" />
+        <Loading v-show="isLoading" :loaderNumber=1 styleColor="rgb(125, 125, 125)"/>
+        <div  v-show="!isLoading" class="recruit-d-content">
             <div class="recruit-d-t">
                 <div class="recruit-d-item">
-                    <p><span class="iconfont  icon-dizhi"></span><span>{{data.pinfoIdea}}</span></p>
+                    <p><span class="iconfont  icon-dizhi"></span><span style="font-size:16px;">{{data.pinfoIdea}}</span></p>
                 </div>
                 <div class="recruit-d-item">
                     <img :src="data.pinfoUri" class="avater-img">
                     <p class="top-panel-item-txt" style="white-space:nowrap;">
                         <span>{{data.pinfoPname}}</span>
                         <span class="iconfont icon-nan" style="color:#1e9ee6"></span>
-                        <span>{{data.pinfoBirthday}}</span>
+                        <span>{{setAge(data.pinfoBirthday)}}</span>
                     </p>
                 </div>
                 <div class="recruit-d-item">
@@ -52,7 +53,13 @@
                    <div class="nl-box">
                         <h3 class="section-title">艺术照</h3>
                         <ul class="imgs-list">
-                            <li v-for="(v,idnex) in imgList"><img  :src="imgUrl+v.lidFileuri"/></li>
+                          
+                      <li v-for="(v,index) in list">
+                       <img class="preview-img"  :src="v.src" height="100" @click="$preview.open(index, list)">
+
+                         
+                      </li>
+
                         </ul>
                     </div>
                    
@@ -60,30 +67,34 @@
              
         </div>
          <BottomPlay  v-show="isShowbp"  :isPay="ispay" :phoneNumber="pinfoPhone" :msgId="rsmIds"/>
-         <FooterButton  :btnName="$route.query.isP?'编辑':'与他联系'" bgFooterButton="#ff6b00" @fBtnAction="play"/>
+         <FooterButton  :btnName="applClass=='T'?'编辑':'与他联系'" bgFooterButton="#ff6b00" @fBtnAction="play"/>
     </div>
 </template>
 
 <script>
 import VHeader from '../components/Header.vue'
 import FooterButton from '../components/FooterButton.vue'
-
+import Loading from '../components/Loading.vue'
 import BottomPlay from '../components/BottomPlay.vue'
 export default {
     name: 'redumeD',
     data() {
         return {
+           isLoading:true,
            data:{},
            imgList:[],
+            list: [],
            isError:false,
            imgUrl:api.imgUrl,
            isShowbp:false,
            ispay:true,
            pinfoPhone:'',
-           rsmIds:0
+           rsmIds:0,
+           applClass:''
         }
     },
-    mounted(){
+    created(){
+       this.applClass=GetQueryString('applClass')?GetQueryString('applClass'):'';
         let url="";
        if(this.$route.query.isP){
           url=api.presumeD+this.$route.query.id;
@@ -100,16 +111,27 @@ export default {
           this.pinfoPhone=data.data[0].pinfoPhone;
           this.rsmIds=data.data[0].rsmIds;
           this.imgList=data.imgData;
+
+          data.imgData.map((item,index)=>{
+              
+              this.list.push({
+                  src:this.imgUrl+item.lidFileuri,
+                  w: document.body.clientWidth ,
+                  h: document.body.clientHeight-88
+              });
+           });
+         this.isLoading=false;
           this.isError=false;
        }).catch(error=>{
           this.isError=true;
+          
        })
     },
 
     methods:{
-       nrAction(){
-
-        },
+    setAge(date){
+         return Math.abs(new Date(date).getFullYear() - new Date().getFullYear()+1)+'岁';
+      },
         play(){
            
             if(this.$route.query.isP){
@@ -124,7 +146,8 @@ export default {
     components: {
         VHeader,
         FooterButton,
-        BottomPlay
+        BottomPlay,
+        Loading
     }
 }
 </script>
@@ -182,8 +205,8 @@ export default {
             }
         }
         .avater-img {
-            height: rem(120px);
-            width: rem(120px);
+            height: rem(150px);
+            width: rem(150px);
             border-radius: 50%;
         }
     }
@@ -191,8 +214,8 @@ export default {
           background: #edebe8;
         text-align:center;
         border-radius: 25px 25px 0 0;
-        border-top: 1px solid #bbb;
-       
+      //  border-top: 1px solid #bbb;
+       overflow: hidden;
         >h2{
           
             width:60%;
@@ -254,13 +277,13 @@ export default {
      .imgs-list {
     
       display: flex;
-      justify-content: space-between;
+       justify-content: center;;
       flex-direction: row;
       align-items: center;
       li {
         text-align: center;
-        margin: 0 2px;
-        width:30%;
+          width: 33.33%;
+         margin: 5px 10px;
         img {
             height: auto;
           width:100%;

@@ -74,7 +74,8 @@ export default {
                         item2.isSelect=true;
                 }
                 if(item2.isSelect){
-                  array.push({codeName:item2.codeName,codeValue:item2.codeValue,isSelect:item2.isSelect}); 
+                 array.push({selectIndex:this.selectIndex,data:{codeName:item2.codeName,codeValue:item2.codeValue,isSelect:item2.isSelect}}); 
+
                 }
                  
              })
@@ -90,42 +91,51 @@ export default {
      this.isPrompt=!this.isPrompt;
     },
   closeKp(){
-    this.$emit('closePanel',this.selectArray);
+   let  array=this.selectArray==0?[{selectIndex:this.selectIndex,data:{codeName:'',codeValue:'',isSelect:false}}]:this.selectArray;
+    this.$emit('closePanel',array);
   },
   selectKind(index,sindex){
     let array=[];
     this.isFirst=false;
-  
-    if(this.selectArray.length>=this.selectSize&&this.selectIndex==1){
-      if(!this.sKinds[index]['classData'][sindex]['isSelect']){
-      //  this.promptCommon('最多选择'+this.selectSize+'个选项');
-        }
-      this.sKinds[index]['classData'][sindex]['isSelect']=false;
-       return;
-    }else{
+
     
-      if(this.selectIndex!=1){
-        this.sKinds[index]['classData'].map((item,index)=>{
-          item.isSelect=false;
-        });
-      }
-          
-      
+   if(this.selectArray.length<this.selectSize){
       this.sKinds[index]['classData'][sindex]['isSelect']=!this.sKinds[index]['classData'][sindex]['isSelect'];
-         
-       
-    }
-   
-    this.sKinds.map((item1,index1)=>{
-             item1.classData.map((item2,idnex2)=>{
-                if(item2.isSelect){
-                  array.push({codeName:item2.codeName,codeValue:item2.codeValue}); 
-                }
-             })
-       });
-     this.selectArray=array;
+   }else{
+       this.sKinds[index]['classData'][sindex]['isSelect']=false;
+   }
+  
+    // if(this.selectArray.length>=this.selectSize&&this.selectIndex==1){
+    //   if(!this.sKinds[index]['classData'][sindex]['isSelect']){
+    //   //  this.promptCommon('最多选择'+this.selectSize+'个选项');
+    //     }
+    //   this.sKinds[index]['classData'][sindex]['isSelect']=false;
+    //    return;
+    // }else{
     
-     console.log(this.selectArray);
+  //     if(this.selectIndex!=1){
+  //       this.sKinds[index]['classData'].map((item,index)=>{
+  //         item.isSelect=false;
+  //       });
+  //     }
+     
+      
+  //     
+        
+       
+  // //  }
+   
+  //   this.sKinds.map((item1,index1)=>{
+  //            item1.classData.map((item2,idnex2)=>{
+  //               if(item2.isSelect){
+  //               array.push({selectIndex:this.selectIndex,data:{codeName:item2.codeName,codeValue:item2.codeValue,isSelect:item2.isSelect}}); 
+  //              }
+  //            })
+  //      });
+  
+  //    this.selectArray=array;
+    
+  //    console.log(this.selectArray);
     }
   },
   components:{

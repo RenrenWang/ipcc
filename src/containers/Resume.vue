@@ -1,8 +1,8 @@
 <template>
 	<div class="resume">
 		<VHeader :isSubPage="false" title="简历大全" :isFixed="true" />
-		<SearchNavbar @searchNavLeftBtn="selectAddressCity" :sCity="city"/>
-		<SearchKey :searchKeys="keyList" />
+		<SearchNavbar @searchNavLeftBtn="selectAddressCity" :sCity="city" @changKey="getKey"/>
+		<SearchKey :searchKeys="keyList" @resultKinds="getkinds"/>
 		<div class="resume-list mescroll" id="mescroll">
 			<ul id="dataList" class="data-list">
 				<ResumeItem v-for="(v,index) in pdlist" :key="index" :resume="v" />
@@ -29,7 +29,7 @@ export default {
 					name: "兼全职", kinds: [
 						{
 							title: "",
-							classData: [{codeName:'C', codeValue: '兼职', isSelect: true }, {codeName:'J', codeValue: '全职', isSelect: false }]
+							classData: [{codeName:'J', codeValue: '兼职', isSelect: true }, {codeName:'C', codeValue: '全职', isSelect: false }]
 						}
 					]
 				},
@@ -51,7 +51,12 @@ export default {
 				},
 			],
 			pdlist: [],
-			page: 1
+			page: 1,
+			searchStr:'',
+			pinfoSex:'',
+			titleExt:'',
+			titleClass:'',
+            searchVal:''
 		}
 	},
 	// mounted() {
@@ -63,7 +68,32 @@ export default {
 		this.initMescroll();
 	},
 	methods: {
-		selectAddressCity(){
+		getKey(key){
+		   this.searchVal=key!=''?'&searchVal='+key:'';
+		   this.mescroll.resetUpScroll( false );
+		},
+		getkinds(arr){
+	
+	
+			switch(arr[0]['selectIndex']){
+					case 0 :
+					this.titleClass=arr[0]['data']['codeName'];
+					break;
+					case 1:
+					this.titleExt=arr[0]['data']['codeName'];
+					break;
+					case 2:
+				    this.pinfoSex=arr[0]['data']['codeName']
+					break;
+			}
+		 this.searchStr=this.resStr("pinfoSex",this.pinfoSex)+this.resStr("titleExt",this.titleExt)+this.resStr("titleClass",this.titleClass);
+		console.log( this.searchStr);
+		this.mescroll.resetUpScroll( false );
+		},
+		resStr(name,value){
+        return  value!=''?'&'+name+'='+value:'';
+       },	
+	selectAddressCity(){
 		
 		  AMapUI.loadUI(['misc/MobiCityPicker'],(MobiCityPicker)=> {
 
@@ -89,6 +119,7 @@ export default {
 		 this.$http.get(api.kindList)
 		 .then(response=>{
 			 let data=response.data;
+			 
 			 data.fieldsData.map((item,index)=>{
 				item.classData.map((sitem,sindex)=>{
 					sitem.isSelect=false;
@@ -96,6 +127,8 @@ export default {
 			 })
 			 	
 			 this.keyList[1]['kinds']=data.fieldsData;
+		 }).catch(error=>{
+            console.log(error);
 		 })
 		},
 		initMescroll() {
@@ -116,7 +149,7 @@ export default {
 					//以下参数可删除,不配置
 					//page:{size:8}, //可配置每页8条数据,默认10
 					toTop: { //配置回到顶部按钮
-						src: "/static/images/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+						src: require("../assets/images/mescroll-totop.png"), //默认滚动到1000px显示,可配置offset修改
 						//offset : 1000
 					},
 					htmlNodata: '<p class="upwarp-nodata">-- 没有更多数据 --</p>',
@@ -127,7 +160,7 @@ export default {
 					},
 					empty: { //配置列表无任何数据的提示
 						warpId: "dataList",
-						icon: "/static/images/mescroll-empty.png",
+						icon: require("../assets/images/mescroll-empty.png"),
 						tip: "亲,暂无相关数据哦~",
 						btntext: "去逛逛 >",
 						btnClick() {
@@ -145,11 +178,13 @@ export default {
 			console.log("page.num==" + page.num + ", page.size==" + page.size);
 			//联网加载数据
 
-			this.$http.get(api.resumeList + 'isAll=Y&pinfoId='+GetQueryString('pinfoId')+'&pageno=' + page.num).then((response) => {
+			this.$http.get(api.resumeList + 'isAll=Y&pinfoId='+GetQueryString('pinfoId')+'&pageno=' + page.num+this.searchStr+this.searchVal).then((response) => {
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				let data = response.data.data;
 				// this.pdlist = data.data;
-
+                  if(data.length<=0){
+					  this.mescroll.endSuccess(0);
+				  }
 
 				//data=[]; //打开本行注释,可演示列表无任何数据empty的配置
 				//如果是第一页需手动制空列表

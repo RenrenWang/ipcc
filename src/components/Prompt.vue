@@ -43,11 +43,12 @@ export default {
  height:100%;
  width:100%;
  overflow:hidden;
+z-index: 999;
  .prompt-bg{
    height:100%;
    width:100%;
    background:#000;
-   opacity:.5;
+   opacity:.3;
   
  }
 

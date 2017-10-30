@@ -1,9 +1,10 @@
 <template>
   <div class="home">
+
       <VHeader title="IPCC机构"  :isSubPage="false"/>   
       <TopPanel :setData="topDdata"/>
       <BottomPanel :Btns="links"/>
-     
+    
   </div>
 </template>
 
@@ -15,9 +16,15 @@ import  BottomPanel   from '../components/BottomPanel.vue'
 
 export default {
   name: 'home',
+   props:{
+    user:{
+    type:Object
+    }
+  },
+
   data () {
     return {
-      topDdata:{name:'机构端',firstName:"",avatar:'',hUrl:'/homes'},
+      topDdata:{name:'机构端',avatar:'',firstName:'',hUrl:''},
       links:[
           {name:"发布招聘",toUrl:"/releaseRecruitment"},
           {name:"简历大全",toUrl:"/resume"},
@@ -26,9 +33,11 @@ export default {
     }
   },
   mounted(){
-   this.topDdata.firstName=GetQueryString('pinfoSname')?GetQueryString('pinfoSname'):'';
-    this.topDdata.avatar=GetQueryString('pinfoSname')?GetQueryString('pinfoUri'):'';
+  let user=JSON.parse(localStorage.getItem('user'));
   
+    this.topDdata.firstName=user.pinfoSname;
+    this.topDdata.avatar=user.pinfoUri;
+    this.topDdata.hUrl=baseUrl+'/wx_banding?applClass=T';
   },
   methods:{
   

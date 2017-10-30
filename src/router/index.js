@@ -11,6 +11,7 @@ import ResumeD from '@/containers/ResumeD'
 import ResumePost from '@/containers/ResumePost'
 import Purchased from '@/containers/Purchased'
 import MyInfo from '@/containers/MyInfo'
+import PhoneNumber from '@/containers/PhoneNumber'
 
 Vue.use(Router)
 
@@ -69,7 +70,11 @@ export default new Router({
      path: '/myInfo',
      name: 'MyInfo',
      component:MyInfo
-    }
+    },{
+      path: '/phoneNumber',
+      name: 'PhoneNumber',
+      component:PhoneNumber
+     }
     
   ]
 })

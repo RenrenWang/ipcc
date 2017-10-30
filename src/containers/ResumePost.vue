@@ -31,7 +31,7 @@
             <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
             <div class="section section-speciality">
                 <h2 class="title">擅长</h2>
-                <span class="speciality-items" v-for="(v,index) in  selectKinds" :key="index">{{v.codeValue}}</span>
+                <span class="speciality-items" v-for="(v,index) in  selectKinds" :key="index">{{v.data.codeValue}}</span>
                 <!--<p style="color:#888">未选择艺术种类</p>-->
                 <span class="iconfont icon-add_x" @click="showPanel"></span>
             </div>
@@ -43,13 +43,14 @@
             <div style="height:10px;background:#fff;border-top:1px solid #bbbbbb;border-bottom:1px solid #bbbbbb;"></div>
              <div class="section">
                  <h2 class="title">艺术照</h2>
-                   <span class="reUpload iconfont icon-add_x" v-if="$route.query.id&&$route.query.id>0&&!isUpload"   @click="reUpload"></span>
+                  <span class="reUpload iconfont icon-add_x" v-if="$route.query.id&&$route.query.id>0&&!isUpload"   @click="reUpload"></span>
                 <span class="reUpload" v-if="$route.query.id&&$route.query.id>0&&isUpload"  @click="reUpload">取消</span>    
                 <Upload   v-show="isUpload"  @uploadFile="uploadResult"/>
-        
-              <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">
-                    <li v-for="(v,idnex) in srcImgs"><img  :src="imgUrl+v.lidFileuri"/></li>
-                </ul>
+                
+                <ul class="imgs-list"  v-if="!isUpload&&($route.query.id&&$route.query.id>0)">
+                      <li v-for="(v,idnex) in srcImgs"><img  :src="imgUrl+v.lidFileuri"/></li>
+                  </ul>
+  
             </div>
 
            
@@ -58,7 +59,7 @@
     
 	<!--<div class="top-content" slot="top-content">Top of the content.</div>
 	<div class="bottom-content" slot="bottom-content">Bottom of the content.</div>-->
-
+        <Loading v-show="isLoading" :loaderNumber=1  bgColor="rgb(0, 0, .2)"/>
         <FooterButton  btnName="上传" @fBtnAction="save()"/>
         <KindPanel selectIndex=5  :selectSize=5 v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
         <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
@@ -73,11 +74,12 @@ import KindPanel from '../components/KindPanel.vue'
 import Prompt from '../components/Prompt.vue'
 import picker from 'vue-3d-picker';
 import Upload from '../components/Upload'
+import Loading from '../components/Loading.vue'
 export default {
   name: 'ResumePost',
   data () {
     return {
-     
+        isLoading:false, 
         name:'',
         jobAddress:'',
         age:'',
@@ -94,7 +96,7 @@ export default {
        istr:'',
        msgid:0,
        srcImgs:[],
-       isUpload:false,
+       isUpload:true,
         imgUrl:api.imgUrl,
         items: [
         {
@@ -103,13 +105,15 @@ export default {
           values: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         }
       ],
-      refNameArr:[]
+      refNameArr:[],
+      isSave:false
     }
   },
 
 mounted(){
-
-this.getDataD()
+  if(this.$route.query.id){
+      this.getDataD();
+    }
 },
 
 
@@ -117,7 +121,7 @@ this.getDataD()
   methods:{
   reUpload(){
    this.isUpload=!this.isUpload;
-    },
+ },
   getDataD(){
     this.$http.get(api.presumeD+this.$route.query.id)//this.$route.params.id
        .then(response=>{
@@ -133,19 +137,20 @@ this.getDataD()
                 this.resumeText=sdata.pinfoNote;
                 
                  if(sdata.titleExt1name!=""&&sdata.titleExt1name){
-                      this.selectKinds.push({codeValue:sdata.titleExt1name,codeName:sdata.titleExt1});
+                  // [{selectIndex:-1,data:{codeValue:data.data[0].titleExt1name,codeName:data.data[0].titleExt1}}];
+                   this.selectKinds.push({selectIndex:-1,data:{codeValue:sdata.titleExt1name,codeName:sdata.titleExt1}});
                  }
                   if(sdata.titleExt2name!=""&&sdata.titleExtname){
-                      this.selectKinds.push({codeValue:sdata.titleExt2name,codeName:sdata.titleExt2});
+                      this.selectKinds.push({selectIndex:-1,data:{codeValue:sdata.titleExt2name,codeName:sdata.titleExt2}});
                  }
                   if(sdata.titleExt1name!=""&&sdata.titleExt3name){
-                      this.selectKinds.push({codeValue:sdata.titleExt3name,codeName:sdata.titleExt3});
+                      this.selectKinds.push({selectIndex:-1,data:{codeValue:sdata.titleExt3name,codeName:sdata.titleExt3}});
                  }
                   if(sdata.titleExt4name!=""&&sdata.titleExt4name){
-                      this.selectKinds.push({codeValue:sdata.titleExt4name,codeName:sdata.titleExt4});
+                      this.selectKinds.push({selectIndex:-1,data:{codeValue:sdata.titleExt4name,codeName:sdata.titleExt4}});
                  }
                   if(sdata.titleExt5name!=""&&sdata.titleExt5name){
-                      this.selectKinds.push({codeValue:sdata.titleExt5name,codeName:sdata.titleExt5});
+                      this.selectKinds.push({selectIndex:-1,data:{codeValue:sdata.titleExt5name,codeName:sdata.titleExt5}});
                  }
                    this.srcImgs=data.imgData;
                     if(this.srcImgs.length>0){
@@ -188,7 +193,14 @@ this.getDataD()
        .then(this.$http.spread( (acct, perms)=> {
               // Both requests are now complete
           //  this.isShowAlertConfirm=true;
-            this.promptCommon('信息修改成功');
+           // this.isSave=true;
+           this.isLoading=false;
+             if(!this.$route.query.id&&this.$route.query.id<=0){
+                  this.promptCommon('信息上传成功');
+             }else{
+                   this.promptCommon('信息修改成功');
+             }
+            
             
              console.log(acct);
              console.log(perms);
@@ -272,6 +284,9 @@ this.getDataD()
        this.pContent=str;
     },
     pAction(){
+      if(this.isSave){
+        location.href=baseUrl+'/wx_banding?applClass=T';
+      }
      this.isPrompt=!this.isPrompt;
     },
     selectJqz(str){
@@ -302,23 +317,23 @@ this.getDataD()
          this.promptCommon('工作经验不能为空');
         return;
       }
-
+       
         let kindStr = '';
       switch (this.selectKinds.length) {
         case 5:
-          kindStr += '&titleExt5=' + this.selectKinds[4]['codeName'];
+          kindStr += '&titleExt5=' + this.selectKinds[4]['data']['codeName'];
 
         case 4:
-          kindStr += '&titleExt4=' + this.selectKinds[3]['codeName'];
+          kindStr += '&titleExt4=' + this.selectKinds[3]['data']['codeName'];
 
         case 3:
-          kindStr += '&titleExt3=' + this.selectKinds[2]['codeName'];
+          kindStr += '&titleExt3=' + this.selectKinds[2]['data']['codeName'];
 
         case 2:
-          kindStr += '&titleExt2=' + this.selectKinds[1]['codeName'];
+          kindStr += '&titleExt2=' + this.selectKinds[1]['data']['codeName'];
 
         case 1:
-          kindStr += '&titleExt1=' + this.selectKinds[0]['codeName'];
+          kindStr += '&titleExt1=' + this.selectKinds[0]['data']['codeName'];
           break;
         case 0:
            this.promptCommon('请选择擅长');
@@ -354,28 +369,51 @@ this.getDataD()
        this.getKindsData();
        this.isShowPanel = !this.isShowPanel;
     },
-    ishowKindPanel(setArray) {
+   ishowKindPanel(setArray) {
       this.selectKinds = setArray;
       this.isShowPanel = !this.isShowPanel;
+     
+     
     },
+
+    
    postResume(str) {
+       this.isLoading=true;
+       
       this.$http.get(api.resumePost + str)
         .then(response => {
         
           if (response.data.result == "success") {
               
-             this.promptCommon('发布成功');
+            
              this.msgid=response.data.rsmIds;
-           
-                 if(this.msgid>0&&this.refNameArr.length>0){
-                   //document.getElementById("submit").click();
+                   if(this.msgid>0&&this.refNameArr.length>0){
                  
-                          this.postImg();
+                  //  document.getElementById("submit").click();
+               
+                               this.postImg();
+                              
                     }else{
-                   
-                       this.promptCommon('信息修改成功');
-                       //this.isShowAlertConfirm=true;
-                    }
+                       this.isLoading=false;
+                     
+                      if(!this.$route.query.id&&this.$route.query.id<=0){
+                          this.promptCommon('信息上传成功');
+                           
+                      }else{
+                          this.promptCommon('信息修改成功');
+                      }
+                      
+                     
+                 }
+                //  if(this.msgid>0&&this.refNameArr.length>0){
+                //    //document.getElementById("submit").click();
+                //        this.postImg();
+                //     }else{
+                //       //this.isSave=true;
+                      
+                //        this.promptCommon('信息上传成功');
+                //        //this.isShowAlertConfirm=true;
+                //     }
                 }
           
         })
@@ -387,7 +425,8 @@ this.getDataD()
       KindPanel,
       Prompt,
       picker,
-      Upload
+      Upload,
+      Loading
   }
 }
 </script>

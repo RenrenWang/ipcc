@@ -1,7 +1,7 @@
 <template>
   <div class="home">
       <VHeader title="IPCC机构"  :isSubPage="false"/>   
-      <TopPanel  :setData="topDdata"/>
+      <TopPanel  :setData="topDdata" :user="user" />
       <BottomPanel :Btns="links" :isPostResume="true" @resumeDelete="ShowAlertConfirm()"/>
       <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="是否确定删除简历" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
   </div>
@@ -15,9 +15,15 @@ import  AlertConfirm   from '../components/AlertConfirm.vue'
 
 export default {
   name: 'home',
+   props:{
+    user:{
+    type:Object
+    }
+  },
+
   data () {
     return {
-     topDdata:{name:'教师端',firstName:"神仙姐姐有点白",hUrl:'/'},
+     topDdata:{name:'教师端',avatar:'',firstName:'',hUrl:''},
      resumeId:1,
      isShowAlertConfirm:false,
       links:[
@@ -27,10 +33,17 @@ export default {
       ]
     }
   },
+   updated(){
+     
+  
+   
+  },
   mounted(){
-    console.log("pinfoSex----"+GetQueryString('pinfoSex'));
-     this.topDdata.firstName=GetQueryString('pinfoSname')?GetQueryString('pinfoSname'):'';
-    this.topDdata.avatar=GetQueryString('pinfoSname')?GetQueryString('pinfoUri'):'';
+    let user=JSON.parse(localStorage.getItem('user'));
+  
+    this.topDdata.firstName=user.pinfoSname;
+    this.topDdata.avatar=user.pinfoUri;
+     this.topDdata.hUrl=baseUrl+'/wx_banding?applClass=J';
   },
   methods:{
     ShowAlertConfirm(){

@@ -10,7 +10,7 @@
        <a  class="bp-btn bp-btn-tip" href="javascript:;">
             付费后可获取教师联系方式！
         </a>
-        <a  class="bp-btn" :href="'http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=B&pinfoId='+pId+'&msgId='+msgId">
+        <a  class="bp-btn" :href="'http://www.ipengcaca.com/appsrv/weixinPaycontrollerAction.action?applType=WXPAY&feeClass=B&pinfoId='+pId+'&msgId='+msgId">
             微信支付
         </a>
      </div>

@@ -73,9 +73,10 @@
      
       </div>
     </div>
+    <Loading v-show="isLoading" :loaderNumber=1  bgColor="rgb(0, 0, .2)"/>
     <selectMapAddress v-show="isShowSelectMap" @closeSelectMap="showMap"/>
     <FooterButton :btnName="$route.query.id?'保存':'确认发布'" @fBtnAction="btnAction()" />
-    <KindPanel  :selectItem="selectKindsStr" v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
+    <KindPanel :selectItem="selectKindsStr" v-show="isShowPanel" @closePanel="ishowKindPanel" :sKinds="kinds" :selectIndex='1' sName="艺术种类" />
     <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction"/>
     <BottomPlay v-show="isShowPlay"/>
     <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="提示" alertContent="招聘信息已上传，支付后教师才能看到招聘信息" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
@@ -92,11 +93,12 @@ import Prompt from '../components/Prompt.vue'
 import BottomPlay from '../components/BottomPlay'
 import Upload from '../components/Upload'
 import AlertConfirm from '../components/AlertConfirm'
-
+import Loading from '../components/Loading.vue'
 export default {
   name: 'recruitPost',
   data() {
     return {
+      isLoading:false,
       rTitle: '',
       rmb: '',
       rClass: '',
@@ -122,7 +124,7 @@ export default {
       isShowAlertConfirm:false,
       imgUrl:api.imgUrl,
       isUpload:true,
-      
+      zfnums:0,
     
     }
   },
@@ -148,9 +150,10 @@ export default {
                this.rAddress=data.data[0].infoAddr;
                this.rmb=data.data[0].salaryClassname;
                this.workDemand=data.data[0].titleSimdesc;
-               this.selectKinds=[{codeValue:data.data[0].titleExt1name,codeName:data.data[0].titleExt1}];
+               this.selectKinds=[{selectIndex:-1,data:{codeValue:data.data[0].titleExt1name,codeName:data.data[0].titleExt1}}];
                this.srcImgs=data.imgData;
                this.rMapAddress=data.data[0].mapAddr;
+               this.zfnums=data.data[0].zfnums;
                if(this.srcImgs.length>0){
                   this.isUpload=false;
                }
@@ -161,7 +164,7 @@ export default {
   },
   AlertConfirmActive(){
     
-     location.href="http://www.hzrongzhi.com/appsrv/wx_banding?applType=WXPAY&feeClass=A&pinfoId="+GetQueryString('pinfoId')+"&msgId="+this.msgid;
+     location.href=api.pay+"&feeClass=A&pinfoId="+GetQueryString('pinfoId')+"&msgId="+this.msgid;
 
   },
   uploadResult(arr){
@@ -206,8 +209,17 @@ export default {
         )
        .then(this.$http.spread( (acct, perms)=> {
               // Both requests are now complete
-            this.isShowAlertConfirm=true;
-
+            this.isLoading=false;
+           if((!this.$route.query.id&&this.$route.query.id<=0)||this.zfnums!=1){
+                 this.isShowAlertConfirm=true;
+           }else{
+              this.promptCommon('信息修改成功');
+           }
+           //if(!this.$route.query.id&&this.$route.query.id<=0&&this.zfnums==0)
+          
+           
+            
+           
             
              console.log(acct);
              console.log(perms);
@@ -280,19 +292,19 @@ export default {
      
       switch(this.selectKinds.length) {
         case 5:
-          kindStr += this.selectKinds[4]['codeValue'] + '、';
+          kindStr += this.selectKinds[4]['data']['codeValue'] + '、';
 
         case 4:
-          kindStr += this.selectKinds[3]['codeValue'] + '、';
+          kindStr += this.selectKinds[3]['data']['codeValue'] + '、';
 
         case 3:
-          kindStr += this.selectKinds[2]['codeValue'] + '、';
+          kindStr += this.selectKinds[2]['data']['codeValue'] + '、';
 
         case 2:
-          kindStr += this.selectKinds[1]['codeValue'] + '、';
+          kindStr += this.selectKinds[1]['data']['codeValue'] + '、';
 
         case 1:
-          kindStr += this.selectKinds[0]['codeValue'] + '、';
+          kindStr += this.selectKinds[0]['data']['codeValue'] + '、';
           break;
         case 0:
 
@@ -322,6 +334,7 @@ export default {
     ishowKindPanel(setArray) {
       this.selectKinds = setArray;
       this.isShowPanel = !this.isShowPanel;
+     
       this.selectKindsAction();
     },
     selectSex(sex) {
@@ -331,6 +344,7 @@ export default {
       this.rZKind = str;
     },
     postRecruit(str) {
+        this.isLoading=true;
       console.log(api.recruitAddAOrRevise + str+'&pinfoId='+GetQueryString('pinfoId'));
       this.$http.get(api.recruitAddAOrRevise + str+'&pinfoId='+GetQueryString('pinfoId'))
         .then(response => {
@@ -348,15 +362,21 @@ export default {
                                this.postImg();
                               
                     }else{
-                      if(this.$route.query.id){
-                             this.promptCommon('信息修改成功');
+                       this.isLoading=false;
+                     
+                      if((!this.$route.query.id&&this.$route.query.id<=0)||this.zfnums!=1){
+                          this.isShowAlertConfirm=true;
+                           
                       }else{
-                         this.isShowAlertConfirm=true;
+                          this.promptCommon('信息修改成功');
                       }
                       
-                   
+                     
                  }
+                  
+
           }else{
+              this.isLoading=false;
              this.promptCommon('发布失败');
           }
         })
@@ -377,19 +397,19 @@ export default {
       let kindStr = '';
       switch (this.selectKinds.length) {
         case 5:
-          kindStr += '&titleExt5=' + this.selectKinds[4]['codeName'];
+          kindStr += '&titleExt5=' + this.selectKinds[4]["data"]['codeName'];
 
         case 4:
-          kindStr += '&titleExt4=' + this.selectKinds[3]['codeName'];
+          kindStr += '&titleExt4=' + this.selectKinds[3]["data"]['codeName'];
 
         case 3:
-          kindStr += '&titleExt3=' + this.selectKinds[2]['codeName'];
+          kindStr += '&titleExt3=' + this.selectKinds[2]["data"]['codeName'];
 
         case 2:
-          kindStr += '&titleExt2=' + this.selectKinds[1]['codeName'];
+          kindStr += '&titleExt2=' + this.selectKinds[1]["data"]['codeName'];
 
         case 1:
-          kindStr += '&titleExt1=' + this.selectKinds[0]['codeName'];
+          kindStr += '&titleExt1=' + this.selectKinds[0]["data"]['codeName'];
           break;
         case 0:
           this.promptCommon('艺术种类不能为空');
@@ -439,7 +459,7 @@ export default {
     KindPanel,
     selectMapAddress,
     Prompt,
-   
+   Loading,
     BottomPlay,
     Upload,
     AlertConfirm

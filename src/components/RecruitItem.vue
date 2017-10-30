@@ -3,14 +3,15 @@
        <router-link  class="recruit-item-t" :to="{name:'RecruitD',query: { id:rData.infoIds,type:isAll}}"  tag="div">
            <div class="recruit-item-tt">
            <h3 class="recruit-item-title">{{rData.infoTitle}}</h3>
-           <span class="timing">倒计时{{rData.timeDays}}天</span>
+           <span class="timing" v-if="rData.zfnums==1">倒计时{{rData.timeDays}}天</span>
+           <span class="timing red" v-else-if="rData.zfnums==0" >未支付</span>
        </div>
        <p class="recruit-item-text">要求：{{rData.titleDesc}}</p>
        <div class="demand-keyword">
           <div class="demand-keyword-l">
             <span class="jqz">{{rData.titleClassname}}</span>
-             <p class="sex" v-if="rData.pinfoSex=='男'"><span class="iconfont  icon-nan"></span></p>
-             <p class="sex" v-if="rData.pinfoSex=='女'"><span class="iconfont  icon-nv"></span></p>
+             <p class="sex nan-color" v-if="rData.titleSex=='男'"><span class="iconfont  icon-nan3"></span></p>
+             <p class="sex nv-color" v-if="rData.titleSex=='女'"><span class="iconfont icon-nv2"></span></p>
            
           </div>
           <div class="needs">
@@ -20,7 +21,7 @@
              <span class="need-item" v-if="rData.titleExt4name&&rData.titleExt4name!=''">{{rData.titleExt4name}}</span>
              <span class="need-item" v-if="rData.titleExt5name&&rData.titleExt5name!=''">{{rData.titleExt5name}}</span>-->
           </div>
-          <p class="rmb">薪资：{{rData.salaryClassname}}</p>
+          <p class="rmb">薪资：{{setDy()}}</p>
         </div>
           
        </router-link>
@@ -60,6 +61,10 @@ export default {
     }
   },
   methods:{
+     
+       setDy(){
+          return  this.rData.titleClassname=='全职'?this.rData.salaryClassname+"元/月":this.rData.salaryClassname+"元/小时";
+        },
     deleteItem(){
      
        this.$emit('deleteItem',[this.rData.infoIds,this.selectIndex]);  
@@ -90,12 +95,24 @@ export default {
         .timing{
             font-size:14px;
             color:#727272;
+            &.red{
+                color: #f00;
+            }
         }
     }
    
     .recruit-item-text{
        margin:10px  0;
        color:#050501;
+     line-height: 20px;
+ 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    display: box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-word;
     }
     .demand-keyword{
         padding: 5px 0;
@@ -138,8 +155,14 @@ export default {
              color:#fff;
              border-radius:5px;
              width:26px;
-             
+           
              text-align:center;
+             .iconfont{
+                   font-size: 12px;
+             }
+             &.nv-color{
+                 background: #F4B0C5;
+             }
            }
        
          }

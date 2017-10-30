@@ -20,6 +20,9 @@ export default {
   props:{
       setData:{
           type:Object
+      },
+      user:{
+         type:Object 
       }
   },
   data () {
@@ -29,10 +32,12 @@ export default {
   },
  methods:{
       toHome(url){
-      this.$router.push({ path:url})
+    //this.$router.push({ path:url})
+     location.href=url;
   },
   isSex(){
-       return GetQueryString('pinfoSex')=='男'?'icon-nan':'icon-nv';
+       let user=JSON.parse(localStorage.getItem('user'));
+     return (user.pinfoSex=='男')?'icon-nan':'icon-nv';
    }
  }
 }
@@ -42,7 +47,7 @@ export default {
 <style scoped lang="scss">
 @import "../assets/style/base.scss";
 .top-panel{
-    height:rem(350px);
+    height:rem(340px);
     background:#ecebe7;
     display:flex;
     flex-direction:row;
@@ -84,10 +89,10 @@ export default {
          
       }
       .avater-img{
-          height:rem(200px);
-          width:rem(200px);
+          height:rem(190px);
+          width:rem(190px);
           border-radius:50%;
-          box-shadow: 0px 0px 5px #eeda90;
+          box-shadow: 0 0 4px #FFC800;
       }
     }
     .icon-nan{

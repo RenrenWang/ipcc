@@ -6,11 +6,11 @@
        </div>
        <div class="search-box">
            <span class="iconfont  icon-sousuo1"></span>
-           <input  type="text" v-model="searchKey" placeholder="搜索"/>
+           <input  type="text" v-model="searchKey"  @change="changeInputKey()"  placeholder="搜索"/>
        </div>
        <p class="link">
           <router-link :to="{ name: 'Purchased',query:{type:isAll}}"  v-if="!isAll">购买的</router-link>
-          <router-link :to="{ name: 'Purchased',query:{type:isAll}}"  v-else>已联系</router-link>
+          <!-- <router-link :to="{ name: 'Purchased',query:{type:isAll}}"  v-else>已联系</router-link> -->
        </p>
   </div>
 </template>
@@ -18,13 +18,16 @@
 <script>
 export default {
   name: 'SearchNavbar',
-  props:{'sCity':{},isAll:{default:false}},
+  props:{'sCity':{},isAll:{default:false},changKey:{}},
   data () {
     return {
        searchKey:""
     }
   },
   methods:{
+    changeInputKey(){
+         this.$emit('changKey',this.searchKey);
+    },
     active(){
     
       this.$emit('searchNavLeftBtn');

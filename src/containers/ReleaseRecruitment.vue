@@ -9,7 +9,7 @@
          </div>
      <FooterButton  btnName="发布" @fBtnAction="btnAction()"/>
      <AlertConfirm  v-show="isShowAlertConfirm"  alertTitle="删除" alertContent="删除后，该信息将无法被老师所看到。" @cancelActive="AlertCancelActive" @confirmActive="AlertConfirmActive"/>
-
+   <Prompt v-show="isPrompt"  :content="pContent" @actionPrompt="pAction()"/>
   </div>
 </template>
 
@@ -18,6 +18,7 @@ import  VHeader   from '../components/Header.vue'
 import  RecruitItem   from '../components/RecruitItem.vue'
 import FooterButton from '../components/FooterButton.vue'
 import AlertConfirm from '../components/AlertConfirm.vue'
+import Prompt from '../components/Prompt.vue'
 export default {
   name: 'releaseRecruitment',
   data () {
@@ -27,7 +28,9 @@ export default {
 	  deleteId:-1,
 	  deleteIndex:-1,
 	  mescroll:Object,
-	  isError:false
+	  isError:false,
+	    isPrompt:false,
+           pContent:''
     }
   },
   mounted(){
@@ -35,7 +38,14 @@ export default {
      this.initMescroll();
   },
   methods:{
-
+   promptCommon(str){
+      this.isPrompt=true;
+       this.pContent=str;
+    },
+    pAction(){
+   
+     this.isPrompt=!this.isPrompt;
+    },
 	AlertCancelActive(){
          this.isShowAlertConfirm=false;
       },
@@ -46,14 +56,15 @@ export default {
 			  console.log(JSON.stringify(response.data));
 			  if(response.data.result=='success'){
                this.isShowAlertConfirm=false;
-			
-			 
-			   console.log(this.pdlist.splice(this.deleteIndex,1));
+			    this.promptCommon('删除成功');
+			   this.pdlist.splice(this.deleteIndex,1);
+			   if(this.pdlist.length<=0){
+				   	this.mescroll.endSuccess(0);
+			   }
 			  }else{
-				   alert('删除失败！'+this.deleteIndex);
+				 this.promptCommon('删除失败');
 			  }
-			  
-          });
+		});
         
       },
       showAlertConfirm(array){
@@ -134,10 +145,11 @@ export default {
 				//console.log("this.pdlist.length==" + this.pdlist.length);
 
 			}).catch(error=>{
-				this.mescroll.endErr();
-				if(this.pdlist<=0){
-                     this.isError=true;
-				}
+				this.mescroll.endSuccess(0);
+				// this.mescroll.endErr();
+				// if(this.pdlist<=0){
+                //      this.isError=true;
+				// }
 				//this.mescroll.endSuccess(this.pdlist<0?);
 
 			})
@@ -149,7 +161,8 @@ export default {
      VHeader,
      RecruitItem,
      FooterButton,
-	 AlertConfirm
+	 AlertConfirm,
+	 Prompt
   }
 }
 </script>

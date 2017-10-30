@@ -1,16 +1,44 @@
 <template>
   <div id="app"  style="height:100%">
  
-    <router-view></router-view>
+    <router-view :user="user"></router-view>
   </div>
 </template>
 
 <script>
 export default {
   name: 'app',
-
-  mounted(){
-    console.log( this.GetQueryString('pinfoId'));
+  data(){
+   	return {
+			user:{
+				pinfoId:0,
+				pinfoPname:'',
+				pinfoSname:'',//昵称
+				pinfoSex:'',
+				pinfoPhone:'',
+				pinfoUri:''
+			}
+		}
+	},
+  created(){
+	    
+		this.$http.get(api.person+this.GetQueryString('pinfoId'))
+		.then(response=>{
+			let data=response.data;
+			if(data.result='success'){
+				console.log(data);
+				let sdata=data.data[0];
+				let user={};
+				user.pinfoId=sdata.pinfoId;
+				user.pinfoPname=sdata.pinfoPname;
+				user.pinfoSname=sdata.pinfoSname;
+				user.pinfoSex=sdata.pinfoSex;
+				user.pinfoPhone=sdata.pinfoPhone;
+				user.pinfoUri=sdata.pinfoUri;
+				localStorage.setItem('user',JSON.stringify(user));
+			}
+     
+		})
   },
   methods:{
 	 GetQueryString(name){

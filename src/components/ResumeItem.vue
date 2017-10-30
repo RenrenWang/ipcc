@@ -7,9 +7,9 @@
               <div class="resume-item-top-text-t">
                    <p class="name-info">
                        <span style="font-size:16px;font-weight:bold;">{{resume.pinfoPname}}</span>
-                       <span  v-if="resume.pinfoSex=='男'" class="iconfont  icon-nan"  style="color:rgb(30, 158, 230)"></span>
+                       <span  v-if="resume.pinfoSex=='男'" class="iconfont  icon-nan3"  style="color:rgb(30, 158, 230)"></span>
                        <span  v-if="resume.pinfoSex=='女'" class="iconfont  icon-nv"  style="color:rgb(30, 158, 230)"></span>
-                       <span>{{resume.pinfoAge}}岁</span>
+                       <span>{{setAge(resume.pinfoBirthday)}}</span>
                    </p>
                    <span style="font-size:16px;font-weight:bold;">{{resume.titleClassname}}</span>
               </div>
@@ -20,7 +20,7 @@
          </div> 
     </div>
     <p class="resume-item-bottom">
-        擅长：{{resume.titleExt1name?resume.titleExt1name+'、':''}}{{resume.titleExt2name?resume.titleExt2name+'、':''}}{{resume.titleExt3name?resume.titleExt3name+'、':''}}{{resume.titleExt4name?resume.titleExt4name+'、':''}}{{resume.titleExt5name?resume.titleExt5name+'、':''}}
+        擅长：{{titleExt}}
     </p>
  </router-link>
 </template>
@@ -37,6 +37,25 @@ export default {
     return {
       imgUrl:api.imgUrl
     }
+  },
+  methods:{
+ 
+    setAge(date){
+         return Math.abs(new Date(date).getFullYear() - new Date().getFullYear()+1)+'岁';
+      },
+  },
+  computed:{
+     titleExt(){
+         let str='';
+         let resume=this.resume;
+         str+=resume.titleExt1name?resume.titleExt1name+'、':'';
+         str+=resume.titleExt2name?resume.titleExt2name+'、':'';
+         str+=resume.titleExt3name?resume.titleExt3name+'、':'';
+         str+=resume.titleExt4name?resume.titleExt4name+'、':'';
+         str+=resume.titleExt5name?resume.titleExt5name+'、':'';
+        return str.slice(0,-1);
+
+     } 
   }
 
 }
@@ -48,7 +67,7 @@ export default {
 .resume-item{
     margin:10px 0;
     background-color: #f2f2f2;
-    padding:10px;
+    padding:10px 5px;
     font-size:14px;
     border:1px solid #bbbbbb;
     border-radius:10px;
@@ -66,15 +85,19 @@ export default {
         margin-left:15px;
          flex:1;
         
-         
+          
          .iconfont{
-             font-size:18px;
+             font-size:14px;
          }
          .resume-item-top-text-t{
+              span{
+                    padding-bottom:15px;
+              }
           .name-info{
              padding-right:rem(100px);
-             padding-bottom:15px;
+           padding-bottom:15px;
              border-bottom:1px solid #bbbbbb;
+             word-wrap: none;
           }
           flex-direction: row;
           display:flex;

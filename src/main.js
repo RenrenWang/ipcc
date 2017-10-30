@@ -5,7 +5,8 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
 import {BaseUrl,Api} from './api.js'
 global.baseUrl=BaseUrl;
 global.api=Api;

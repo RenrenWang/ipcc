@@ -1,7 +1,12 @@
 <template>
-  <div class="footer-button" @click="btnAction()" :style="{background:bgFooterButton}">
-    {{btnName}}
-  </div>
+      <div  class="footer-button">
+          <div class="item-buttom" @click="btnAction()" :style="{background:bgFooterButton}">
+              {{btnName}}
+          </div>
+           <!-- <div class="item-buttom" @click="btnAction()" :style="{background:bgFooterButton}">
+              {{btnName}}
+          </div> -->
+      </div>
 </template>
 
 <script>
@@ -44,9 +49,14 @@ export default {
   font-size: 18px;
   height: rem(100px);
   width: 100%;
-  background: #ffc800;
+ 
   text-align: center;
   line-height: rem(100px);
   z-index:998;
+  display: flex;
+  .item-buttom{
+    flex: 1;
+    background: #ffc800;
+  }
 }
 </style>
