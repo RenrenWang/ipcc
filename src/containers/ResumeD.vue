@@ -130,7 +130,7 @@ export default {
 
     methods:{
     setAge(date){
-         return Math.abs(new Date(date).getFullYear() - new Date().getFullYear()+1)+'岁';
+          return Math.abs(Number(new Date(date).getFullYear()) - Number(new Date().getFullYear())+1)+'岁';
       },
         play(){
            
